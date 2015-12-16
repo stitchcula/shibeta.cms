@@ -50,6 +50,7 @@ block style
                 .card-reveal
                     input
                         height 2.5rem
+                        margin-bottom 12px
                     div.action
                         display inline
                     >.row>.col:last-of-type
@@ -168,6 +169,7 @@ block content
             $('.slider').slider({full_width: true,interval:3000,indicators:false})
             $('#toForget').click(function(){$("html,body").animate({scrollTop:0},600)})
 
+            var flag=0
             $("#onLogin").click(function () {
                 //if(flag) return 0
                 var usr = $("#usr").val()
@@ -175,7 +177,7 @@ block content
                 flag=1
                 $("#res1").fadeOut(500)
                 $("#onLogining").addClass("active")
-                $.ajax({usr:"/login?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
+                $.ajax({usr:"/admin?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
                     success:function (data, status) {
                         if (status == "success") {
                             if (data.result == 200) {

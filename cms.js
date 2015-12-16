@@ -14,24 +14,17 @@ var koa=require('koa')
         return _
     })())
     ,mongo,cts
-    ,mailer=require('nodemailer').createTransport({
-    host:"smtp.mxhichina.com",
-    port:25,
-    auth:{
-        user:process.env.MAILER_USER,
-        pass:process.env.MAILER_PASS
-    }
-})
+    ,mailer=require("request-json").createClient('https://shibeta.org/')
 
 co(function*(){
-    co(function*(){mongo=(yield require('robe')
+    mongo=(yield require('robe')
         .connect(process.env.MONGO_HOST+":"+process.env.MONGO_PORT+"/contracts_"))
-        .collection('usr')})
+        .collection('usr')
 })
 co(function*(){
-    co(function*(){cts=(yield require('robe')
+    cts=(yield require('robe')
         .connect(process.env.MONGO_HOST+":"+process.env.MONGO_PORT+"/contracts_"))
-        .collection('cts')})
+        .collection('cts')
 })
 
 var app=koa()
@@ -53,12 +46,13 @@ app.use(function *(next){
     }
     this.env={
         WEB_PORT:8005,
-        MASTER_MAIL:"liudingli16@qq.com"
+        MASTER_MAIL:"liudingli16@qq.com",
+        MASTER_TEL:"18142628666"
     }
     this.db=mongo
+    this.mailer=mailer
     this.cts=cts//合同s
     this.redis=redis
-    this.mailer=mailer
     if(this.method==='POST') this.request.body=this.request.body.files?this.request.body:this.request.body.fields
     yield next
     if(this.task) console.log(1)

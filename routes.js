@@ -47,7 +47,7 @@ router.get('/login',function*(next){//登陆页面
     })
     yield next
 }).post('/login',function*(next){//登陆
-
+    /*
      var usr={//强制注册
      uin: "000000",
      usr: new Buffer("stcula").toString('base64'),//->base64
@@ -62,7 +62,7 @@ router.get('/login',function*(next){//登陆页面
      }
      console.log(usr)
      this.body=yield this.db.insert(usr)
-    /*
+    */
     if(!this.request.body.usr||!this.request.body.pwd) return this.body={result:403}
     var msg=null
     if(/[@]/.test(this.request.body.usr)){
@@ -78,7 +78,7 @@ router.get('/login',function*(next){//登陆页面
     }else{
         this.body={result:403}
         this.session=null
-    }*/
+    }
     yield next
 }).get('/t/:sid',function*(next){//改密
     var msg=yield this.redis.hgetall(this.params.sid)
@@ -100,8 +100,9 @@ router.get('/login',function*(next){//登陆页面
             MO.to = msg.em
             MO.subject="浩盛消防在线平台密码重置"
             MO.html = '<h4>完成修改密码</h4><b>请点击以下链接完成您的修改：</b><br><a href="http://121.40.249.9:'+this.env.WEB_PORT+'/t/' + sid + '">http://121.40.249.9:800/t/' + sid + '</a>'
-            this.mailer.sendMail(MO,function(err,rep){
-                console.log(err||rep)
+            this.mailer.post('api/mailer',MO,function(e,r,b){
+                console.log(e)
+                console.log(r.statusCode)
             })
             yield this.redis.hmset(sid, {
                 ip:this.ip,
