@@ -1,0 +1,222 @@
+extends frag/framework
+
+block style
+    link(rel='stylesheet',href='/static/css/icomoon.css')
+    script(src="/static/lib/sha1.js")
+    style
+        :stylus
+            .yahei
+                font-family "Microsoft YaHei"
+            .test
+                background #000000
+            footer
+                z-index 5
+            //body,html
+            //    min-width 400px
+            .slider.fullscreen
+                z-index -1
+                position fixed
+            .login
+                width 100%
+                .card
+                    .face
+                        img
+                            border 1px solid #cccccc
+                    .card-content
+                        padding-bottom 12px
+                    .card-action
+                        #onLogin
+                            margin-left 20px
+                    .card-action a
+                        color #65BEF3
+                    .card-action a:hover
+                        color #8ed7ff
+                    .card-action .action
+                        min-width 120px
+                .row
+                    margin-bottom 0
+                .collection
+                    margin-top 0
+                    margin-bottom 12px
+                    .collection-item
+                        padding 0px 10px
+                    //last input border
+                    .collection-item:last-child
+                        border-bottom 1px solid #FFFFFF
+                    .collection-item:last-child:focus
+                        border-bottom 1px solid #26a69a
+                .card-content input
+                    height 2rem
+                .card-reveal
+                    input
+                        height 2.5rem
+                    div.action
+                        display inline
+                    >.row>.col:last-of-type
+                        padding-top 1rem
+                .btn-flat
+                    padding 0 1rem
+                    height 2rem
+                    margin-bottom 2px
+                .card-reveal .input-field:first-of-type
+                    margin-top 2rem
+                .resMsg
+                    height 14px
+                    font-size 14px
+                    color #ff755d
+                    display inline
+                @media only screen and (max-width: 600px)
+                    .face
+                        width 50%
+                        margin 20px auto
+                    .collection
+                        margin 20px auto
+                    .card-content input, .card-reveal input
+                        height 3rem
+                    .card-reveal
+                        .input-field
+                            height 4rem
+                            margin 5% auto
+                        div.action
+                            display block
+                        >.row>.col:last-of-type .btn.action
+                            margin 10%
+                            width 80%
+                    .btn-flat.action
+                        padding 0 1rem
+                        height 3rem
+                        margin 20px auto
+                    .btn-flat.action:last-of-type
+                        float right !important
+
+
+
+block content
+    main.valign-wrapper
+        div.login.valign
+            div.row
+                div.col.s12.m8.l4.offset-m2.offset-l4
+                    div.card.hoverable
+                        div.card-image
+                            img(src=title_img)
+                            span.card-title.yahei 浩盛消防 登陆
+                        div.card-content
+                            div.row
+                                div.col.s12.m3
+                                    div.face
+                                        img.circle.responsive-img(src=default_face)
+                                div.col.s12.m6
+                                    div.collection
+                                        input#usr(type="text",placeholder="用户名/邮箱/手机号").collection-item.validate
+                                        input#pwd(type="password",placeholder="密码").collection-item.validate
+                                    //p.center
+                                        input#ifRemember(type="checkbox")
+                                        label.yahei(for="ifRemember") 记住密码
+                                div.col.s12.m3
+                                    a.btn-flat.waves-effect.waves-teal.yahei.grey-text.text-lighten-1.action &nbsp;
+                                    a#toForget.btn-flat.waves-effect.waves-teal.yahei.grey-text.text-lighten-1.action.activator 忘记密码
+                        div.card-action
+                            a.btn-flat.waves-light
+                                i.icon-qq.left
+                                | QQ
+                            a#onLogin.waves-effect.waves-light.white-text.btn.right.yahei.action 登陆
+                            div#onLogining.preloader-wrapper.small.right
+                                div.spinner-layer.spinner-red-only
+                                    div.circle-clipper.left
+                                        div.circle
+                                    div.gap-patch
+                                        div.circle
+                                    div.circle-clipper.right
+                                        div.circle
+                            div#res1.yahei.right.resNsg
+                        div.card-reveal
+                            span.card-title.grey-text.text-darken-4.yahei 重置密码
+                                i.material-icons.right close
+                            div.row
+                                div.input-field.col.s12
+                                    input#i1.validate.yahei(type="text",placeholder="")
+                                    label.yahei(for="i1") 真实姓名
+                                div.input-field.col.s12
+                                    input#i2.validate.yahei(type="text",placeholder="")
+                                    label.yahei(for="i2") 身份证号
+                                div.input-field.col.s12
+                                    input#i3.validate.yahei(type="password",placeholder="")
+                                    label.yahei(for="i3",data-error="") 新密码
+                                div.input-field.col.s12
+                                    input#i4.validate.yahei(type="password",placeholder="")
+                                    label.yahei(for="i4",data-error="") 重复密码
+                                div.col.s12
+                                    div#res2.yahei.resMsg
+                                    div#onForgeting.preloader-wrapper.small
+                                        div.spinner-layer.spinner-red-only
+                                            div.circle-clipper.left
+                                                div.circle
+                                            div.gap-patch
+                                                div.circle
+                                            div.circle-clipper.right
+                                                div.circle
+                                    a#onForget.waves-effect.waves-light.white-text.btn.right
+                                        i.material-icons done_all
+        //slider bg
+        div.slider.fullscreen
+            ul.slides
+                each s in slides
+                    li
+                        img(src=s.img)
+    script.
+        $(function(){
+            $('.slider').slider({full_width: true,interval:3000,indicators:false})
+            $('#toForget').click(function(){$("html,body").animate({scrollTop:0},600)})
+
+            $("#onLogin").click(function () {
+                //if(flag) return 0
+                var usr = $("#usr").val()
+                var pwd = hex_sha1($("#pwd").val())
+                flag=1
+                $("#res1").fadeOut(500)
+                $("#onLogining").addClass("active")
+                $.ajax({usr:"/login?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
+                    success:function (data, status) {
+                        if (status == "success") {
+                            if (data.result == 200) {
+                                window.location = "/usr?rd="+Math.random().toString(36).substr(2)
+                            } else {
+                                $("#onLogining").removeClass("active")
+                                $("#res1").html("账户&密码错误owo").fadeIn(500)
+                            }
+                        } else {
+                            $("#onLogining").removeClass("active")
+                            $("#res1").html("服务器繁忙owo").fadeIn(500)
+                        }
+                        flag=0
+                    }
+                })
+            })
+
+            $("#onForget").click(function () {
+                if(flag) return 0
+                if($("#i3").val()!=$("#i4").val()){
+                    $("#res2").html("两次输入密码不匹配。").fadeIn(500)
+                    flag=0
+                    return 0
+                }
+                $("#res2").fadeOut(500)
+                $("#onForgeting").addClass("active")
+                flag=1
+                $.ajax({url:'/t?rd='+Math.random().toString(36).substr(2),type:'PUT',data:{name:$("#i1").val(),idf:$("#i2").val(),pwd:hex_sha1($("#i3").val())},success:function(data,status){
+                    if (status == "success") {
+                        if (data.result == 200) {
+                            $("#onForgeting").removeClass("active")
+                            $("#res2").html("请尽快查收邮件，1小时内有效owo").fadeIn(500)
+                        } else {
+                            $("#onForgeting").removeClass("active")
+                            $("#res2").html("信息有误owo").fadeIn(500)
+                        }
+                    } else {
+                        $("#onForgeting").removeClass("active")
+                        $("#res2").html("服务器繁忙owo").fadeIn(500)
+                    }
+                    flag=0
+                }})
+            })
+        })

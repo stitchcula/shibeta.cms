@@ -1,0 +1,62 @@
+mixin footer
+    footer.page-footer(class=(off_footer)?"_off-footer":"")
+        if !off_footer
+            div.container
+                div.row
+                    div.col.l6.s12
+                        h5.white-text lalalala
+                        p.grey-text.text-lighten-4 lalalalalla
+                    div.col.l4.offset-l2.s12
+                        h5.white-text links
+                        ul
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat 助屋简介
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat 关于本站
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat 建议反馈
+                            li
+                                a.modal-trigger.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat(href="#modal_v") &nbsp; V 0.1.6 &nbsp;
+                                div#modal_v.modal.modal-fixed-footer
+                                    div.modal-content
+                                        h4 历史版本
+                                        ul.collapsible.popout(data-collapsible="accordion")
+                                            li
+                                                div.collapsible-header.active v0.1.6
+                                                div.collapsible-body
+                                                    p 更新了isap.space。
+                                            li
+                                                div.collapsible-header v0.1.5
+                                                div.collapsible-body
+                                                    p 更新了mixin。
+                                    div.modal-footer
+                                        a.modal-action.modal-close.waves-effect.waves-green.btn-flat 关闭
+                                        a.modal-action.waves-effect.waves-green.btn-flat(href="https://github.com/stitchcula/shibeta.org") 在GitHub查看
+        if off_footer
+            div.progress.ajaxLoad
+                div.indeterminate
+        div.footer-copyright
+            div.container
+                span © 2015 Copyright StitchCula.
+                if off_footer
+                    span
+                        a.grey-text.text-lighten-4.right(href="/about") About
+                //else
+                    span
+                        a.grey-text.text-lighten-4.right About
+        style
+            :stylus
+                footer.page-footer._off-footer
+                    padding-top 0
+                    >.container
+                        display none
+                footer>.ajaxLoad
+                    margin 0
+                    display none
+        script.
+            $(function () {
+                $('.modal-trigger').leanModal()
+                $('.collapsible').collapsible({
+                    accordion : false
+                });
+            })

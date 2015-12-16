@@ -1,0 +1,520 @@
+body {
+  background-color: #fafffa;
+  font-family: "Microsoft YaHei";
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+html,
+body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.mc {
+  background-color: rgba(100,100,100,0.9);
+}
+.sc {
+  background-color: #32cd32;
+}
+#home {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 32px;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+#home:hover .home {
+  color: #000;
+}
+.home {
+  color: #fff;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+#usr {
+  overflow: hidden;
+}
+.usr {
+  margin: 0 auto;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+#face {
+  display: inline-block;
+  background: url("/usr.jpg") no-repeat center top;
+  background-size: contain;
+  vertical-align: middle;
+}
+#name {
+  text-align: center;
+  white-space: nowrap;
+  font-family: "Microsoft YaHei";
+  vertical-align: middle;
+}
+#usrmsg {
+  margin: 0 auto;
+  margin-top: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+  background-color: #b4b4b4;
+  display: none;
+}
+#menu {
+  margin-top: 32px;
+  overflow: hidden;
+  position: relative;
+}
+.mcon {
+  margin: 0 auto;
+  white-space: nowrap;
+  text-align: center;
+  line-height: ;
+  width: 100%;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+.mcon:hover {
+  background-color: #e9e9e9;
+}
+.mcon:hover .mico {
+  color: #000;
+  margin-left: 10%;
+}
+.mcon:hover .mtext {
+  color: #000;
+}
+.mtext {
+  cursor: default;
+  color: #fff;
+  margin-bottom: 8px;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+.mico {
+  color: #fff;
+  margin-top: 8px;
+  transition: all 1s;
+  -moz-transition: all 1s;
+  -webkit-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+#loading {
+  display: none;
+  text-align: center;
+}
+.loading {
+  color: #e9e9e9;
+}
+/*------------------------------------------------*/
+::-webkit-scrollbar-button {
+  height: 6px;
+  background: #32cd32;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.9);
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(100,100,100,0.9);
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(100,100,100,0);
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+.pure-img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+#layout,
+#bar,
+.bar-link {
+  transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  -webkit-transition: all 0.5s ease-out;
+  -ms-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+}
+#layout {
+  position: relative;
+  padding-left: 0;
+}
+#layout .active #bar {
+  left: 200px;
+  width: 200px;
+}
+#layout .active .bar-link {
+  left: 200px;
+}
+.content {
+  margin: 0 auto;
+  padding: 0 2em;
+  min-width: 600px;
+  margin-bottom: 50px;
+  line-height: 1.6em;
+}
+.header {
+  margin: 0;
+  color: #333;
+  text-align: center;
+  padding: 2.5em 2em 0;
+  border-bottom: 1px solid #eee;
+}
+.header h1 {
+  margin: 0.2em 0;
+  font-size: 3em;
+  font-weight: 300;
+}
+.header h2 {
+  font-weight: 300;
+  color: #ccc;
+  padding: 0;
+  margin-top: 0;
+}
+#bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+/* so the bar or its navicon stays above all content */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* -- Dynamic Button For Responsive bar -------------------------------------*/
+.bar-link {
+  position: fixed;
+  display: block;
+/* show this only on small screens */
+  top: 0;
+  left: 0;
+/* "#bar width" */
+  background: rgba(0,0,0,0.6);
+  font-size: 10px;
+/* change this value to increase/decrease button size */
+  z-index: 10;
+  width: 2em;
+  height: 2em;
+  padding: 1em 1em;
+}
+.bar-link:hover,
+.bar-link:focus {
+  background: #000;
+}
+.bar-link span {
+  position: relative;
+  display: block;
+  margin-top: 0.9em;
+}
+.bar-link span,
+.bar-link span:before,
+.bar-link span:after {
+  background-color: #fff;
+  width: 100%;
+  height: 0.2em;
+  transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+.bar-link span:before,
+.bar-link span:after {
+  position: absolute;
+  margin-top: -0.55em;
+  content: " ";
+}
+.bar-link span:after {
+  margin-top: 0.55em;
+}
+.bar-link.active span {
+  background: transparent;
+}
+.bar-link.active span:before {
+  -webkit-transform: rotate(45deg) translate(0.5em, 0.4em);
+  -moz-transform: rotate(45deg) translate(0.5em, 0.4em);
+  -ms-transform: rotate(45deg) translate(0.5em, 0.4em);
+  -o-transform: rotate(45deg) translate(0.5em, 0.4em);
+  transform: rotate(45deg) translate(0.5em, 0.4em);
+}
+.bar-link.active span:after {
+  -webkit-transform: rotate(-45deg) translate(0.4em, -0.3em);
+  -moz-transform: rotate(-45deg) translate(0.4em, -0.3em);
+  -ms-transform: rotate(-45deg) translate(0.4em, -0.3em);
+  -o-transform: rotate(-45deg) translate(0.4em, -0.3em);
+  transform: rotate(-45deg) translate(0.4em, -0.3em);
+}
+/* -- Responsive Styles (Media Queries) ------------------------------------- */
+@media (min-aspect-ratio 1/1) and (min-width 48em) {
+  .header,
+  .content {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+  #layout {
+    padding-left: 60px;
+/* left col width "#bar" */
+    left: 0;
+  }
+  #bar {
+    width: 60px;
+  }
+  #bar:hover {
+    width: 18%;
+    min-width: 200px;
+  }
+  .bar-link {
+    position: fixed;
+    left: 60px;
+    display: none;
+  }
+  #layout.active .bar-link {
+    left: 60px;
+  }
+  #home {
+    height: 48px;
+    line-height: 48px;
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+  }
+  .home {
+    margin-top: 8px;
+  }
+  #usr {
+    height: 160px;
+  }
+  #face {
+    width: 54px;
+    height: 54px;
+    -moz-border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -o-border-radius: 27px;
+    border-radius: 27px;
+  }
+  #name {
+    margin-left: 12px;
+    width: 120px;
+    height: 54px;
+    line-height: 54px;
+    font-size: 32px;
+    display: none;
+  }
+  #usrmsg {
+    margin-top: 24px;
+    height: 82px;
+    width: 80%;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    line-height: 82px;
+  }
+  #bar:hover #name {
+    display: inline-block;
+  }
+  #bar:hover #face {
+    margin-left: 10px;
+  }
+  #bar:hover #usrmsg {
+    display: block;
+  }
+  .mcon {
+    height: 60px;
+    line-height: 60px;
+  }
+  .mtext {
+    margin-left: 30px;
+    margin-right: 10%;
+    font-size: 16px;
+    display: none;
+  }
+  #bar:hover .mtext {
+    display: inline;
+  }
+  #loading {
+    margin-top: 200px;
+  }
+}
+@media (max-aspect-ratio 1/1) {
+@media (min-width 48em) {
+    #layout.active #bar {
+      left: 540px;
+      width: 540px;
+    }
+    #layout.active .bar-link {
+      left: 540px;
+    }
+    #bar {
+      width: 540px;
+      margin-left: -540px;
+    }
+    .bar-link {
+      width: 4em;
+      height: 4em;
+    }
+    .bar-link span {
+      margin-top: 2em;
+    }
+    .bar-link span:before {
+      margin-top: -1em;
+    }
+    .bar-link span:after {
+      margin-top: 1em;
+    }
+    #home {
+      height: 72px;
+      line-height: 72px;
+      transition: all 1s;
+      -moz-transition: all 1s;
+      -webkit-transition: all 1s;
+      -ms-transition: all 1s;
+      -o-transition: all 1s;
+    }
+    .home {
+      margin-top: 6px;
+      font-size: 4em;
+    }
+    #usr {
+      height: 420px;
+    }
+    #face {
+      width: 240px;
+      margin-top: 46px;
+      height: 240px;
+      -moz-border-radius: 120px;
+      -webkit-border-radius: 120px;
+      -o-border-radius: 120px;
+      border-radius: 120px;
+    }
+    #name {
+      margin: 0 auto;
+      height: 128px;
+      line-height: 128px;
+      font-size: 72px;
+    }
+    #usrmsg {
+      margin-top: 24px;
+      height: 82px;
+      width: 80%;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -o-border-radius: 5px;
+      border-radius: 5px;
+      line-height: 82px;
+    }
+    .mcon {
+      height: 136px;
+      line-height: 136px;
+    }
+    .mico {
+      font-size: 4em;
+    }
+    .mtext {
+      margin-left: 32px;
+      font-size: 40px;
+      display: inline;
+    }
+    #loading {
+      margin-top: 500px;
+    }
+    .loading {
+      font-size: 12em;
+    }
+    .back {
+      font-size: 6em;
+    }
+}
+}
+@media (max-width 48em) {
+  #layout.active #bar {
+    left: 200px;
+    width: 200px;
+  }
+  #layout.active .bar-link {
+    left: 200px;
+  }
+  #bar {
+    width: 200px;
+    margin-left: -200px;
+  }
+  #home {
+    height: 48px;
+    line-height: 48px;
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+  }
+  .home {
+    margin-top: 8px;
+  }
+  #usr {
+    height: 160px;
+  }
+  #face {
+    width: 80px;
+    height: 80px;
+    -moz-border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -o-border-radius: 40px;
+    border-radius: 40px;
+  }
+  #name {
+    margin: 0 auto;
+    height: 54px;
+    line-height: 54px;
+    font-size: 32px;
+  }
+  #usrmsg {
+    margin-top: 24px;
+    height: 82px;
+    width: 80%;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    line-height: 82px;
+  }
+  .mcon {
+    height: 80px;
+    line-height: 80px;
+  }
+  .mtext {
+    margin-left: 16px;
+    font-size: 20px;
+    display: inline;
+  }
+  #loading {
+    margin-top: 200px;
+  }
+}

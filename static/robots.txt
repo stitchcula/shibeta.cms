@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /static/upload/
+Disallow: /static/d/
+Allow: /

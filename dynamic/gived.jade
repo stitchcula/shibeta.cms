@@ -1,0 +1,277 @@
+doctype html
+html
+    head
+        title 浩盛消防 授权合同
+        script(src='/static/lib/jquery.js')
+        link(rel='stylesheet',href='/static/lib/pure.min.css')
+        link(rel='stylesheet',href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        meta(name="viewport",content="width=device-width, initial-scale=1")
+        style
+            :stylus
+                @import "hack"
+                body
+                    min-width 800px
+                    min-height 480px
+                    background-color #ccc
+                    user-select none
+                    -webkit-user-select none
+                    -moz-user-select none
+                    background-attachment: fixed
+                    background-repeat: no-repeat
+                    background-size: cover
+                    -moz-background-size: cover
+                    -webkit-background-size: cover
+                    background-image url(/static/img/bg_services.jpg);
+
+                #bar
+                    position absolute
+                    height 40px
+                    width 100%
+                    background-color rgb(100, 100, 100, 0.4)
+                    radius-bottom 8px
+
+                #sm
+                    text-align center
+                    line-height 40px
+
+                #exl
+                    text-align right
+                    line-height 40px
+
+                .sm
+                    font-size 12px
+                    font-family "Microsoft YaHei"
+                    color #FFF
+
+                .exl
+                    color #FFF
+                    trans all 1s
+                    margin-right 16px
+                    margin-top 5px
+
+                .fa-qq
+                    margin-right 40px
+
+                .fa-weibo:hover
+                    color rgb(223, 2, 18)
+
+                .fa-qq:hover
+                    color rgb(7, 181, 223)
+
+                .fa-tumblr:hover
+                    color rgb(230, 190, 54)
+
+                #block
+                    width 800px
+                    height 480px
+                    margin auto
+                    position absolute
+                    top 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0
+                    overflow hidden
+                    radius 8px
+                    background-color rgba(255, 255, 255, 0.4)
+                    trans all 0.8s
+
+                .com
+                    height 440px
+
+                input::-webkit-input-placeholder
+                    color #999
+                    font-size 16px
+                    font-family "Microsoft YaHei"
+                    trans all 1s
+
+                input:focus::-webkit-input-placeholder //,input:hover::-webkit-input-placeholder
+                    color rgba(0, 0, 0, 0.0)
+
+                .input
+                    margin auto 0
+                    border 0px
+                    border-bottom 2px solid #999
+                    height 24px
+                    background-color rgba(0, 0, 0, 0.0)
+                    outline-width 0px
+                    font-size 18px
+                    color #222
+                    font-family "Microsoft YaHei"
+
+                .searchbox
+                    line-height 60px
+                    position: relative
+                    margin 0 auto
+                    height 60px
+                    width 50%
+
+                .searchbar
+                    margin auto auto
+                    width 100%
+
+                .search
+                    color #32CD32
+                    trans all 0.6s
+                    position: absolute
+                    top 50%
+                    margin-top -8px
+                    right 0
+
+                .search:hover
+                    color #c0fcd0
+
+                #contain
+                    height 440px
+
+                #p1, #p2
+                    color #444
+                    font-family "Microsoft YaHei"
+
+                #p1
+                    font-size 26px
+                    margin-bottom 0
+
+                #p2
+                    font-size 14px
+
+                #res
+                    width 768px
+                    margin 0 auto
+                    margin-top 12px
+                    trans all 0.6s
+                    .resp
+                        height 20px
+                        font-size 14px
+                        color #ff2800
+                        margin-top 32px
+                        margin-bottom 0px
+                        margin-left 110px
+
+                #ctView
+                    margin 0 auto
+                    width 480pt
+                    p
+                        font-family "Microsoft YaHei"
+                    .resTab
+                        margin 0 auto
+                        border:none
+                        border-collapse:collapse
+                        tr
+                            height 12pt
+                        p
+                            margin 3px auto
+                    .resTd1
+                        width:14.0cm
+                        border:none
+                        p
+                            font-size 12pt
+                            font-weight bold
+                    .resTr2
+                    .resTr5
+                        height 18pt
+                        td
+                            width:14.0cm
+                            border:none
+                            height 18pt
+                        p
+                            text-align:right
+                            font-size 10pt
+                    .resTr2
+                        border-bottom: solid 1.0pt #32CD32
+                    .resTd3
+                        background: #32CD32
+                        width:70pt;
+                        border:solid 1.0pt #32CD32
+                        border-top:none
+                        p
+                            font-size 12pt
+                            font-weight bold
+                            color #FFF
+                    .resTd4
+                        width:160pt;
+                        border-top:none;
+                        border-left:none;
+                        border-bottom:solid 1.0pt #32CD32
+                        border-right:solid 1.0pt #32CD32
+                        p
+                            font-size 12pt
+
+        script.
+            $(function () {
+                $(".resp").html("授权成功。（5秒钟后自动跳转）").fadeIn(500)
+                var t = 5
+                var h = setInterval(function () {
+                    if (t <= 0) {
+                        window.location="/usr?rd="+Math.random().toString(36).substr(2)
+                        clearInterval(h)
+                    } else {
+                        --t
+                        $(".resp").html("授权成功。（" + t + "秒钟后自动跳转）")
+                    }
+                }, 1000)
+            })
+    body
+        #block
+            #contain
+                div.pure-u-1-6
+                div.pure-u-2-3
+                    p#p1 授权结果
+                    p#p2 下面为授权合同的信息。
+                div.pure-u-1-6
+                #res
+                    #ctView
+                        table.resTab(border=1,cellspacing=0,cellpadding=0)
+                            tr
+                                td.resTd1(width=555,colspan=4)
+                                    p(align="center")=name
+                            tr.resTr2
+                                td(width=555,colspan=4)
+                                    p(align="right")="合同编码:"+id
+                            tr
+                                td.resTd3(width=91)
+                                    p(align="center") 甲&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方
+                                td.resTd4(width=200)
+                                    p(align="center")=p[0]
+                                td.resTd3(width=91)
+                                    p(align="center") 乙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方
+                                td.resTd4(width=200)
+                                    p(align="center")=p[1]
+                            tr
+                                td.resTd3(width=91)
+                                    p(align="center") 合同金额
+                                td.resTd4(width=200)
+                                    p(align="center")=p[2]
+                                td.resTd3(width=91)
+                                    p(align="center") 有效期限
+                                td.resTd4(width=200)
+                                    p(align="center")=p[3]
+                            tr
+                                td.resTd3(width=91)
+                                    p(align="center") 签订时间
+                                td.resTd4(width=200)
+                                    p(align="center")=p[4]
+                                td.resTd3(width=91)
+                                    p(align="center") 签订地点
+                                td.resTd4(width=200)
+                                    p(align="center")=p[5]
+                            tr
+                                td.resTd3(width=91)
+                                    p(align="center") 甲方代表
+                                td.resTd4(width=200)
+                                    p(align="center")=p[6]
+                                td.resTd3(width=91)
+                                    p(align="center") 乙方代表
+                                td.resTd4(width=200)
+                                    p(align="center")=p[7]
+                            tr.resTr5
+                                td(width=555,colspan=4)
+                                    p(align="right")="授权时间:"+status
+                    div.resp
+            div.pure-u-1-1
+                #bar
+                    #sm.pure-u-1-2
+                        a.sm Copyright © 浩盛消防 2015 保留所有
+                    #exl.pure-u-1-2
+                        i.fa.fa-tumblr.exl
+                        i.fa.fa-weibo.exl
+                        i.fa.fa-qq.exl

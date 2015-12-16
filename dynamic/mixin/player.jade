@@ -1,0 +1,101 @@
+style
+    :stylus
+        @import "frag/hack"
+        @import "theme/player"
+        .player
+            position fixed
+            left 0
+            bottom 128px
+            height 36px
+            width 72px
+            border-radius 0 18px 18px 0
+            transition all 0.6s
+            .quick
+                position relative
+                .play
+                    width 36px
+                    height 36px
+                    border-radius 18px
+                    text-align center
+                    line-height 36px
+                    cursor pointer
+                    position absolute
+                    right 0
+                    transition all 0.6s
+                    i
+                        transition all 0.6s
+                .extend
+                    height 36px
+                    line-height 36px
+                    width 54px
+                    i
+                        cursor pointer
+                        animation extend 1.5s
+                        animation-iteration-count infinite
+                    @keyframes extend
+                        from
+                            margin-left 8px
+                        to
+                            margin-left 18px
+                .progress-yet
+                    position absolute
+                    top 0
+                    width 0
+                    height 36px
+                    z-index -1
+                    transition all 0.1s
+
+mixin player
+    div.player
+        audio
+            source(src="/api/music",type="audio/mpeg")
+        div.quick
+            div.play
+                i.fa.fa-play
+            div.extend
+                i.fa.fa-angle-double-right
+            div.progress-yet
+        div.panel
+    script.
+        var audio=document.getElementsByTagName("audio")[0]
+        var progressMove
+        audio.load()
+        document.getElementsByClassName('player')[0].getElementsByClassName('play')[0].addEventListener('click',function (e) {
+            e.stopPropagation()
+            if (audio.paused) {
+                audio.play()
+                document.querySelector('.player .play i').classList.remove("fa-play")
+                document.querySelector('.player .play i').classList.add("fa-pause")
+                progressMove = setInterval(function () {
+                    var progressYet = (audio.currentTime / audio.duration) * document.getElementsByClassName('player')[0].clientWidth
+                    document.getElementsByClassName('progress-yet')[0].style.width=progressYet+'px'
+                    if(audio.currentTime==audio.duration) reloadQuick()
+                }, 1000)
+            } else {
+                audio.pause()
+                document.querySelector('.player .play i').classList.remove("fa-pause")
+                document.querySelector('.player .play i').classList.add("fa-play")
+                clearInterval(progressMove)
+            }
+        })
+        /*
+        document.getElementsByClassName('player')[0].getElementsByClassName('extend')[0].addEventListener('click',function (e) {
+            if(!this.ifExtend){
+                document.getElementsByClassName('player')[0].style.bottom = 0
+                document.getElementsByClassName('player')[0].style.height = '164px'
+                document.getElementsByClassName('player')[0].style.width = '512px'
+                this.ifExtend=1
+            }else{
+                document.getElementsByClassName('player')[0].style.bottom = '128px'
+                document.getElementsByClassName('player')[0].style.height = '36px'
+                document.getElementsByClassName('player')[0].style.width = '72px'
+                this.ifExtend=0
+            }
+        })
+        */
+        function reloadQuick(src){
+            audio.currentTime=0
+            if(src) audio.src=src
+            audio.load()
+            audio.play()
+        }

@@ -1,0 +1,125 @@
+extends ../frag/framework
+block style
+    style
+        :stylus
+            p.box
+                padding: 20px;
+            .yahei
+                font-family "Microsoft YaHei"
+            p
+                color: rgba(0, 0, 0, 0.71);padding: 0;-webkit-font-smoothing: antialiased;
+            h1, h2, h3, h4, h5, h6
+                -webkit-font-smoothing: antialiased
+            nav a
+                -webkit-font-smoothing: antialiased
+            nav ul li:hover, nav ul li.active
+                background-color: #ea454b;
+            header, main, footer
+                padding-left: 240px
+            .parallax-demo header, .parallax-demo main, .parallax-demo footer
+                padding-left: 0;
+            @media only screen and (max-width: 992px)
+                header, main, footer
+                    padding-left: 0;
+            ul.side-nav.fixed li a
+                line-height 44px;height 44px;line-height
+            ul.side-nav.fixed li i
+                line-height inherit;width 2rem
+            a.button-collapse.top-nav
+                position: absolute;text-align: center;height: 48px;width: 48px;left: 7.5%;top: 0;float: none;margin-left: 1.5rem;color: #fff;font-size: 32px;z-index: 2;
+            a.button-collapse.top-nav.full
+                line-height: 64px
+            @media only screen and (max-width: 600px)
+                a.button-collapse.top-nav
+                    left: 5%
+                a.button-collapse.top-nav.full
+                    line-height: 56px
+                nav .nav-wrapper i
+                    height 56px;line-height: 56px
+
+block content
+    header
+        div.container
+            a.button-collapse.top-nav.full.hide-on-large-only.left(href="#",data-activates="slide-nav")
+                i.mdi-navigation-menu
+        ul#slide-nav.side-nav.fixed
+            li.logo
+            each m in menu
+                if typeof(m.href) == 'string'
+                    li.bold._active
+                        a.waves-effect.waves-right.yahei(href=m.href)
+                            i.material-icons.left=m.icon
+                            | #{m.inner}
+                else
+                    li.no-padding
+                        ul.collapsible.collapsible-accordion
+                            li.bold
+                                a.collapsible-header.waves-effect.waves-right.yahei
+                                    i.material-icons.left=m.icon
+                                    | #{m.inner}
+                                div.collapsible-body
+                                    ul
+                                        each i in m.href
+                                            li._active
+                                                a.waves-effect.waves-right.yahei(href=i.href)
+                                                    i.material-icons.left=i.icon
+                                                    | #{i.inner}
+        script.
+            $(function () {
+                //init
+                function is_touch_device() {
+                    try {
+                        document.createEvent("TouchEvent");
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                if (is_touch_device())  $('#slide-nav').css({ overflow: 'auto'})
+                $('.button-collapse').sideNav({
+                    menuWidth: 240,
+                    edge: 'left',
+                    closeOnClick: false
+                })
+                $("li._active").each(function(){
+                    $(this).click(function(){
+                        $("li._active").toggleClass("active",false)
+                        $(this).toggleClass("active",true)
+                    })
+                })
+
+                //ajax
+                window.onload = ajaxHash
+                window.onhashchange = ajaxHash
+                function ajaxHash() {
+                    var hash = window.location.hash
+                    var path = window.location.pathname
+                    hash = (/^.*\/$/.test(hash)) ? hash.substring(1, hash.length - 1) : hash.substring(1, hash.length)
+                    path = (/^.*\/$/.test(path)) ? path.substring(0, path.length - 1) : path.substring(0, path.length)
+                    if(!hash) hash="notice"
+                    ajaxLoad("main",path + "/" + hash)
+                }
+                function ajaxLoad(selector,path){
+                    ajax(path,'GET',function(err,res){
+                        if (err != undefined)
+                            data = '<a href="/api/error">ERROR:' + err + '</a>'
+                        $(selector).fadeOut(200,function(){
+                            $(this).empty().append(res).fadeIn(200)
+                        })
+                    })
+                }
+                function ajax(path,method,data,callback){
+                    if(!callback) callback=data
+                    $.ajax({url:path,type:method,cache:false,data:data,
+                        beforeSend:function(){
+                            $("footer>.ajaxLoad").fadeIn(200)
+                        },
+                        complete:function(data){
+                            $("footer>.ajaxLoad").fadeOut(200)
+                            callback(data.responseText.code,data.responseText)
+                        }
+                    })
+                }
+            })
+    main
+

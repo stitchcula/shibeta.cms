@@ -1,0 +1,32 @@
+mixin upload_mini
+    link(rel="stylesheet",href="/static/lib/webuploader.css")
+    script(src="/static/lib/webuploader.min.js")
+    div#uploader.wu-example
+        div#thelist.uploader-list
+        div.btns
+            div#picker 选择文件
+            button#ctlBtn.btn 开始上传
+    script.
+        //$(function(){
+            var uploader=WebUploader.create({
+                swf:"/static/lib/Uploader.swf",
+                server:"/api/upload",
+                pick:"#picker",
+                resize:false
+            })
+            uploader.on('fileQueued', function (file) {
+                console.log(1)
+            })
+            uploader.on('uploadProgress', function (file, percentage) {
+                console.log(2)
+            })
+            uploader.on('uploadSuccess', function (file) {
+                console.log(3)
+            });
+            uploader.on('uploadError', function (file) {
+                console.log(4)
+            });
+            uploader.on('uploadComplete', function (file) {
+                console.log(5)
+            })
+        //})

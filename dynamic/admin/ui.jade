@@ -1,0 +1,130 @@
+nav.top-nav
+    div.container
+        div.nav-wrapper
+            a.brand-logo.yahei
+                i.material-icons.left view_compact
+                |UI控制
+div.container
+    div.row
+        div.col.s12
+            ul.tabs.z-depth-1
+                li.tab.col.s6
+                    a.active(href="#control_ui_page").yahei 页面
+                li.tab.col.s6
+                    a(href="#control_ui_content").yahei 内容
+        div#control_ui_page.col.s12
+            div.row
+                div.col.m6.l4
+                    a.waves-effect.waves-light.btn.yahei.control_ui_page_select
+                        i.material-icons.left(href="#control_ui_page_addNewPage") add
+                        |添加新页面
+                div.col.m6.l8
+                    div.row.control_ui_page_prm
+                        div.col.m12.l6.input-field
+                            input#control_ui_page_title.validate(type="text")
+                            label(for="control_ui_page_title") 标题
+                        div.col.m12.l6.input-field
+                            input#control_ui_page_url.validate(type="text")
+                            label(for="control_ui_page_url") 地址
+                        div.col.s12
+                            a.teal-text.yahei 参数
+                            ul.tabs.right.control_ui_page_prm_tab
+                                li.tab
+                                    a
+                                        i.material-icons clear_all
+                                li.tab
+                                    a.active(href="#control_ui_page_prm_tab1")
+                                        i.material-icons view_list
+                                li.tab
+                                    a(href="#control_ui_page_prm_tab2")
+                                        i.material-icons settings_ethernet
+                        div.col.s12#control_ui_page_prm_tab1
+                            div.row
+                                div.col.s5
+                                    input.validate(type="text")
+                                div.col.s6
+                                    input.validate(type="text")
+                                i.material-icons remove_circle
+                            div.row
+                                div.col.s5
+                                    input.validate(type="text")
+                                div.col.s6
+                                    input.validate(type="text")
+                                i.material-icons remove_circle
+                        div.col.s12#control_ui_page_prm_tab2
+                            div.row
+                                div.col.s12.input-field
+                                    textarea#control_ui_page_prm_tab2_textarea.materialize-textarea
+                                    label(for="control_ui_page_prm_tab2_textarea") JSON OBJECT
+                        div.col.s12
+                            span.yahei.ajaxResult.red-text
+                            a.waves-effect.waves-light.btn.yahei.right#control_ui_page_ok
+                                i.material-icons.left done_all
+                                |确定添加
+        div#control_ui_content.col.s12 lalalala2
+style
+    :stylus
+        .control_ui_page_select
+            margin 16px 8px
+        .control_ui_page_prm
+            margin-top 16px
+        .control_ui_page_prm_tab
+            width auto !important
+        #control_ui_page_prm_tab1
+            >.row
+                margin 0
+                position: relative
+                i
+                    position: absolute
+                    top 8px
+                    right 0
+                    cursor: pointer
+                    display none
+                    color #ee6e73
+                input
+                    margin 0
+            >.row:hover
+                i
+                    display inline
+            >.row:last-of-type
+                margin-bottom 32px
+                i
+                    display none
+            >.row:first-of-type
+                display: none
+script.
+    $(function(){
+        $('ul.tabs').tabs()
+        $('#control_ui_page_prm_tab1>.row:last-of-type input').click(function(){
+            $(this).closest('.row').before($('#control_ui_page_prm_tab1>.row:first-of-type').clone(true))
+        })
+        $('#control_ui_page_prm_tab1>.row i').click(function(){
+            $(this).closest('.row').remove()
+        })
+        $('#control_ui_page_ok').click(function(){
+            var data={jade:{}},i=$('#control_ui_page .control_ui_page_prm input')
+            data.url=i[1].value
+            data.jade.title=i[0].value
+            for(var x=4;x<i.length-2;x=x+2){
+                data.jade[i[x].value]=i[x+1].value
+            }
+            ajax('/admin/ui/page','POST',data,function(err,res){
+                $('.ajaxResult').html("提交成功")
+            })
+        })
+
+
+        //public
+        function ajax(path,method,data,callback){
+            if(!callback) callback=data
+            $.ajax({url:path,type:method,cache:false,data:data,
+                beforeSend:function(){
+                    $("footer>.ajaxLoad").fadeIn(200)
+                },
+                complete:function(data){
+                    $("footer>.ajaxLoad").fadeOut(200)
+                    callback(data.responseText.code,data.responseText)
+                }
+            })
+        }
+    })

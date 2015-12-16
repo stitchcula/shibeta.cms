@@ -1,0 +1,52 @@
+{
+  "name": "shibeta.cms",
+  "version": "1.0.0",
+  "description": "2.0.0",
+  "main": "cms.js",
+  "dependencies": {
+    "angular2": "^2.0.0-alpha.50",
+    "co": "^4.6.0",
+    "co-redis": "^2.0.0",
+    "dir-requirer": "^1.0.4",
+    "directory-tree": "^0.1.1",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.13",
+    "jade": "^1.11.0",
+    "koa": "^1.1.2",
+    "koa-better-body": "^1.0.17",
+    "koa-mongo": "^0.4.1",
+    "koa-router": "^5.3.0",
+    "koa-session-redis": "^1.1.0",
+    "koa-static": "^1.5.2",
+    "koa-stylus": "0.0.3",
+    "nodegrass": "0.0.3",
+    "nodemailer": "^1.10.0",
+    "oneapm": "^1.2.15",
+    "redis": "^2.4.2",
+    "reflect-metadata": "^0.1.2",
+    "request": "^2.67.0",
+    "request-json": "^0.5.3",
+    "robe": "^0.12.0",
+    "rxjs": "^5.0.0-alpha.14",
+    "stylus": "^0.53.0",
+    "zone.js": "^0.5.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node cms.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stitchcula/shibeta.cms.git"
+  },
+  "keywords": [
+    "koa",
+    "contract"
+  ],
+  "author": "StitchCula",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/stitchcula/shibeta.cms/issues"
+  },
+  "homepage": "https://github.com/stitchcula/shibeta.cms#readme"
+}

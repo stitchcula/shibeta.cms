@@ -1,0 +1,345 @@
+doctype html
+html
+    head
+        title 浩盛消防在线平台统一入口
+        script(src='/static/lib/jquery.js')
+        link(rel='stylesheet',href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        script(src="/static/lib/sha1.js")
+        meta(name="viewport",content="width=device-width, initial-scale=1")
+        link(rel='stylesheet',href='/static/lib/pure.min.css')
+        style
+            :stylus
+                @import "hack"
+                body
+                    min-width 800px
+                    min-height 480px
+                    background-color #ccc
+                    user-select none
+                    -webkit-user-select none
+                    -moz-user-select none
+                    background-attachment:fixed
+                    background-repeat:no-repeat
+                    background-size:cover
+                    -moz-background-size:cover
+                    -webkit-background-size:cover
+                    background-image url(/static/img/bg_services.jpg)
+                img
+                    z-index -1
+                    width 100%
+                    height 100%
+                    fil 20px
+                i
+                    cursor pointer
+                .pure-control-group
+                    i
+                        margin-left 20px
+                    input
+                        font-family "Microsoft YaHei"
+                .com
+                    height 440px
+
+                #block
+                    width 800px
+                    height 480px
+                    margin auto
+                    position absolute
+                    top 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0
+                    overflow hidden
+                    radius 8px
+                    background-color rgba(255, 255, 255, 0.4)
+                    trans all 0.8s
+                #forget
+                #login
+                    width 800px
+                    height 480px
+                    margin auto
+                    position absolute
+                    top 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0
+                #forget
+                    -webkit-transform rotateY(-180deg)
+                    display none
+                #face
+                    margin 0 auto
+                    margin-top 40px
+                    width 100px
+                    height 100px
+                    radius 50px
+                    text-align center
+                    line-height @height
+                    border 1px solid #AAAAAA
+
+                .face
+                    color #EEEEEE
+                    margin-top 10px
+
+                #onlogin, #onforget
+                    width 260px
+                    height 36px
+                    background-color #3FCF3F
+                    text-align center
+                    line-height @height
+                    radius 5px
+                    trans all 0.5s
+                    margin 0 auto
+                    margin-top 30px
+
+                .onlogin,.onforget
+                    color #FFF
+                    trans all 0.5s
+
+                #onlogin:hover
+                    background-color #c0fcd0
+                #onforget:hover
+                    background-color #c0fcd0
+
+                #onlogin:hover .onlogin
+                    color #000
+                #onforget:hover .onforget
+                    color #000
+
+                .input
+                    margin 0 auto
+                    border 0px
+                    border-bottom 2px solid #999
+                    height 24px
+                    width 260px
+                    display block
+                    background-color rgba(0, 0, 0, 0.0)
+                    outline-width 0px
+                    font-size 18px
+                    font-color #222
+                    font-family "Microsoft YaHei"
+
+                #usr
+                    margin-top 60px
+
+                #pwd,.pwd
+                    margin-top 20px
+
+                input::-webkit-input-placeholder
+                    color #999
+                    font-size 16px
+                    font-family "Microsoft YaHei"
+                    trans all 1s
+
+                input:focus::-webkit-input-placeholder //,input:hover::-webkit-input-placeholder
+                    color rgba(0, 0, 0, 0.0)
+
+                #bar
+                    position absolute
+                    height 40px
+                    width 100%
+                    background-color rgb(100, 100, 100, 0.4)
+                    radius-bottom 8px
+
+                #sm
+                    text-align center
+                    line-height 40px
+
+                #exl
+                    text-align right
+                    line-height 40px
+
+                .sm
+                    font-size 12px
+                    font-family "Microsoft YaHei"
+                    color #FFF
+
+                .exl
+                    color #FFF
+                    trans all 1s
+                    margin-right 16px
+                    margin-top 5px
+
+                .fa-qq
+                    margin-right 40px
+
+                .fa-weibo:hover
+                    color rgb(223, 2, 18)
+
+                .fa-qq:hover
+                    color rgb(7, 181, 223)
+
+                .fa-tumblr:hover
+                    color rgb(230, 190, 54)
+
+                .resMsg
+                    height 14px
+                    margin-top 16px
+                    margin-left 86px
+                    font-size 14px
+                    color #ff755d
+
+                #toForget
+                    width 140px
+                    height 24px
+                    margin 0 auto
+                    margin-left 266px
+                    cursor default
+                    font-size 14px
+                    line-height 24px
+                    font-family "Microsoft YaHei"
+                    text-align center
+                    margin-top 10px
+                    color #AAAAAA
+                    radius 5px
+                    border 1px solid #AAAAAA
+                    trans all 0.5s
+
+                #toForget:hover
+                    background-color #FFF
+                    font-color #777
+                    color #777
+
+                #back
+                    height 440px
+                    line-height @height
+                    text-align center
+
+                .back
+                    color rgba(255, 255, 255, 0.8)
+                    trans all 0.8s
+                    &:hover
+                        color rgba(0, 0, 0, 0.4)
+
+
+                #forgetM
+                    p
+                        color #444
+                        font-family "Microsoft YaHei"
+                #p1
+                    font-size 26px
+                    margin-bottom 0
+                #p2
+                    font-size 14px
+
+                .err
+                    color #f00
+                    display none
+
+        script.
+            $(function () {
+                var flag=0
+                $("#onlogin").click(function () {
+                    //if(flag) return 0
+                    var usr = $("#usr").val()
+                    var pwd = hex_sha1($("#pwd").val())
+                    $(".onlogin").removeClass("fa-check").addClass("fa-pulse").addClass("fa-spinner")
+                    flag=1
+                    $.ajax({usr:"/login?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
+                        success:function (data, status) {
+                            if (status == "success") {
+                                if (data.result == 200) {
+                                    window.location = "/usr?rd="+Math.random().toString(36).substr(2)
+                                } else {
+                                    $(".onlogin").removeClass("fa-spinner").removeClass("fa-pulse").addClass("fa-check")
+                                    $("#res1").html("账户&密码错误owo").fadeIn(500)
+                                }
+                            } else {
+                                $(".onlogin").removeClass("fa-spinner").removeClass("fa-pulse").addClass("fa-check")
+                                $("#res1").html("服务器繁忙owo").fadeIn(500)
+                            }
+                            flag=0
+                        }
+                    })
+                })
+
+                $("#toForget").click(function () {
+                    $("#block").css({"-webkit-transform":"rotateY(180deg)"})
+                    $("#login").fadeOut(500)
+                    $("#forget").fadeIn(800)
+                    $(".resMsg").html("&nbsp;")
+                    flag=0
+                })
+
+                $(".back").click(function(){
+                    $("#block").css({"-webkit-transform":"rotateY(0deg)"})
+                    $("#forget").fadeOut(500)
+                    $("#login").fadeIn(800)
+                    $(".resMsg").html("&nbsp;")
+                    flag=0
+                })
+
+                $("#onforget").click(function () {
+                    if(flag) return 0
+                    if($("#n").val()!=$("#m").val()){
+                        $("#res2").html("两次输入密码不匹配。").fadeIn(500)
+                        flag=0
+                        return 0
+                    }
+                    $(".onforget").removeClass("fa-check").addClass("fa-pulse").addClass("fa-spinner")
+                    flag=1
+                    $.ajax({url:'/t?rd='+Math.random().toString(36).substr(2),type:'PUT',data:{name:$("#t").val(),idf:$("#d").val(),pwd:hex_sha1($("#n").val())},success:function(data,status){
+                        if (status == "success") {
+                            if (data.result == 200) {
+                                $(".onforget").removeClass("fa-spinner").removeClass("fa-pulse").addClass("fa-check")
+                                $("#res2").html("请尽快查收邮件，1小时内有效owo").fadeIn(500)
+
+                            } else {
+                                $(".onforget").removeClass("fa-spinner").removeClass("fa-pulse").addClass("fa-check")
+                                $("#res2").html("信息有误owo").fadeIn(500)
+                            }
+                        } else {
+                            $(".onforget").removeClass("fa-spinner").removeClass("fa-pulse").addClass("fa-check")
+                            $("#res2").html("服务器繁忙owo").fadeIn(500)
+                        }
+                        flag=0
+                    }})
+                })
+            })
+
+    body
+        #block
+            #login
+                #ad.pure-u-1-2.com
+                    //div.ad
+                #main.pure-u-1-2.com
+                    #face
+                        i.fa.fa-user.fa-5x.face
+                    input#usr.input(type="text",name="",placeholder="用户名/邮箱/手机号",max="16")
+                    input#pwd.input(type="password",name="",placeholder="密码",max="16")
+                    #onlogin
+                        i.fa.fa-check.onlogin
+                    #res1.resMsg
+                    #toForget 登陆遇到困难？
+                        i.fa.fa-sign-in
+                div.pure-u-1-1
+                    #bar
+                        #sm.pure-u-1-2
+                            a.sm Copyright © 浩盛消防 2015 保留所有
+                        #exl.pure-u-1-2
+                            i.fa.fa-tumblr.exl
+                            i.fa.fa-weibo.exl
+                            i.fa.fa-qq.exl
+            #forget
+                div.com
+                    #back.pure-u-1-8
+                        i.fa.fa-arrow-circle-left.fa-4x.back
+                    #forgetM.pure-u-7-8
+                        p#p1 重置密码
+                        p#p2 如果下列填写的信息与记录的匹配，您绑定的邮箱将收到一封邮件。
+                        input#t.pwd.input(type="text",name="",placeholder="真实姓名",max="16")
+                        i#te.fa.fa-times-circle.err
+                        input#d.pwd.input(type="text",name="",placeholder="身份证号码",max="16")
+                        i#de.fa.fa-times-circle.err
+                        input#n.pwd.input(type="password",name="",placeholder="新密码",max="16")
+                        i#ne.fa.fa-times-circle.err
+                        input#m.pwd.input(type="password",name="",placeholder="再输入一次",max="16")
+                        i#me.fa.fa-times-circle.err
+                        #onforget
+                            i.fa.fa-check.onforget
+                        #res2.resMsg
+                div.pure-u-1-1
+                    #bar
+                        #sm.pure-u-1-2
+                            a.sm Copyright © 浩盛消防 2015 保留所有
+                        #exl.pure-u-1-2
+                            i.fa.fa-tumblr.exl
+                            i.fa.fa-weibo.exl
+                            i.fa.fa-qq.exl
