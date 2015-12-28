@@ -6,7 +6,9 @@ var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/tr
 for(var r of menu){
     r=r.path//.substring(0,r.name.lastIndexOf("."))
     router.get('/'+r,function*(next){
-        this.render(this.path)
+        if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
+            this.render(this.path)
+        }else return this.redirect('/login')
         yield next
     })
 }

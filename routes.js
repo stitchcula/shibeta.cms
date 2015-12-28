@@ -72,6 +72,8 @@ router.get('/login',function*(next){//登陆页面
     }else if(/^(\w){6,12}$/.test(this.request.body.usr)){
         msg=yield this.db.findOne({usr:new Buffer(this.request.body.usr).toString('base64')})
     }
+    console.log(JSON.stringify(msg))
+    console.log(this.request.body)
     if(msg&&(this.request.body.pwd==msg.pwd)){
         this.session={tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
         this.body={result:200}

@@ -168,23 +168,22 @@ block content
         $(function(){
             $('.slider').slider({full_width: true,interval:3000,indicators:false})
             $('#toForget').click(function(){$("html,body").animate({scrollTop:0},600)})
-
+            $("#res1").fadeOut(500)
             var flag=0
             $("#onLogin").click(function () {
                 //if(flag) return 0
                 var usr = $("#usr").val()
                 var pwd = hex_sha1($("#pwd").val())
                 flag=1
-                $("#res1").fadeOut(500)
                 $("#onLogining").addClass("active")
                 $.ajax({usr:"/admin?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
                     success:function (data, status) {
                         if (status == "success") {
                             if (data.result == 200) {
-                                window.location = "/usr?rd="+Math.random().toString(36).substr(2)
+                                window.location = "/admin?rd="+Math.random().toString(36).substr(2)
                             } else {
                                 $("#onLogining").removeClass("active")
-                                $("#res1").html("账户&密码错误owo").fadeIn(500)
+                                $("#res1").html("账户或密码错误").fadeIn(500)
                             }
                         } else {
                             $("#onLogining").removeClass("active")

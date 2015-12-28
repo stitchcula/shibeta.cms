@@ -45,9 +45,9 @@ app.use(function *(next){
         return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)
     }
     this.env={
-        WEB_PORT:8005,
-        MASTER_MAIL:"liudingli16@qq.com",
-        MASTER_TEL:"18142628666"
+        WEB_PORT:805,
+        MASTER_MAIL:"1132463097@qq.com",
+        MASTER_TEL:"15917597227"
     }
     this.db=mongo
     this.mailer=mailer
