@@ -7,8 +7,19 @@ for(var r of menu){
     r=r.path//.substring(0,r.name.lastIndexOf("."))
     router.get('/'+r,function*(next){
         if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
+            if(this.path=="/admin/user") { //兼容jade
+                return this.render(this.path, {
+                    usr: new Buffer(this.session.usr, 'base64').toString(),
+                    name: new Buffer(this.session.name, 'base64').toString(),
+                    idf: this.session.idf,
+                    pms: this.session.pms,
+                    tel: this.session.tel,
+                    em: this.session.em,
+                    ding: this.session.job
+                })
+            }
             this.render(this.path)
-        }else return this.redirect('/login')
+        }else return this.render('redirectLogin')
         yield next
     })
 }
@@ -16,7 +27,7 @@ for(var r of menu){
 router.use('/',function*(next){//验证
     if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
         this.session.ol+=7200000
-    }else return this.redirect('/login')
+    }else return this.render('redirectLogin')
     yield next
 }).get('/',function*(next){
     this.render('admin/framework',{
@@ -27,23 +38,28 @@ router.use('/',function*(next){//验证
                 href:"#notice"
             },
             {
-                inner:"性能监控",
-                icon:"cloud_queue",
+                inner:"个人信息",
+                icon:"perm_identity",
+                href:"#user"
+            },
+            {
+                inner:"合同管理",
+                icon:"description",
                 href:[
                     {
-                        inner:"总览",
-                        icon:"equalizer",
-                        href:"#3"
+                        inner:"提交合同",
+                        icon:"library_add",
+                        href:"#cms_push"
                     },
                     {
-                        inner:"储存",
-                        icon:"dns",
-                        href:"#4"
+                        inner:"真伪查询",
+                        icon:"find_in_page",
+                        href:"#cms_auth"
                     },
                     {
-                        inner:"交互",
-                        icon:"swap_horiz",
-                        href:"#4"
+                        inner:"查看合同",
+                        icon:"chrome_reader_mode",
+                        href:"#cms_edit"
                     }
                 ]
             },
@@ -53,8 +69,8 @@ router.use('/',function*(next){//验证
                 href:[
                     {
                         inner:"用户群组",
-                        href:"#usrs",
-                        icon:"supervisor_account"
+                        href:"#users",
+                        icon:"people_outline"
                     },
                     {
                         inner:"UI控制",
@@ -66,7 +82,7 @@ router.use('/',function*(next){//验证
             {
                 inner:"注销",
                 icon:"arrow_back",
-                href:"#1"
+                href:"#exit"
             },
         ],
         off_footer:1,

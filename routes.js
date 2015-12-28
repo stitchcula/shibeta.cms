@@ -89,7 +89,7 @@ router.get('/login',function*(next){//登陆页面
         yield this.redis.del(this.params.sid)
         this.session={tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
         this.body={result:200}
-        this.redirect('/usr')
+        this.redirect('/admin')
     }else this.status=404
     yield next
 }).put('/t',function*(next){//忘记密码

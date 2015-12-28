@@ -1,0 +1,5 @@
+script.
+    $.ajax({url:'/admin?rd='+Math.random().toString(36).substr(2),type:'DELETE',success:function(data,status){
+        if(data.result==200) window.location="/login"
+        if(data.result==403) console.log(data)//服务器错误
+    }})

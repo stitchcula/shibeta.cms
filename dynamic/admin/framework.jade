@@ -57,6 +57,7 @@ block content
                                 a.collapsible-header.waves-effect.waves-right.yahei
                                     i.material-icons.left=m.icon
                                     | #{m.inner}
+                                    i.material-icons.right keyboard_arrow_down
                                 div.collapsible-body
                                     ul
                                         each i in m.href
@@ -87,6 +88,7 @@ block content
                         $(this).toggleClass("active",true)
                     })
                 })
+
 
                 //ajax
                 window.onload = ajaxHash

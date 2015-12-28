@@ -33,7 +33,10 @@ app.proxy='nginx'
 app.keys=['stcula','toy']
 app.use(function*(next){
     yield next
-    if(this.status==404) this.render('404')
+    if(this.status==404){
+        this.render('404')
+        return this.status=404
+    }
 })
 app.use(stylus('./dynamic'))
 app.use(session({store:{host:process.env.REDIS_HOST,port:process.env.REDIS_PORT,ttl:600,auth:process.env.REDIS_AUTH}}))

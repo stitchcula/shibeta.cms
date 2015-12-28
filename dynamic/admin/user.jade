@@ -1,0 +1,50 @@
+nav.top-nav
+    div.container
+        div.nav-wrapper
+            a.brand-logo
+                i.material-icons.left question_answer
+                |个人信息
+div.container.selfInfo
+    div.row
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.validate.yahei(value=usr,type="text")
+            label.active.yahei 用 户 名
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(value=name,type="text")
+            label.active.yahei 姓    名
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.validate.yahei(value=idf,type="text")
+            label.active.yahei 身份证号
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(value=em,type="text")
+            label.active.yahei 电子邮箱
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.validate.yahei(value=tel,type="text")
+            label.active.yahei 电话号码
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(value=ding,type="text")
+            label.active.yahei 钉钉账号
+        div.input-field.col.s12.m12.l5.offset-l1.roInput
+            input.validate.yahei(disabled,value=(pms[3]?"法人":(pms[4]?"管理员":"委托代理人")),type="text")
+            label.active.yahei 角    色
+    div.row
+        div.input-field.col.s12.m12.l5.offset-l1
+            a.tooltipped.waves-effect.btn-flat.yahei(data-position="right" data-delay="50" data-tooltip="点击修改密码") 修改密码
+        div.input-field.col.s12.m12.l5
+            a.waves-effect.btn.yahei.right
+                i.material-icons.left done_all
+                |确定修改
+    style
+        :stylus
+            .selfInfo
+                .row:first-of-type
+                    margin-top 42px
+            .roInput
+                input
+                    color #222222!important
+                label
+                    color #9e9e9e!important
+    script.
+        $(function(){
+            $('.tooltipped').tooltip({delay: 50})
+        })
