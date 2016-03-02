@@ -95,9 +95,12 @@ div.container.cms_push
                     money: i[9],
                 },function(err,res){
                     if(err) console.log(err)
-                    if(res.result=200){
+                    if(res.result==200){
                         $(".cms_push_res").html("提交成功，请耐心等待授权。")
                         flashCtInput()
+                    }
+                    if(res.result==595){
+                        $(".cms_push_res").html("已存在同名合同，请检查后重试。")
                     }
                 })
             })
