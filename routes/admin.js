@@ -18,6 +18,11 @@ for(var r of menu){
                     ding: this.session.job
                 })
             }
+            if(this.path=="/admin/cms_push"){
+                return this.render(this.path,{
+                    autosave:this.session.autosave
+                })
+            }
             this.render(this.path)
         }else return this.render('redirectLogin')
         yield next

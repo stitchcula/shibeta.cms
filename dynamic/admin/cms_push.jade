@@ -6,40 +6,41 @@ nav.top-nav
                 |提交合同
 div.container.cms_push
     div.row.cms_push_input
+        -var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
         div.input-field.col.s12.m12.l10.offset-l1
-            input.validate.yahei(type="text")
+            input.validate.yahei(type="text",value=autosave?autosave.name:"")
             label.active.yahei 合同名称
         div.input-field.col.s12.m12.l5.offset-l1
-            input.validate.yahei(type="text")
+            input.validate.yahei(type="text",value=autosave?autosave.a:"")
             label.active.yahei 甲方
         div.input-field.col.s12.m12.l5
-            input.validate.yahei(type="text")
+            input.validate.yahei(type="text",value=autosave?autosave.aa:"")
             label.active.yahei 甲方代表
         div.input-field.col.s12.m12.l5.offset-l1
-            input.validate.yahei(value="湖南浩盛消防科技有限公司",type="text")
+            input.validate.yahei(value=autosave?autosave.b:"湖南浩盛消防科技有限公司",type="text")
             label.active.yahei 乙方
         div.input-field.col.s12.m12.l5
-            input.validate.yahei(type="text")
+            input.validate.yahei(type="text",value=autosave?autosave.bb:"")
             label.active.yahei 乙方代表
         div.input-field.col.s12.m12.l5.offset-l1
-            input.datepicker.yahei(type="date",value=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日")
+            input.datepicker.yahei(type="date",value=autosave?autosave.time:now)
             label.active.yahei 签订时间
         div.input-field.col.s12.m12.l5
-            input.validate.yahei(value=ding,type="text")
+            input.validate.yahei(type="text",value=autosave?autosave.location:"")
             label.active.yahei 签订地点
         div.input-field.col.s6.m6.l5.offset-l1
-            input.datepicker.yahei(type="date",placeholder="起始日期")
+            input.datepicker.yahei(type="date",placeholder="起始日期",value=autosave?autosave.begin:now)
             label.active.yahei 有效期限
         div.input-field.col.s6.m6.l5
-            input.datepicker.yahei(type="date",placeholder="终止日期")
+            input.datepicker.yahei(type="date",placeholder="终止日期",value=autosave?autosave.end:now)
             label.active.yahei 到
         div.input-field.col.s11.m11.l5.offset-l1
-            input.validate.yahei(type="number",placeholder="人民币")
+            input.validate.yahei(type="number",placeholder="人民币",value=autosave?autosave.money:"")
             label.active.yahei 合同金额
         div.input-field.col.s1.m1.l1
             p.yahei 元
         div.col.s12.m12.l10.offset-l1
-            p.cms_push_res.yahei 注：请勿连续提交。
+            p.cms_push_res.yahei 注：请勿连续提交；可自动保存，请放心填写。
     div.row
         div.col.s6.m6.l5.offset-l1
             a.waves-effect.btn-flat.yahei.cms_push_reset 重置
@@ -68,17 +69,87 @@ div.container.cms_push
             $('.cms_push_enter').click(function() {
                 var i = []
                 var j = 0
+                var exit=false
 
                 $('.cms_push_input input').each(function () {
                     i[j] = $(this).val()
                     if(i[j]==""){
                         $('.cms_push_input input').eq(j).addClass("invalid")
-                        $(".cms_push_res").html("请填写完整信息。")
+                        exit=true
                     }
                     j++
+                })
 
+                if(exit) return $(".cms_push_res").html("请填写完整信息。")
 
+                ajax('/ct','POST',{
+                    name: i[0],
+                    a: i[1],
+                    aa: i[2],
+                    b: i[3],
+                    bb: i[4],
+                    time:i[5],
+                    location: i[6],
+                    begin: i[7],
+                    end: i[8],
+                    money: i[9],
+                },function(err,res){
+                    console.log(err)
+                    console.log(res)
                 })
             })
+
+            $('.cms_push_reset').click(function() {
+                var i = document.querySelectorAll(".cms_push_input input")
+                for (var j = 0; j <= i.length; j++)
+                    if (i[j]) i[j].value = null
+                var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
+                document.querySelectorAll(".cms_push_input input")[3].value = "湖南浩盛消防科技有限公司"
+                document.querySelectorAll(".cms_push_input input")[5].value = now
+                document.querySelectorAll(".cms_push_input input")[7].value = now
+                document.querySelectorAll(".cms_push_input input")[8].value = now
+            })
+
+            var h=setInterval(function(){
+                if($(".cms_push").length==0)
+                    return clearInterval(h)
+
+                var i = []
+                var j = 0
+
+                $('.cms_push_input input').each(function () {
+                    i[j] = $(this).val()
+                    j++
+                })
+
+                ajax('/ct/autosave','POST',{
+                    name: i[0],
+                    a: i[1],
+                    aa: i[2],
+                    b: i[3],
+                    bb: i[4],
+                    time:i[5],
+                    location: i[6],
+                    begin: i[7],
+                    end: i[8],
+                    money: i[9],
+                    _silent:1
+                },function(err,res){
+                    console.log(err)
+                })
+            },5000)
+
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        if(!data._silent) jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(data){
+                        if(!data._silent) jQuery("footer>.ajaxLoad").fadeOut(200)
+                        callback(data.responseText.code,data.responseText)
+                    }
+                })
+            }
         })
 

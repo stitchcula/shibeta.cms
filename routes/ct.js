@@ -50,6 +50,13 @@ router.use('/',function*(next){//验证权限
     }
     this.body=cts
     yield next
+}).post('/autosave',function*(next){
+    if(this.request.body!={})
+        this.session.autosave=this.request.body
+    else
+        this.session.autosave=null
+    this.body={result:200}
+    yield next
 }).post('/',function*(next){//新增合同
     //////////////验证格式
     var msg=yield this.db.findOne({uin:this.session.uin})
