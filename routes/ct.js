@@ -2,6 +2,9 @@
 
 var router=require('koa-router')()
 
+var jade=require('jade')
+var crypto=require('crypto')
+
 router.use('/',function*(next){//验证权限
     if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
         this.session.ol+=7200000
@@ -70,7 +73,7 @@ router.use('/',function*(next){//验证权限
                 MO.from = "浩盛消防"
                 MO.to = this.env.MASTER_MAIL
                 MO.subject='浩盛消防 新的未授权合同'
-                MO.html = jade.renderFile(__dirname+'/dynamic/_cts.jade',{id:id[0],address:new Buffer(id[0]+id[1]).toString('base64'),name:this.request.body.name,sentUsr:new Buffer(this.session.name,'base64').toString(),status:"未授权",p:[this.request.body.a,this.request.body.b,this.request.body.money,this.request.body.begin+"到"+this.request.body.end,undefined,this.request.body.location,this.request.body.aa,this.request.body.bb]},undefined)
+                MO.html = jade.renderFile(__dirname+'/../dynamic/_cts.jade',{id:id[0],address:new Buffer(id[0]+id[1]).toString('base64'),name:this.request.body.name,sentUsr:new Buffer(this.session.name,'base64').toString(),status:"未授权",p:[this.request.body.a,this.request.body.b,this.request.body.money,this.request.body.begin+"到"+this.request.body.end,undefined,this.request.body.location,this.request.body.aa,this.request.body.bb]},undefined)
                 this.mailer.post('api/mailer',MO,function(e,r,b){
                     console.log(e)
                     console.log(r.statusCode)

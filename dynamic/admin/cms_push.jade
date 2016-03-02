@@ -94,12 +94,19 @@ div.container.cms_push
                     end: i[8],
                     money: i[9],
                 },function(err,res){
-                    console.log(err)
-                    console.log(res)
+                    if(err) console.log(err)
+                    if(res.result=200){
+                        $(".cms_push_res").html("提交成功，请耐心等待授权。")
+                        flashCtInput()
+                    }
                 })
             })
 
             $('.cms_push_reset').click(function() {
+                flashCtInput()
+            })
+
+            function flashCtInput(){
                 var i = document.querySelectorAll(".cms_push_input input")
                 for (var j = 0; j <= i.length; j++)
                     if (i[j]) i[j].value = null
@@ -108,7 +115,7 @@ div.container.cms_push
                 document.querySelectorAll(".cms_push_input input")[5].value = now
                 document.querySelectorAll(".cms_push_input input")[7].value = now
                 document.querySelectorAll(".cms_push_input input")[8].value = now
-            })
+            }
 
             var h=setInterval(function(){
                 if($(".cms_push").length==0)
@@ -135,7 +142,7 @@ div.container.cms_push
                     money: i[9],
                     _silent:1
                 },function(err,res){
-                    console.log(err)
+                    if(err) console.log(err)
                 })
             },5000)
 
