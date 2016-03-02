@@ -5,7 +5,7 @@ nav.top-nav
                 i.material-icons.left question_answer
                 |个人信息
 div.container.selfInfo
-    div.row
+    div.row.selfInfo_input
         div.input-field.col.s12.m12.l5.offset-l1
             input.validate.yahei(value=usr,type="text")
             label.active.yahei 用 户 名
@@ -27,13 +27,37 @@ div.container.selfInfo
         div.input-field.col.s12.m12.l5.offset-l1.roInput
             input.validate.yahei(disabled,value=(pms[3]?"法人":(pms[4]?"管理员":"委托代理人")),type="text")
             label.active.yahei 角    色
+        div.col.s12
+            p.selfInfo_res
     div.row
-        div.input-field.col.s12.m12.l5.offset-l1
-            a.tooltipped.waves-effect.btn-flat.yahei(data-position="right" data-delay="50" data-tooltip="点击修改密码") 修改密码
-        div.input-field.col.s12.m12.l5
-            a.waves-effect.btn.yahei.right
+        div.col.s6.m6.l5.offset-l1
+            a.tooltipped.waves-effect.btn-flat.yahei.modal-trigger(data-position="right" data-delay="50" data-tooltip="点击修改密码" href="#selfInfo_changePwd") 修改密码
+            //selfInfo_changePwd
+            div#selfInfo_changePwd.modal
+                div.modal-content
+                    div.container
+                        h5.yahei 修改密码
+                        div.row.selfInfo_changePwd_input
+                            div.input-field.col.s12
+                                input.validate.yahei(type="password")
+                                label.active.yahei 原密码
+                            div.input-field.col.s12
+                                input.validate.yahei(type="password")
+                                label.active.yahei 新密码
+                            div.input-field.col.s12
+                                input.validate.yahei(type="password")
+                                label.active.yahei 再输一遍
+                            div.col.s12
+                                p.selfInfo_changePwd_res.left.yahei
+                div.modal-footer
+                    a.modal-action.modal-close.waves-effect.waves-red.btn-flat.yahei.yahei 取消
+                    a.waves-effect.waves-green.btn.yahei.selfInfo_changePwd_enter.yahei 修改
+
+        div.col.s6.m6.l5
+            a.waves-effect.btn.yahei.right.selfInfo_enter
                 i.material-icons.left done_all
                 |确定修改
+
     style
         :stylus
             .selfInfo
@@ -47,4 +71,61 @@ div.container.selfInfo
     script.
         $(function(){
             $('.tooltipped').tooltip({delay: 50})
+            $('.modal-trigger').leanModal()
+
+            $('.selfInfo_enter').click(function(){
+                var i = []
+                var j = 0
+
+                $('.selfInfo_input input').each(function () {
+                    i[j] = $(this).val()
+                    j++
+                })
+
+                ajax('/admin/msg','PUT',{
+                    usr:i[0],
+                    name:i[1],
+                    idf:i[2],
+                    em:i[3],
+                    tel:i[4],
+                    job:i[5]
+                },function(err,res){
+                    console.log(err)
+                    console.log(res)
+                })
+            })
+
+            $('.selfInfo_changePwd_enter').click(function(){
+                var i = []
+                var j = 0
+
+                $('.selfInfo_changePwd_input input').each(function () {
+                    i[j] = hex_sha1($(this).val())
+                    j++
+                })
+
+                if(i[1]==i[2])
+                    ajax('/admin/pwd','PUT',{
+                        pwd:i[0],
+                        newPwd:i[2],
+                    },function(err,res){
+                        console.log(err)
+                        console.log(res)
+                    })
+                else
+                    $(".selfInfo_changePwd_res").html("两次输入密码不匹配。")
+            })
+
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(data){
+                        jQuery("footer>.ajaxLoad").fadeOut(200)
+                        callback(data.responseText.code,data.responseText)
+                    }
+                })
+            }
         })

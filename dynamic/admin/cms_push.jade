@@ -1,2 +1,84 @@
+nav.top-nav
+    div.container
+        div.nav-wrapper
+            a.brand-logo
+                i.material-icons.left library_add
+                |提交合同
+div.container.cms_push
+    div.row.cms_push_input
+        div.input-field.col.s12.m12.l10.offset-l1
+            input.validate.yahei(type="text")
+            label.active.yahei 合同名称
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.validate.yahei(type="text")
+            label.active.yahei 甲方
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(type="text")
+            label.active.yahei 甲方代表
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.validate.yahei(value="湖南浩盛消防科技有限公司",type="text")
+            label.active.yahei 乙方
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(type="text")
+            label.active.yahei 乙方代表
+        div.input-field.col.s12.m12.l5.offset-l1
+            input.datepicker.yahei(type="date",value=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日")
+            label.active.yahei 签订时间
+        div.input-field.col.s12.m12.l5
+            input.validate.yahei(value=ding,type="text")
+            label.active.yahei 签订地点
+        div.input-field.col.s6.m6.l5.offset-l1
+            input.datepicker.yahei(type="date",placeholder="起始日期")
+            label.active.yahei 有效期限
+        div.input-field.col.s6.m6.l5
+            input.datepicker.yahei(type="date",placeholder="终止日期")
+            label.active.yahei 到
+        div.input-field.col.s11.m11.l5.offset-l1
+            input.validate.yahei(type="number",placeholder="人民币")
+            label.active.yahei 合同金额
+        div.input-field.col.s1.m1.l1
+            p.yahei 元
+        div.col.s12.m12.l10.offset-l1
+            p.cms_push_res.yahei 注：请勿连续提交。
+    div.row
+        div.col.s6.m6.l5.offset-l1
+            a.waves-effect.btn-flat.yahei.cms_push_reset 重置
+        div.col.s6.m6.l5
+            a.waves-effect.btn.yahei.right.cms_push_enter
+                i.material-icons.left done_all
+                |提交
 
+    style
+        :stylus
+            .cms_push
+                .row:first-of-type
+                    margin-top 42px
+            .roInput
+                input
+                    color #222222!important
+                label
+                    color #9e9e9e!important
+    script.
+        jQuery(function(){
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 10
+            })
+
+            $('.cms_push_enter').click(function() {
+                var i = []
+                var j = 0
+
+                $('.cms_push_input input').each(function () {
+                    i[j] = $(this).val()
+                    if(i[j]==""){
+                        $('.cms_push_input input').eq(j).addClass("invalid")
+                        $(".cms_push_res").html("请填写完整信息。")
+                    }
+                    j++
+
+
+                })
+            })
+        })
 

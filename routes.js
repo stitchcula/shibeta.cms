@@ -75,7 +75,7 @@ router.get('/login',function*(next){//登陆页面
     console.log(JSON.stringify(msg))
     console.log(this.request.body)
     if(msg&&(this.request.body.pwd==msg.pwd)){
-        this.session={tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
+        this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
         this.body={result:200}
     }else{
         this.body={result:403}

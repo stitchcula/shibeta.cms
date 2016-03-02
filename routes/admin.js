@@ -89,7 +89,7 @@ router.use('/',function*(next){//验证
         title:"控制台"
     })
     yield next
-}).put('/',function*(next){//修改信息
+}).put('/msg',function*(next){//修改信息
     var usr=yield this.db.findOne({uin:this.session.uin})
     if(usr){
         var usrObj={
@@ -98,11 +98,28 @@ router.use('/',function*(next){//验证
             idf: this.request.body.fields.idf,
             name:new Buffer(this.request.body.fields.name).toString('base64'),
             tel:this.request.body.fields.tel,
+            job:this.request.body.fields.job
         }
-        if(this.request.body.fields.pwd&&this.request.body.fields.pwd==usr.pwd&&this.request.body.fields.newPwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")
-            usrObj.pwd=this.request.body.fields.newPwd
         yield this.db.update({uin:this.session.uin},{$set:usrObj})
+        this.session.tel=usrObj.tel
+        this.session.em=usrObj.em
+        this.session.idf=usrObj.idf
+        this.session.name=usrObj.name
+        this.session.usr=usrObj.usr
+        this.session.job=usrObj.job
         this.body={result:200}
+    }else this.body={result:404}
+    yield next
+}).put('/pwd',function*(next){//修改密码
+    var usr=yield this.db.findOne({uin:this.session.uin})
+    if(usr){
+        var usrObj={}
+        if(this.request.body.fields.pwd&&this.request.body.fields.pwd==usr.pwd&&this.request.body.fields.newPwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709"){
+            usrObj.pwd=this.request.body.fields.newPwd
+            yield this.db.update({uin:this.session.uin},{$set:usrObj})
+            this.session.pwd=usrObj.pwd
+            this.body={result:200}
+        }else this.body={result:304}
     }else this.body={result:404}
     yield next
 }).post('/',function*(next){//上传

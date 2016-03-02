@@ -66,7 +66,7 @@ block content
                                                     i.material-icons.left=i.icon
                                                     | #{i.inner}
         script.
-            $(function () {
+            jQuery(function () {
                 //init
                 function is_touch_device() {
                     try {
@@ -76,16 +76,16 @@ block content
                         return false;
                     }
                 }
-                if (is_touch_device())  $('#slide-nav').css({ overflow: 'auto'})
-                $('.button-collapse').sideNav({
+                if (is_touch_device())  jQuery('#slide-nav').css({ overflow: 'auto'})
+                jQuery('.button-collapse').sideNav({
                     menuWidth: 240,
                     edge: 'left',
                     closeOnClick: false
                 })
-                $("li._active").each(function(){
-                    $(this).click(function(){
-                        $("li._active").toggleClass("active",false)
-                        $(this).toggleClass("active",true)
+                jQuery("li._active").each(function(){
+                    jQuery(this).click(function(){
+                        jQuery("li._active").toggleClass("active",false)
+                        jQuery(this).toggleClass("active",true)
                     })
                 })
 
@@ -105,8 +105,8 @@ block content
                     ajax(path,'GET',function(err,res){
                         if (err != undefined)
                             data = '<a href="/api/error">ERROR:' + err + '</a>'
-                        $(selector).fadeOut(200,function(){
-                            $(this).empty().append(res).fadeIn(200)
+                        jQuery(selector).fadeOut(200,function(){
+                            jQuery(this).empty().append(res).fadeIn(200)
                         })
                     })
                 }
@@ -114,10 +114,10 @@ block content
                     if(!callback) callback=data
                     $.ajax({url:path,type:method,cache:false,data:data,
                         beforeSend:function(){
-                            $("footer>.ajaxLoad").fadeIn(200)
+                            jQuery("footer>.ajaxLoad").fadeIn(200)
                         },
                         complete:function(data){
-                            $("footer>.ajaxLoad").fadeOut(200)
+                            jQuery("footer>.ajaxLoad").fadeOut(200)
                             callback(data.responseText.code,data.responseText)
                         }
                     })
