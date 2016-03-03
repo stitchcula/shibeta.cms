@@ -40,7 +40,7 @@ div.container.cms_push
         div.input-field.col.s1.m1.l1
             p.yahei 元
         div.col.s12.m12.l10.offset-l1
-            p.cms_push_res.yahei 注：请勿连续提交；可自动保存，请放心填写。
+            p.cms_push_res.yahei.red-text 注：请勿连续提交；可自动保存，请放心填写。
     div.row
         div.col.s6.m6.l5.offset-l1
             a.waves-effect.btn-flat.yahei.cms_push_reset 重置
@@ -95,8 +95,10 @@ div.container.cms_push
                     money: i[9],
                 },function(err,res){
                     if(err) console.log(err)
+                    res=JSON.parse(res)
                     if(res.result==200){
                         $(".cms_push_res").html("提交成功，请耐心等待授权。")
+                        Materialize.toast('submitted successfully', 4000)
                         flashCtInput()
                     }
                     if(res.result==595){

@@ -27,6 +27,10 @@ for(var r in routes){
 
 /*----------------------------------------------------------------*/
 
+router.get('/test',function*(next){
+    this.render('preload')
+    yield next
+})
 
 router.get('/',function*(next){//跳转登陆
     this.redirect('/login')

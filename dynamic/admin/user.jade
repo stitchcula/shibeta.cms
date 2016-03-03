@@ -28,7 +28,7 @@ div.container.selfInfo
             input.validate.yahei(disabled,value=(pms[3]?"法人":(pms[4]?"管理员":"委托代理人")),type="text")
             label.active.yahei 角    色
         div.col.s12
-            p.selfInfo_res
+            p.selfInfo_res.red-text
     div.row
         div.col.s6.m6.l5.offset-l1
             a.tooltipped.waves-effect.btn-flat.yahei.modal-trigger(data-position="right" data-delay="50" data-tooltip="点击修改密码" href="#selfInfo_changePwd") 修改密码
@@ -48,7 +48,7 @@ div.container.selfInfo
                                 input.validate.yahei(type="password")
                                 label.active.yahei 再输一遍
                             div.col.s12
-                                p.selfInfo_changePwd_res.left.yahei
+                                p.selfInfo_changePwd_res.left.yahei.red-text
                 div.modal-footer
                     a.modal-action.modal-close.waves-effect.waves-red.btn-flat.yahei.yahei 取消
                     a.waves-effect.waves-green.btn.yahei.selfInfo_changePwd_enter.yahei 修改

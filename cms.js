@@ -50,7 +50,7 @@ app.use(function *(next){
     this.env={
         WEB_PORT:805,
         MASTER_MAIL:"1132463097@qq.com",
-        MASTER_TEL:"15917597227"
+        MASTER_TEL:"15675131602"
     }
     this.db=mongo
     this.mailer=mailer

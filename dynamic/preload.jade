@@ -1,0 +1,32 @@
+extends frag/framework
+
+//block style
+
+block content
+    main
+        nav.blue
+            div.container
+                div.nav-wrapper
+                    a.brand-logo(href="#!") Shibeta.org
+
+        div.parallax-container
+            div.parallax
+                img(src="/static/img/para1.jpg")
+        div.section.white
+            div.row.container
+                h3.blue-text Shibeta.org is under construction.
+                h5.grey-text.text-darken-3.lighten-3 if you have any suggestion,
+                h5.grey-text.text-darken-3.lighten-3 please send an email to stitchgl@outlook.com or add QQ 1132463097.
+        div.parallax-container
+            div.parallax
+                img(src="/static/img/para1.jpg")
+        style
+            :stylus
+                .parallax-container
+                    height 515px
+                footer.page-footer
+                    margin-top 0px!important
+        script.
+            jQuery(function(){
+                $('.parallax').parallax()
+            })
