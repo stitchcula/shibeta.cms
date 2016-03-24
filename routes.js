@@ -28,7 +28,7 @@ for(var r in routes){
 /*----------------------------------------------------------------*/
 
 router.get('/test',function*(next){
-    this.render('preload')
+    this.render('_ct_inner',{without_footer:1})
     yield next
 })
 
@@ -150,7 +150,7 @@ router.get('/monitor',function*(next){
                 restart:rep.processes[1].pm2_env.restart_time+rep.processes[0].pm2_env.restart_time
             }
         }
-    }else return this.redirect('/login')
+    }else return this.render('redirectLogin')
     yield next
 })
 

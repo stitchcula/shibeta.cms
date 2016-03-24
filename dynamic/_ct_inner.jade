@@ -1,0 +1,94 @@
+extends frag/framework
+
+block style
+    style
+        :stylus
+            .ct_inner
+                margin-top 50px
+                input
+                    border-bottom 1px solid #9E9E9E!important
+                    box-shadow 0 0 0 0 #9e9e9e!important
+                .input-field:first-of-type
+                    input
+                        text-align center
+                .p_status
+                    margin 0
+
+block content
+    -var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
+    div.row.ct_inner
+        div.col.m10.offset-m1
+            div.z-depth-2
+                div.row.container
+                    div.input-field.col.s12.m12.l10.offset-l1
+                        input.validate.yahei(type="text",value="N/a")
+                        p.right.red-text.p_status 未授权
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 甲方
+                    div.input-field.col.s12.m12.l5
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 甲方代表
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.validate.yahei(value=value="N/a",type="text")
+                        label.active.yahei 乙方
+                    div.input-field.col.s12.m12.l5
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 乙方代表
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.datepicker.yahei(type="date",value=now)
+                        label.active.yahei 签订时间
+                    div.input-field.col.s12.m12.l5
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 签订地点
+                    div.input-field.col.s6.m6.l5.offset-l1
+                        input.datepicker.yahei(type="date",placeholder="起始日期",value=now)
+                        label.active.yahei 有效期限
+                    div.input-field.col.s6.m6.l5
+                        input.datepicker.yahei(type="date",placeholder="终止日期",value=now)
+                        label.active.yahei 到
+                    div.input-field.col.s11.m11.l5.offset-l1
+                        input.validate.yahei(type="number",placeholder="人民币",value=0)
+                        label.active.yahei 合同金额
+                    div.input-field.col.s1.m1.l1
+                        p.yahei 元
+    script.
+        (function(){
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 10
+            })
+
+
+
+            ajax('/vfc','POST',{id:"HS160325D95908"},function(err,res){
+                if(err) console.log(err)
+                res=JSON.parse(res)
+                if(res.result==200){
+                    for(var n=0;n<res.cts.length;n++){
+                        for(var m=0;m<$(".ct_inner").eq(n).find("input").length;m++){
+                            document.querySelectorAll(".ct_inner")[n].querySelectorAll("input")[m].value=res.cts[n][m]
+                        }
+                    }
+                }
+                if(res.result==404){
+
+                }
+            })
+
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        if(!data._silent) jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(data){
+                        if(!data._silent) jQuery("footer>.ajaxLoad").fadeOut(200)
+                        callback(data.responseText.code,data.responseText)
+                    }
+                })
+            }
+
+        })()
+
+

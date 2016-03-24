@@ -5,3 +5,134 @@ nav.top-nav
                 i.material-icons.left find_in_page
                 |真伪查询
 div.container.cms_auth
+    div.row.cms_auth_input
+        div.col.s10.offset-s1.m8.offset-m2.l6.offset-l3
+            p.yahei.grey-text 输入HS为开头的14位合同编码以查询真伪。
+            div.card
+                input(value="HS")
+                i.material-icons search
+    -var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
+    div.row.ct_inner
+        div.col.m10.offset-m1
+            div.z-depth-2
+                div.container
+                    div.row
+                        div.input-field.col.s12.m12.l10.offset-l1
+                            input.validate.yahei(type="text",value="N/a")
+                            p.right.red-text.p_status 未授权
+                        div.input-field.col.s12.m12.l5.offset-l1
+                            input.validate.yahei(type="text",value="N/a")
+                            label.active.yahei 甲方
+                        div.input-field.col.s12.m12.l5
+                            input.validate.yahei(type="text",value="N/a")
+                            label.active.yahei 甲方代表
+                        div.input-field.col.s12.m12.l5.offset-l1
+                            input.validate.yahei(value=value="N/a",type="text")
+                            label.active.yahei 乙方
+                        div.input-field.col.s12.m12.l5
+                            input.validate.yahei(type="text",value="N/a")
+                            label.active.yahei 乙方代表
+                        div.input-field.col.s12.m12.l5.offset-l1
+                            input.datepicker.yahei(type="date",value=now)
+                            label.active.yahei 签订时间
+                        div.input-field.col.s12.m12.l5
+                            input.validate.yahei(type="text",value="N/a")
+                            label.active.yahei 签订地点
+                        div.input-field.col.s6.m6.l5.offset-l1
+                            input.datepicker.yahei(type="date",placeholder="起始日期",value=now)
+                            label.active.yahei 有效期限
+                        div.input-field.col.s6.m6.l5
+                            input.datepicker.yahei(type="date",placeholder="终止日期",value=now)
+                            label.active.yahei 到
+                        div.input-field.col.s11.m11.l5.offset-l1
+                            input.validate.yahei(type="number",placeholder="人民币",value=0)
+                            label.active.yahei 合同金额
+                        div.input-field.col.s1.m1.l1
+                            p.yahei 元
+
+    style
+        :stylus
+            .cms_auth
+                .cms_auth_input
+                    margin-top 24%
+                    //-webkit-transition: all 0.3s ease-in-out
+                    //-moz-transition: all 0.3s ease-in-out
+                    //-ms-transition: all 0.3s ease-in-out
+                    //-o-transition: all 0.3s ease-in-out
+                    //transition: all 0.3s ease-in-out
+                    .card
+                        input
+                            display block
+                            font-size 16px
+                            font-weight 300
+                            width 100%
+                            height 45px
+                            margin 0
+                            padding 0 45px 0 15px
+                            border 0
+                            outline none
+                            box-shadow: none
+                            -webkit-transition: all 0.3s
+                            -moz-transition: all 0.3s
+                            -ms-transition: all 0.3s
+                            -o-transition: all 0.3s
+                            transition: all 0.3s
+                        i
+                            position: absolute
+                            top: 10px
+                            right: 10px
+                            cursor: pointer;
+                .ct_inner
+                    display: none
+                    input
+                        border-bottom 1px solid #9E9E9E!important
+                        box-shadow 0 0 0 0 #9e9e9e!important
+                    .input-field:first-of-type
+                        input
+                            text-align center
+                    .p_status
+                        margin 0
+    script.
+        (function(){
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 10
+            })
+
+            $(".cms_auth_input i").click(function(){
+                var i=$(".cms_auth_input input").val().toUpperCase()
+
+                var iReg = /^[A-Z0-9]{14}$/
+
+                ajax('/vfc','POST',{id:(i?i:"HS160325D95908")},function(err,res){
+                    if(err) console.log(err)
+                    res=JSON.parse(res)
+                    if(res.result==200){
+                        $(".cms_auth_input").animate({marginTop:"0"},350,function(){
+                            for(var n=0;n<res.cts.length;n++){
+                                for(var m=0;m<$(".ct_inner").eq(n).find("input").length;m++){
+                                    document.querySelectorAll(".ct_inner")[n].querySelectorAll("input")[m].value=res.cts[n][m]
+                                    $(".ct_inner").eq(n).fadeIn(100)
+                                }
+                            }
+                        })
+                    }
+                    if(res.result==404){
+
+                    }
+                })
+            })
+
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(data){
+                        jQuery("footer>.ajaxLoad").fadeOut(200)
+                        callback(data.responseText.code,data.responseText)
+                    }
+                })
+            }
+        })()

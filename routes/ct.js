@@ -140,7 +140,7 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname+'/dynamic/gived.jade',{id:id,name:cts.name,status:GiveTime,p:[cts.ext.partys[0],cts.ext.partys[1],cts.ext.money,cts.ext.exp[0]+"到"+cts.ext.exp[1],cts.ext.time,cts.ext.location,cts.ext.rprs[0],cts.ext.rprs[1]]},undefined)
+                        this.body = jade.renderFile(__dirname+'/dynamic/gived_.jade',{id:id,name:cts.name,status:GiveTime,p:[cts.ext.partys[0],cts.ext.partys[1],cts.ext.money,cts.ext.exp[0]+"到"+cts.ext.exp[1],cts.ext.time,cts.ext.location,cts.ext.rprs[0],cts.ext.rprs[1]]},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期
