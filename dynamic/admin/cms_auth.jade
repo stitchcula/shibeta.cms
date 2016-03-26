@@ -13,7 +13,7 @@ div.container.cms_auth
                 i.material-icons search
     -var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
     div.row.ct_inner
-        div.col.m10.offset-m1
+        div.col.s10.offset-s1
             div.z-depth-2
                 i.material-icons.right close
                 div.container
@@ -50,6 +50,16 @@ div.container.cms_auth
                             label.active.yahei 合同金额
                         div.input-field.col.s1.m1.l1
                             p.yahei 元
+    div.row.ct_inner_404
+        div.col.s10.offset-s1
+            div.z-depth-2
+                i.material-icons.right close
+                div.container
+                    div.row
+                        div.col.s12.m12.l10.offset-l1
+                            p.red-text.yahei 没有查询到该合同编码的记录，这是一个不被 浩盛消防 承认的合同编码。
+                            p.yahei.grey-text · 请检查输入。
+                            p.yahei.grey-text · 可能尚未授权，请耐心等待。
 
     style
         :stylus
@@ -83,7 +93,7 @@ div.container.cms_auth
                             top: 10px
                             right: 10px
                             cursor: pointer;
-                .ct_inner
+                .ct_inner,.ct_inner_404
                     display: none
                     input
                         border-bottom 1px solid #9E9E9E!important
@@ -124,22 +134,32 @@ div.container.cms_auth
                     res=JSON.parse(res)
                     if(res.result==200){
                         $(".cms_auth_input").animate({marginTop:"0"},350,function(){
+                            $('.ct_inner_clone').remove()
                             for(var n=0;n<res.cts.length;n++){
                                 for(var m=0;m<$(".ct_inner").eq(0).find("input").length;m++){
                                     document.querySelectorAll(".ct_inner")[0].querySelectorAll("input")[m].value=res.cts[n][m]
                                 }
                                 $('.cms_auth').append( $('.ct_inner').eq(0).clone(true))
-                                $(".ct_inner").eq(n+1).fadeIn(100)
+                                $('.ct_inner').eq(n+1).addClass('ct_inner_clone').fadeIn(100)
                             }
                         })
                     }
                     if(res.result==404){
-
+                        $(".cms_auth_input").animate({marginTop:"0"},350,function(){
+                            $('.ct_inner_clone').remove()
+                            $('.cms_auth').append( $('.ct_inner_404').eq(0).clone(true))
+                            $('.ct_inner_404').eq(1).addClass('ct_inner_clone').fadeIn(100)
+                        })
                     }
                 })
             })
 
             $(".ct_inner i").click(function(){
+                $(this).closest(".ct_inner").remove()
+                $(".cms_auth_input").animate({marginTop:"24%"},350)
+            })
+
+            $(".ct_inner_404 i").click(function(){
                 $(this).closest(".ct_inner").remove()
                 $(".cms_auth_input").animate({marginTop:"24%"},350)
             })
