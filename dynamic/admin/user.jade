@@ -25,7 +25,7 @@ div.container.selfInfo
             input.validate.yahei(value=ding,type="text")
             label.active.yahei 钉钉账号
         div.input-field.col.s12.m12.l5.offset-l1.roInput
-            input.validate.yahei(disabled,value=(pms[3]?"法人":(pms[4]?"管理员":"委托代理人")),type="text")
+            input.validate.yahei(disabled,value=(pms[3]?"法人代表":(pms[4]?"管理员":"委托代理人")),type="text")
             label.active.yahei 角    色
         div.col.s12
             p.selfInfo_res.red-text
@@ -122,9 +122,13 @@ div.container.selfInfo
                     beforeSend:function(){
                         jQuery("footer>.ajaxLoad").fadeIn(200)
                     },
-                    complete:function(data){
+                    complete:function(res){
                         jQuery("footer>.ajaxLoad").fadeOut(200)
-                        callback(data.responseText.code,data.responseText)
+                        if(res.status==0) Materialize.toast('网络故障……', 4000)
+                        if(res.status==403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
+                        if(res.status==404) Materialize.toast('服务器懵逼了', 4000)
+                        if(res.status==500) Materialize.toast('服务器傻掉了', 4000)
+                        callback(res.responseText.code,res.responseText)
                     }
                 })
             }
