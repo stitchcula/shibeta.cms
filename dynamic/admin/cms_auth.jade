@@ -9,12 +9,12 @@ div.container.cms_auth
         div.col.s10.offset-s1.m8.offset-m2.l6.offset-l3
             p.yahei.grey-text 输入HS为开头的14位合同编码以查询真伪。
             div.card
-                input(value="HS")
+                input(value="HS").yahei
                 i.material-icons search
     -var now=new Date().getFullYear()+"年 "+(new Date().getMonth()+1)+"月 "+new Date().getDate()+"日"
     div.row.ct_inner
         div.col.s10.offset-s1
-            div.z-depth-2
+            div.z-depth-1
                 i.material-icons.right close
                 div.container
                     div.row
@@ -45,14 +45,14 @@ div.container.cms_auth
                         div.input-field.col.s6.m6.l5.roInput
                             input.datepicker.yahei(disabled,type="date",placeholder="终止日期",value=now)
                             label.active.yahei 到
-                        div.input-field.col.s11.m11.l5.offset-l1.roInput
+                        div.input-field.col.s10.m11.l5.offset-l1.roInput
                             input.validate.yahei(disabled,type="number",placeholder="人民币",value=0)
                             label.active.yahei 合同金额
-                        div.input-field.col.s1.m1.l1
+                        div.input-field.col.s2.m1.l1
                             p.yahei 元
     div.row.ct_inner_404
         div.col.s10.offset-s1
-            div.z-depth-2
+            div.z-depth-1
                 i.material-icons.right close
                 div.container
                     div.row
@@ -64,13 +64,10 @@ div.container.cms_auth
     style
         :stylus
             .cms_auth
+                .yahei
+                    font-family "Microsoft YaHei"!important
                 .cms_auth_input
                     margin-top 24%
-                    //-webkit-transition: all 0.3s ease-in-out
-                    //-moz-transition: all 0.3s ease-in-out
-                    //-ms-transition: all 0.3s ease-in-out
-                    //-o-transition: all 0.3s ease-in-out
-                    //transition: all 0.3s ease-in-out
                     .card
                         input
                             display block
@@ -128,6 +125,7 @@ div.container.cms_auth
                 var i=$(".cms_auth_input input").val().toUpperCase()
 
                 var iReg = /^[A-Z0-9]{14}$/
+                if(!iReg.test(i)) return Materialize.toast('请输入格式正确的合同编码。', 4000)
 
                 ajax('/vfc','POST',{id:(i?i:"HS160325D95908")},function(err,res){
                     if(err) console.log(err)
@@ -155,12 +153,12 @@ div.container.cms_auth
             })
 
             $(".ct_inner i").click(function(){
-                $(this).closest(".ct_inner").remove()
+                $(this).closest(".ct_inner_clone").remove()
                 $(".cms_auth_input").animate({marginTop:"24%"},350)
             })
 
             $(".ct_inner_404 i").click(function(){
-                $(this).closest(".ct_inner").remove()
+                $(this).closest(".ct_inner_clone").remove()
                 $(".cms_auth_input").animate({marginTop:"24%"},350)
             })
 

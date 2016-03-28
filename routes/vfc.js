@@ -3,7 +3,7 @@
 var router=require('koa-router')()
 
 router.get('/',function*(next){//验证页面
-    this.render("vfc")
+    this.render("vfc",{off_footer:1})
 }).post('/',function*(next) {//验证结果
     var idReg=/^[A-Z0-9]{14}$/
     if(idReg.test(this.request.body.id)) {
