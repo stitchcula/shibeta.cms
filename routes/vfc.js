@@ -3,7 +3,7 @@
 var router=require('koa-router')()
 
 router.get('/',function*(next){//验证页面
-    this.render("vfc",{off_footer:1})
+    this.render("vfc",{off_footer:1,title:'浩盛消防合同真伪查询'})
 }).post('/',function*(next) {//验证结果
     var idReg=/^[A-Z0-9]{14}$/
     if(idReg.test(this.request.body.id)) {
