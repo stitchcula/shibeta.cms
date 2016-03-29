@@ -2,7 +2,6 @@ extends frag/framework
 
 block style
     link(rel='stylesheet',href='/static/css/icomoon.css')
-    script(src="/static/lib/sha1.js")
     style
         :stylus
             .yahei
@@ -66,6 +65,9 @@ block style
                     font-size 14px
                     color #ff755d
                     display inline
+                .p_inline
+                    display: inline
+                    line-height inherit
                 @media only screen and (max-width: 600px)
                     .face
                         width 50%
@@ -89,6 +91,7 @@ block style
                         margin 20px auto
                     .btn-flat.action:last-of-type
                         float right !important
+
 
 
 
@@ -134,7 +137,7 @@ block content
                             span.card-title.grey-text.text-darken-4.yahei 重置密码
                                 i.material-icons.right close
                             div.row
-                                div.input-field.col.s12
+                                //div.input-field.col.s12
                                     input#i1.validate.yahei(type="text",placeholder="")
                                     label.yahei(for="i1") 真实姓名
                                 div.input-field.col.s12
@@ -147,7 +150,10 @@ block content
                                     input#i4.validate.yahei(type="password",placeholder="")
                                     label.yahei(for="i4",data-error="") 重复密码
                                 div.col.s12
-                                    div#res2.yahei.resMsg
+                                    //div#res2.yahei.resMsg
+                                    p
+                                        input#onForgetByMobile(type="checkbox")
+                                        label(for="onForgetByMobile").yahei 通过手机验证
                                     div#onForgeting.preloader-wrapper.small
                                         div.spinner-layer.spinner-red-only
                                             div.circle-clipper.left
@@ -164,60 +170,142 @@ block content
                 each s in slides
                     li
                         img(src=s.img)
+
     script.
         $(function(){
             $('.slider').slider({full_width: true,interval:3000,indicators:false})
             $('#toForget').click(function(){$("html,body").animate({scrollTop:0},600)})
-            $("#res1").fadeOut(500)
-            var flag=0
+
             $("#onLogin").click(function () {
-                //if(flag) return 0
                 var usr = $("#usr").val()
                 var pwd = hex_sha1($("#pwd").val())
-                flag=1
+                if(!usr||!pwd) return Materialize.toast('请填写完整信息~', 4000)
                 $("#onLogining").addClass("active")
-                $.ajax({usr:"/admin?rd="+Math.random().toString(36).substr(2),type:"POST",data:{usr: usr, pwd: pwd},cache:false,
-                    success:function (data, status) {
-                        if (status == "success") {
-                            if (data.result == 200) {
-                                window.location = "/admin?rd="+Math.random().toString(36).substr(2)
-                            } else {
-                                $("#onLogining").removeClass("active")
-                                $("#res1").html("账户或密码错误").fadeIn(500)
-                            }
-                        } else {
-                            $("#onLogining").removeClass("active")
-                            $("#res1").html("服务器繁忙owo").fadeIn(500)
-                        }
-                        flag=0
+                ajax("/login?rd="+Math.random().toString(36).substr(2),'POST',{usr: usr, pwd: pwd},function(err,res){
+                    $("#onLogining").removeClass("active")
+                    if(err) console.log(err)
+                    res=JSON.parse(res)
+                    if(res.result==200){
+                        return window.location = "/admin"/*?rd="+Math.random().toString(36).substr(2)*/
+                    }
+                    else{
+                        return swal({title:"账户或密码错误~",type:'error',showConfirmButton: false,allowOutsideClick:true,timer:820})
                     }
                 })
             })
 
-            $("#onForget").click(function () {
-                if(flag) return 0
+            $("#i3").blur(function(){
                 if($("#i3").val()!=$("#i4").val()){
-                    $("#res2").html("两次输入密码不匹配。").fadeIn(500)
-                    flag=0
-                    return 0
+                    $("#i4").toggleClass("invalid",true)
+                }else{
+                    $("#i4").toggleClass("invalid",false)
                 }
-                $("#res2").fadeOut(500)
-                $("#onForgeting").addClass("active")
-                flag=1
-                $.ajax({url:'/t?rd='+Math.random().toString(36).substr(2),type:'PUT',data:{name:$("#i1").val(),idf:$("#i2").val(),pwd:hex_sha1($("#i3").val())},success:function(data,status){
-                    if (status == "success") {
-                        if (data.result == 200) {
-                            $("#onForgeting").removeClass("active")
-                            $("#res2").html("请尽快查收邮件，1小时内有效owo").fadeIn(500)
-                        } else {
-                            $("#onForgeting").removeClass("active")
-                            $("#res2").html("信息有误owo").fadeIn(500)
-                        }
-                    } else {
-                        $("#onForgeting").removeClass("active")
-                        $("#res2").html("服务器繁忙owo").fadeIn(500)
-                    }
-                    flag=0
-                }})
             })
+
+            $("#i4").blur(function(){
+                if($("#i3").val()!=$("#i4").val()){
+                    $("#i4").toggleClass("invalid",true)
+                }else{
+                    $("#i4").toggleClass("invalid",false)
+                }
+            })
+
+            $("#onForget").click(function () {
+                if(!$("#i2").val()||!$("#i3").val()||!$("#i4").val())
+                    return Materialize.toast('请填写完整信息~', 4000)
+                if($("#i3").val()!=$("#i4").val())
+                    return Materialize.toast('两次输入密码不匹配。', 4000)
+                $("#onForgeting").addClass("active")
+                var ifMsg=$("#onForgetByMobile").prop('checked')
+                ajax('/t?rd='+Math.random().toString(36).substr(2),'PUT',{idf:$("#i2").val(),pwd:hex_sha1($("#i3").val()),ifMsg:ifMsg},function(err,res){
+                    $("#onForgeting").removeClass("active")
+                    if(err) console.log(err)
+                    res=JSON.parse(res)
+                    if(res.result==200){
+                        return swal({
+                            title:"邮件发送成功！",
+                            text:'请尽快查看邮箱并按提示操作，1小时内有效owo',
+                            cancelButtonText:"关闭",
+                            confirmButtonText:"转到邮箱",
+                            showCancelButton:true,
+                            type:"success"},
+                        function(isConfirm){
+                            if (isConfirm) {
+                                return window.location ="http://mail."+res.em
+                            }
+                        })
+                    }
+                    if(res.result==201){
+                        ajaxFlag=false
+                        var SmsTimer=60
+                        var resendTimer=setInterval(function(){//TODO:can't run
+                            if(SmsTimer<=0){
+                                jQuery('.sweet-alert a.sweet-alert-resend').html("没收到短信？").removeClass("grey-text")
+                                SmsTimer=60
+                                return clearInterval(resendTimer)
+                            }
+                            SmsTimer--
+                            jQuery('.sweet-alert a.sweet-alert-resend').html("没收到短信？("+SmsTimer+"s)")
+                        },1000)
+                        swal({
+                            title:"信息发送成功！",
+                            text:'请填写6位的验证码，10分钟内有效。<a class="btn-flat waves-effect grey-text sweet-alert-resend" style="height: inherit;line-height: inherit;padding: 0">没收到短信？(60s)</a>',
+                            html:true,
+                            cancelButtonText:"取消",
+                            confirmButtonText:"提交",
+                            showCancelButton:true,
+                            closeOnConfirm: false,
+                            inputPlaceholder: "验证码",
+                            type:"input"},
+                        function(value){
+                            if(!value)
+                                return swal.showInputError("请填写验证码_(:зゝ∠)_")
+                            if(value.length!=6)
+                                return swal.showInputError("请正确填写6位验证码_(:зゝ∠)_")
+                            if(ajaxFlag) return 0
+                            ajaxFlag=true
+                            ajax("/t/"+value,'GET',function(err,res){
+                                ajaxFlag=false
+                                if(err) console.log(err)
+                                res=JSON.parse(res)
+                                if(res.result==200){
+                                    //TODO:
+                                    return
+                                }
+                                if(res.result==404){
+                                    return swal.showInputError("验证码错误~可考虑使用邮箱验证。_(:зゝ∠)_")
+                                }
+                            })
+                        })
+                        return clearInterval(resendTimer)
+                    }
+                    if(res.result==304&&ifMsg){
+                        return swal({title:"发送失败x_x",text:'操作次数过于频繁（>3），请使用邮箱验证。',type:'error'/*,allowOutsideClick:true,timer:820*/})
+                    }
+                    if(res.result==500){
+                        return swal({title:"发送失败x_x",text:'由于未知的原因出现了错误，请稍后再试。',type:'error'/*,allowOutsideClick:true,timer:820*/})
+                    }
+                    else{
+                        return swal({title:"信息有误，请检查后再填写。",type:'error',showConfirmButton: false,allowOutsideClick:true,timer:820})
+                    }
+                })
+            })
+
+
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(res){
+                        jQuery("footer>.ajaxLoad").fadeOut(200)
+                        if(res.status==0) Materialize.toast('网络故障……', 4000)
+                        if(res.status==403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
+                        if(res.status==404) Materialize.toast('服务器懵逼了', 4000)
+                        if(res.status==500) Materialize.toast('服务器傻掉了', 4000)
+                        callback(res.responseText.code,res.responseText)
+                    }
+                })
+            }
         })

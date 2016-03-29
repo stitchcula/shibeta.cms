@@ -87,44 +87,104 @@ router.get('/login',function*(next){//登陆页面
     }
     yield next
 }).get('/t/:sid',function*(next){//改密
-    var msg=yield this.redis.hgetall(this.params.sid)
-    if(msg&&msg.ip==this.ip){
-        yield this.db.update({uin:msg.uin},{$set:{pwd:msg.newPwd}})
-        yield this.redis.del(this.params.sid)
-        this.session={tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
-        this.body={result:200}
-        this.redirect('/admin')
-    }else this.status=404
+    if(this.params.sid.length==1){
+        var shortMessage=yield this.redis.hgetall(this.session.tel)
+        if(shortMessage&&shortMessage.sid==this.params.sid){
+            yield this.redis.del(this.session.tel)
+            yield this.db.update({uin: shortMessage.uin}, {$set: {pwd: shortMessage.newPwd}})
+            msg=yield this.db.findOne({uin:shortMessage.uin})
+            this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
+            this.body={result:200}
+            this.redirect('/admin')
+        }else{
+            this.body={result:404}
+        }
+    }else{
+        var msg=yield this.redis.hgetall(this.params.sid)
+        if(msg&&msg.ip==this.ip){
+            yield this.db.update({uin: msg.uin}, {$set: {pwd: msg.newPwd}})
+            yield this.redis.del(this.params.sid)
+            this.session = {
+                tel: msg.tel,
+                em: msg.em,
+                idf: msg.idf,
+                name: msg.name,
+                usr: msg.usr,
+                uin: msg.uin,
+                pms: msg.pms,
+                ip: this.ip,
+                ol: new Date().getTime() + 7200000
+            }
+            this.body = {result: 200}
+            this.redirect('/admin')
+        }else this.status=404
+    }
     yield next
 }).put('/t',function*(next){//忘记密码
     var msg=yield this.db.findOne({idf:this.request.body.fields.idf})
     if(msg){
-        if((msg.name==new Buffer(this.request.body.fields.name).toString('base64'))&&this.request.body.fields.pwd&&(this.request.body.fields.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")) {
-            var sid = crypto.createHmac('sha1', msg.em + Date.parse(new Date()).toString()).digest('hex')
-            var MO={}
-            MO.from = "浩盛消防"
-            MO.to = msg.em
-            MO.subject="浩盛消防在线平台密码重置"
-            MO.html = '<h4>完成修改密码</h4><b>请点击以下链接完成您的修改：</b><br><a href="http://121.40.249.9:'+this.env.WEB_PORT+'/t/' + sid + '">http://121.40.249.9:800/t/' + sid + '</a>'
-            this.mailer.post('api/mailer',MO,function(e,r,b){
-                console.log(e)
-                console.log(r.statusCode)
-            })
-            yield this.redis.hmset(sid, {
-                ip:this.ip,
-                tel:msg.tel,
-                em:msg.em,
-                idf:msg.idf,
-                name:msg.name,
-                usr:msg.usr,
-                uin:msg.uin,
-                pms:msg.pms,
-                newPwd:this.request.body.fields.pwd})///???
-            yield this.redis.expire(sid, 60 * 60)
-            this.session.freq=new Date().getTime()
-            this.body = {result: 200}
-        }else this.body = {result: 403}
-    }else this.body={result:404}
+        if(/*(msg.name==new Buffer(this.request.body.fields.name).toString('base64'))&&*/this.request.body.fields.pwd&&(this.request.body.fields.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")) {
+            if(this.request.body.fields.ifMsg){
+                var shortMessageInfo=yield this.redis.hgetall(msg.tel)
+                if(shortMessageInfo){
+                    //if(shortMessageInfo.time>=3||(new Date().getTime()<shortMessageInfo.timeStamp+60000)) return this.body={result:304}
+                }else shortMessageInfo={time:1}
+                var sid=parseInt(Math.random()*1000000)
+                var SMS={}
+                SMS.to=msg.tel
+                SMS.type="hs_reset_pwd"
+                SMS.param=sid+",10"
+                this.mailer.post('api/sms',SMS,function(e,r,b){
+                    console.log(e)
+                    console.log(r.statusCode)
+                })
+                yield this.redis.hmset(msg.tel, {
+                    sid:sid,
+                    timeStamp:new Date().getTime(),
+                    time:shortMessageInfo.time++,
+                    uin: msg.uin,
+                    newPwd: this.request.body.fields.pwd
+                })
+                yield this.redis.expire(msg.tel,60)
+                this.session.tel=msg.tel
+                this.body={result:201}
+            }else {
+                var sid = crypto.createHmac('sha1', msg.em + Date.parse(new Date()).toString()).digest('hex')
+                var MO = {}
+                MO.from = "浩盛消防"
+                MO.to = msg.em
+                MO.subject = "浩盛消防在线平台密码重置"
+                MO.html = '<h4>完成修改密码</h4><b>请点击以下链接完成您的修改：</b><br><a href="http://121.40.249.9:' + this.env.WEB_PORT + '/t/' + sid + '">http://121.40.249.9:800/t/' + sid + '</a>'
+                this.mailer.post('api/mailer', MO, function (e, r, b) {
+                    console.log(e)
+                    console.log(r.statusCode)
+                })
+                yield this.redis.hmset(sid, {
+                    ip: this.ip,
+                    tel: msg.tel,
+                    em: msg.em,
+                    idf: msg.idf,
+                    name: msg.name,
+                    usr: msg.usr,
+                    uin: msg.uin,
+                    pms: msg.pms,
+                    newPwd: this.request.body.fields.pwd
+                })///???
+                yield this.redis.expire(sid, 60 * 60)
+                this.session.freq = new Date().getTime()
+                this.body = {result: 200, em: msg.em.split('@')[1]}
+            }
+        }else this.status=304
+    }else{//伪装成功，针对非法访问
+        if(/*(msg.name==new Buffer(this.request.body.fields.name).toString('base64'))&&*/this.request.body.fields.pwd&&(this.request.body.fields.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")) {
+            if(this.request.body.fields.ifMsg){
+                this.body={result:201}
+            }else{
+                this.body = {result: 200,em:"qq.com"}
+            }
+        }else
+            this.status=304
+    }
     yield next
 })
 

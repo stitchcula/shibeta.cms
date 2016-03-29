@@ -5,3 +5,61 @@ nav.top-nav
                 i.material-icons.left chrome_reader_mode
                 |查看合同
 div.container.cms_edit
+    div.row.cms_edit_search
+        div.col.s1.m2.hide-on-large-only.right
+            p &nbsp;
+        div.col.s10.m8.l5.right.cms_edit_search_input
+            div.card
+                input(value="HS").yahei
+                i.material-icons search
+
+        div.col.s10.offset-s1.m8.offset-m2.l7.cms_edit_search_option
+            div.switch.left
+                label.yahei
+                    |&nbsp;
+                    input(type="checkbox",checked=true)
+                    span.lever
+                    |仅未授权
+            a.btn.waves-effect(href=false).yahei.right 查询全部
+    style
+        :stylus
+            .cms_edit
+                .yahei
+                    font-family "Microsoft YaHei"!important
+                .cms_edit_search
+                    margin-top 16px
+                    .cms_edit_search_option
+                        height 60px
+                        .switch
+                            line-height 60px
+                            display inline
+                        a.btn
+                            margin 12px 0
+                    .cms_edit_search_input
+                        .card
+                            input
+                                display block
+                                font-size 16px
+                                font-weight 300
+                                width 100%
+                                height 45px
+                                margin 0
+                                padding 0 45px 0 15px
+                                border 0
+                                outline none
+                                box-shadow: none
+                                -webkit-transition: all 0.3s
+                                -moz-transition: all 0.3s
+                                -ms-transition: all 0.3s
+                                -o-transition: all 0.3s
+                                transition: all 0.3s
+                            i
+                                position: absolute
+                                top: 10px
+                                right: 10px
+                                cursor: pointer;
+
+    script.
+        (function(){
+
+        })()
