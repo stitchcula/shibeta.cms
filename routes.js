@@ -92,7 +92,7 @@ router.get('/login',function*(next){//登陆页面
         if(shortMessage&&shortMessage.sid==this.params.sid){
             yield this.redis.del(this.session.tel)
             yield this.db.update({uin: shortMessage.uin}, {$set: {pwd: shortMessage.newPwd}})
-            msg=yield this.db.findOne({uin:shortMessage.uin})
+            var msg=yield this.db.findOne({uin:shortMessage.uin})
             this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
             this.body={result:200}
             this.redirect('/admin')
@@ -100,10 +100,11 @@ router.get('/login',function*(next){//登陆页面
             this.body={result:404}
         }
     }else{
-        var msg=yield this.redis.hgetall(this.params.sid)
-        if(msg&&msg.ip==this.ip){
-            yield this.db.update({uin: msg.uin}, {$set: {pwd: msg.newPwd}})
+        var mailMessage=yield this.redis.hgetall(this.params.sid)
+        if(mailMessage&&mailMessage.ip==this.ip){
+            yield this.db.update({uin: mailMessage.uin}, {$set: {pwd: mailMessage.newPwd}})
             yield this.redis.del(this.params.sid)
+            var msg=yield this.db.findOne({uin:mailMessage.uin})
             this.session = {
                 tel: msg.tel,
                 em: msg.em,
@@ -124,7 +125,7 @@ router.get('/login',function*(next){//登陆页面
     var msg=yield this.db.findOne({idf:this.request.body.fields.idf})
     if(msg){
         if(/*(msg.name==new Buffer(this.request.body.fields.name).toString('base64'))&&*/this.request.body.fields.pwd&&(this.request.body.fields.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")) {
-            if(this.request.body.fields.ifMsg){
+            if(this.request.body.fields.ifMsg.length==2){
                 var shortMessageInfo=yield this.redis.hgetall(msg.tel)
                 if(shortMessageInfo){
                     //if(shortMessageInfo.time>=3||(new Date().getTime()<shortMessageInfo.timeStamp+60000)) return this.body={result:304}
@@ -160,14 +161,8 @@ router.get('/login',function*(next){//登陆页面
                     console.log(r.statusCode)
                 })
                 yield this.redis.hmset(sid, {
-                    ip: this.ip,
-                    tel: msg.tel,
-                    em: msg.em,
-                    idf: msg.idf,
-                    name: msg.name,
-                    usr: msg.usr,
+                    ip:this.ip,
                     uin: msg.uin,
-                    pms: msg.pms,
                     newPwd: this.request.body.fields.pwd
                 })///???
                 yield this.redis.expire(sid, 60 * 60)

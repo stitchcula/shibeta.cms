@@ -217,7 +217,7 @@ block content
                     return Materialize.toast('两次输入密码不匹配。', 4000)
                 $("#onForgeting").addClass("active")
                 var ifMsg=$("#onForgetByMobile").prop('checked')
-                ajax('/t?rd='+Math.random().toString(36).substr(2),'PUT',{idf:$("#i2").val(),pwd:hex_sha1($("#i3").val()),ifMsg:ifMsg},function(err,res){
+                ajax('/t?rd='+Math.random().toString(36).substr(2),'PUT',{idf:$("#i2").val(),pwd:hex_sha1($("#i3").val()),ifMsg:(ifMsg?"xx":"x")},function(err,res){
                     $("#onForgeting").removeClass("active")
                     if(err) console.log(err)
                     res=JSON.parse(res)
@@ -227,6 +227,7 @@ block content
                             text:'请尽快查看邮箱并按提示操作，1小时内有效owo',
                             cancelButtonText:"关闭",
                             confirmButtonText:"转到邮箱",
+                            confirmButtonColor:"#26a69a",
                             showCancelButton:true,
                             type:"success"},
                         function(isConfirm){
@@ -236,9 +237,9 @@ block content
                         })
                     }
                     if(res.result==201){
-                        ajaxFlag=false
+                        var ajaxFlag=false
                         var SmsTimer=60
-                        var resendTimer=setInterval(function(){//TODO:can't run
+                        var resendTimer=setInterval(function(){
                             if(SmsTimer<=0){
                                 jQuery('.sweet-alert a.sweet-alert-resend').html("没收到短信？").removeClass("grey-text")
                                 SmsTimer=60
@@ -247,10 +248,11 @@ block content
                             SmsTimer--
                             jQuery('.sweet-alert a.sweet-alert-resend').html("没收到短信？("+SmsTimer+"s)")
                         },1000)
-                        swal({
+                        return swal({
                             title:"信息发送成功！",
                             text:'请填写6位的验证码，10分钟内有效。<a class="btn-flat waves-effect grey-text sweet-alert-resend" style="height: inherit;line-height: inherit;padding: 0">没收到短信？(60s)</a>',
                             html:true,
+                            confirmButtonColor:"#26a69a",
                             cancelButtonText:"取消",
                             confirmButtonText:"提交",
                             showCancelButton:true,
@@ -258,6 +260,8 @@ block content
                             inputPlaceholder: "验证码",
                             type:"input"},
                         function(value){
+                            if(typeof (value)=="boolean"&&!value)
+                                return clearInterval(resendTimer)
                             if(!value)
                                 return swal.showInputError("请填写验证码_(:зゝ∠)_")
                             if(value.length!=6)
@@ -277,13 +281,12 @@ block content
                                 }
                             })
                         })
-                        return clearInterval(resendTimer)
                     }
                     if(res.result==304&&ifMsg){
-                        return swal({title:"发送失败x_x",text:'操作次数过于频繁（>3），请使用邮箱验证。',type:'error'/*,allowOutsideClick:true,timer:820*/})
+                        return swal({title:"发送失败x_x",text:'操作次数过于频繁（>3），请使用邮箱验证。',type:'error',confirmButtonColor:"#26a69a",/*,allowOutsideClick:true,timer:820*/})
                     }
                     if(res.result==500){
-                        return swal({title:"发送失败x_x",text:'由于未知的原因出现了错误，请稍后再试。',type:'error'/*,allowOutsideClick:true,timer:820*/})
+                        return swal({title:"发送失败x_x",text:'由于未知的原因出现了错误，请稍后再试。',type:'error',confirmButtonColor:"#26a69a",/*,allowOutsideClick:true,timer:820*/})
                     }
                     else{
                         return swal({title:"信息有误，请检查后再填写。",type:'error',showConfirmButton: false,allowOutsideClick:true,timer:820})
