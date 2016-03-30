@@ -87,7 +87,7 @@ router.get('/login',function*(next){//登陆页面
     }
     yield next
 }).get('/t/:sid',function*(next){//改密
-    if(this.params.sid.length==1){
+    if(this.params.sid.length==6){
         var shortMessage=yield this.redis.hgetall(this.session.tel)
         if(shortMessage&&shortMessage.sid==this.params.sid){
             yield this.redis.del(this.session.tel)
@@ -95,7 +95,6 @@ router.get('/login',function*(next){//登陆页面
             var msg=yield this.db.findOne({uin:shortMessage.uin})
             this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
             this.body={result:200}
-            this.redirect('/admin')
         }else{
             this.body={result:404}
         }
@@ -146,7 +145,7 @@ router.get('/login',function*(next){//登陆页面
                     uin: msg.uin,
                     newPwd: this.request.body.fields.pwd
                 })
-                yield this.redis.expire(msg.tel,60)
+                yield this.redis.expire(msg.tel,600)
                 this.session.tel=msg.tel
                 this.body={result:201}
             }else {

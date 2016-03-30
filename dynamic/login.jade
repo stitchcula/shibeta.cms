@@ -273,8 +273,7 @@ block content
                                 if(err) console.log(err)
                                 res=JSON.parse(res)
                                 if(res.result==200){
-                                    //TODO:
-                                    return
+                                    return window.location ="/admin"
                                 }
                                 if(res.result==404){
                                     return swal.showInputError("验证码错误~可考虑使用邮箱验证。_(:зゝ∠)_")
