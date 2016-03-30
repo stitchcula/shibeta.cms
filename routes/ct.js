@@ -8,7 +8,7 @@ var crypto=require('crypto')
 router.use('/',function*(next){//验证权限
     if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
         this.session.ol+=7200000
-    }else return this.redirect('/login')
+    }else return this.render('redirectLogin')
     yield next
 }).get('/',function*(next){//查看合同by kw,pg
     var pg=(this.query.pg)?this.query.pg:1

@@ -2,6 +2,8 @@
 
 var router=require('koa-router')()
 
+var cLocal=require('../lib/cLocal.js')
+
 var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/tree').children
 for(var r of menu){
     r=r.path//.substring(0,r.name.lastIndexOf("."))
@@ -20,7 +22,9 @@ for(var r of menu){
             }
             if(this.path=="/admin/cms_push"){
                 return this.render(this.path,{
-                    autosave:this.session.autosave
+                    autosave:this.session.autosave,
+                    name: new Buffer(this.session.name, 'base64').toString(),
+                    local:yield new cLocal(this.ip)
                 })
             }
             this.render(this.path)

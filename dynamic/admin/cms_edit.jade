@@ -12,7 +12,6 @@ div.container.cms_edit
             div.card
                 input(value="HS").yahei
                 i.material-icons search
-
         div.col.s10.offset-s1.m8.offset-m2.l7.cms_edit_search_option
             div.switch.left
                 label.yahei
@@ -21,6 +20,36 @@ div.container.cms_edit
                     span.lever
                     |仅未授权
             a.btn.waves-effect(href=false).yahei.right 查询全部
+        div.col.s12
+            blockquote.yahei.grey-text
+                i.material-icons.red-text warning
+                span &nbsp;状态为 未授权；
+                i.material-icons.green-text check_circle
+                span &nbsp;状态为 已授权。
+    div.cms_edit_cts.center-align
+        div.card-panel.row
+            div.col.s2
+                p.yahei 编码
+            div.col.s4
+                p.yahei 合同名称
+            div.col.s3
+                p.yahei 甲方
+            div.col.s1
+                p.yahei 状态
+            div.col.s2
+                p.yahei 操作
+        div.card-panel.row
+            div.col.s2
+                p.truncate HS123456789111
+            div.col.s4
+                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
+            div.col.s3
+                p.yahei.truncate 一二三四
+            div.col.s1
+                i.material-icons.red-text warning
+            div.col.s2.center-align
+                i.material-icons close
+
     style
         :stylus
             .cms_edit
@@ -58,6 +87,17 @@ div.container.cms_edit
                                 top: 10px
                                 right: 10px
                                 cursor: pointer;
+                    blockquote
+                        margin 0
+                        font-size 0.8rem
+                        i
+                            font-size 0.8rem
+                .cms_edit_cts
+                    .card-panel
+                        margin: 0
+                        padding: 0
+                        i
+                            line-height 52px
 
     script.
         (function(){

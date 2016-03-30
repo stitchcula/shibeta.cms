@@ -20,13 +20,13 @@ div.container.cms_push
             input.validate.yahei(value=autosave?autosave.b:"湖南浩盛消防科技有限公司",type="text")
             label.active.yahei 乙方
         div.input-field.col.s12.m12.l5
-            input.validate.yahei(type="text",value=autosave?autosave.bb:"")
+            input.validate.yahei(type="text",value=autosave?autosave.bb:name)
             label.active.yahei 乙方代表
         div.input-field.col.s12.m12.l5.offset-l1
             input.datepicker.yahei(type="date",value=autosave?autosave.time:now)
             label.active.yahei 签订时间
         div.input-field.col.s12.m12.l5
-            input.validate.yahei(type="text",value=autosave?autosave.location:"")
+            input.validate.yahei(type="text",value=autosave?autosave.location:local)
             label.active.yahei 签订地点
         div.input-field.col.s6.m6.l5.offset-l1
             input.datepicker.yahei(type="date",placeholder="起始日期",value=autosave?autosave.begin:now)
@@ -40,7 +40,7 @@ div.container.cms_push
         div.input-field.col.s1.m1.l1
             p.yahei 元
         div.col.s12.m12.l10.offset-l1
-            p.cms_push_res.yahei.red-text 注：请勿连续提交；可自动保存，请放心填写。
+            blockquote.cms_push_res.yahei.red-text 请勿连续提交；可自动保存，请放心填写。
     div.row
         div.col.s6.m6.l5.offset-l1
             a.waves-effect.btn-flat.yahei.cms_push_reset 重置
@@ -160,6 +160,7 @@ div.container.cms_push
                     complete:function(res){
                         if(!data._silent) jQuery("footer>.ajaxLoad").fadeOut(200)
                         if(res.status==0) Materialize.toast('网络故障……', 4000)
+                        //if(res.status==302)
                         if(res.status==403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
                         if(res.status==404) Materialize.toast('服务器懵逼了', 4000)
                         if(res.status==500) Materialize.toast('服务器傻掉了', 4000)
