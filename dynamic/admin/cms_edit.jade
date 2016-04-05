@@ -20,14 +20,14 @@ div.container.cms_edit
                     span.lever
                     |仅未授权
             a.btn.waves-effect(href=false).yahei.right 查询全部
-        div.col.s12
+        div.col.s10.offset-s1.m8.offset-m2.l12
             blockquote.yahei.grey-text
                 i.material-icons.red-text warning
                 span &nbsp;状态为 未授权；
                 i.material-icons.green-text check_circle
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
-        div.card-panel.row
+        div.card-panel.row.hide-on-small-only
             div.col.s2
                 p.yahei 编码
             div.col.s4
@@ -38,17 +38,25 @@ div.container.cms_edit
                 p.yahei 状态
             div.col.s2
                 p.yahei 操作
-        div.card-panel.row
-            div.col.s2
+        div.card-panel.row(ct_status="gived")
+            div.col.s4.hide-on-med-and-up
+                p.yahei 编码
+            div.col.m2.l2.s8
+                i.material-icons.left.red-text.hide-on-med-and-up warning
+                i.material-icons.left.green-text.hide-on-med-and-up check_circle
                 p.truncate HS123456789111
-            div.col.s4
+            div.col.s4.hide-on-med-and-up
+                p.yahei 合同名称
+            div.col.m4.l4.s8
                 p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
-            div.col.s3
-                p.yahei.truncate 一二三四
-            div.col.s1
+            div.col.s4.hide-on-med-and-up
+                p.yahei 甲方
+            div.col.m3.l3.s8
+                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
+            div.col.m1.l1.s8.hide-on-small-only
                 i.material-icons.red-text warning
-            div.col.s2.center-align
-                i.material-icons close
+            div.col.m2.l2.s8.hide-on-small-only
+                p.yahei.truncate 一二三四
 
     style
         :stylus
@@ -88,7 +96,7 @@ div.container.cms_edit
                                 right: 10px
                                 cursor: pointer;
                     blockquote
-                        margin 0
+                        margin 0.4rem 0
                         font-size 0.8rem
                         i
                             font-size 0.8rem
@@ -98,8 +106,26 @@ div.container.cms_edit
                         padding: 0
                         i
                             line-height 52px
+                            display: inline
+                    @media only screen and (max-width: 600px)
+                        .card-panel
+                            margin-bottom 1.6rem
+                            position: relative
+                            i
+                                font-size 1rem
+                        .card-panel[ct_status="ingived"]
+                            background #ffe6e8
+                            i:nth-of-type(2)
+                                display: none
+                        .card-panel[ct_status="gived"]
+                            background #E8F5E9
+                            i:nth-of-type(1)
+                                display: none
+
 
     script.
         (function(){
+            $('.cms_edit_cts .card-panel[ct_status]').focus(function(){
 
+            })
         })()
