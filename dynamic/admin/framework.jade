@@ -14,15 +14,19 @@ block style
                 -webkit-font-smoothing: antialiased
             nav ul li:hover, nav ul li.active
                 background-color: #ea454b;
+            .side-nav .collapsible-header, .side-nav.fixed .collapsible-header// with v0.97.6
+                line-height: 44px
             header, main, footer
+                width 100%
                 padding-left: 240px
+                overflow-x:hidden//with v0.97.6
             .parallax-demo header, .parallax-demo main, .parallax-demo footer
                 padding-left: 0;
             @media only screen and (max-width: 992px)
                 header, main, footer
                     padding-left: 0;
             ul.side-nav.fixed li a
-                line-height 44px;height 44px;line-height
+                line-height 44px;height 44px
             ul.side-nav.fixed li i
                 line-height inherit;width 2rem
             a.button-collapse.top-nav
@@ -41,7 +45,8 @@ block content
     header
         div.container
             a.button-collapse.top-nav.full.hide-on-large-only.left(href="#",data-activates="slide-nav")
-                i.mdi-navigation-menu
+                //i.mdi-navigation-menu // with v0.97.6
+                i.material-icons menu
         ul#slide-nav.side-nav.fixed
             li.logo
             each m in menu
@@ -80,25 +85,27 @@ block content
                 jQuery('.button-collapse').sideNav({
                     menuWidth: 240,
                     edge: 'left',
-                    closeOnClick: false
+                    closeOnClick: true
                 })
-                jQuery("li._active").each(function(){
+
+                jQuery("#slide-nav li._active").each(function(){
                     jQuery(this).click(function(){
-                        jQuery("li._active").toggleClass("active",false)
+                        jQuery("#slide-nav li._active").toggleClass("active",false)
                         jQuery(this).toggleClass("active",true)
                     })
                 })
 
 
                 //ajax
-                window.onload = ajaxHash
-                window.onhashchange = ajaxHash
-                function ajaxHash() {
+                window.onload = function(){ajaxHash(1)}
+                window.onhashchange =function(){ ajaxHash(0)}
+                function ajaxHash(first) {
                     var hash = window.location.hash
                     var path = window.location.pathname
                     hash = (/^.*\/$/.test(hash)) ? hash.substring(1, hash.length - 1) : hash.substring(1, hash.length)
                     path = (/^.*\/$/.test(path)) ? path.substring(0, path.length - 1) : path.substring(0, path.length)
                     if(!hash) hash="notice"
+                    if(first){jQuery('#slide-nav li._active a[href="#'+hash+'"]').closest('._active').click();jQuery('#slide-nav li._active a[href="#'+hash+'"]').closest('ul.collapsible-accordion').find('a.collapsible-header').click()}
                     ajaxLoad("main",path + "/" + hash)
                 }
                 function ajaxLoad(selector,path){

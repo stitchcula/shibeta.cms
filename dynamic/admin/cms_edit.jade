@@ -27,6 +27,16 @@ div.container.cms_edit
                 i.material-icons.green-text check_circle
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
+        //div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up
+            a.btn-floating.btn-large.teal
+                i.large.material-icons mode_edit
+            ul
+                li
+                    a.btn-floating.red
+                        i.material-icons publish
+                li
+                    a.btn-floating.red
+                        i.material-icons publish
         div.card-panel.row.hide-on-small-only
             div.col.s2
                 p.yahei 编码
@@ -57,6 +67,30 @@ div.container.cms_edit
                 i.material-icons.red-text warning
             div.col.m2.l2.s8.hide-on-small-only
                 p.yahei.truncate 一二三四
+            input#HS123456789111(name="cts" type="radio").hide-on-med-and-up
+            label(for="HS123456789111").hide-on-med-and-up
+
+        div.card-panel.row(ct_status="ingived")
+            div.col.s4.hide-on-med-and-up
+                p.yahei 编码
+            div.col.m2.l2.s8
+                i.material-icons.left.red-text.hide-on-med-and-up warning
+                i.material-icons.left.green-text.hide-on-med-and-up check_circle
+                p.truncate HS123456789112
+            div.col.s4.hide-on-med-and-up
+                p.yahei 合同名称
+            div.col.m4.l4.s8
+                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
+            div.col.s4.hide-on-med-and-up
+                p.yahei 甲方
+            div.col.m3.l3.s8
+                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
+            div.col.m1.l1.s8.hide-on-small-only
+                i.material-icons.red-text warning
+            div.col.m2.l2.s8.hide-on-small-only
+                p.yahei.truncate 一二三四
+            input#HS123456789112(name="cts" type="radio").hide-on-med-and-up
+            label(for="HS123456789112").hide-on-med-and-up
 
     style
         :stylus
@@ -101,6 +135,9 @@ div.container.cms_edit
                         i
                             font-size 0.8rem
                 .cms_edit_cts
+                    .fixed-action-btn
+                        bottom 64px
+                        rigth 12px
                     .card-panel
                         margin: 0
                         padding: 0
@@ -113,6 +150,38 @@ div.container.cms_edit
                             position: relative
                             i
                                 font-size 1rem
+                            [type="radio"]:not(:checked)+label, [type="radio"]:checked+label
+                                padding 0
+                                position: absolute
+                                left 0
+                                width 100%
+                                height 100%
+                                line-height 100%
+                            [type="radio"]+label:before, [type="radio"]+label:after
+                                left 0
+                                top 0
+                                width 8px
+                                margin 0
+                                height 100%
+                                -webkit-border-radius: 0
+                                -moz-border-radius: 0
+                                border-radius: 0
+                                border 0px solid #FFFFFF
+                            [type="radio"]:checked+label:after
+                                -webkit-border-radius: 0
+                                -moz-border-radius: 0
+                                border-radius: 0
+                                border 0px solid #FFFFFF
+                                background: #26a69a
+                                -webkit-transform: scale(1.0)
+                                -moz-transform: scale(1.0)
+                                -ms-transform: scale(1.0)
+                                -o-transform: scale(1.0)
+                                transform: scale(1.0)
+                                -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                                -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                                box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+
                         .card-panel[ct_status="ingived"]
                             background #ffe6e8
                             i:nth-of-type(2)
@@ -125,7 +194,10 @@ div.container.cms_edit
 
     script.
         (function(){
-            $('.cms_edit_cts .card-panel[ct_status]').focus(function(){
 
-            })
+
+            var cts=[]//globe contracts array
+            var ct_focu=null
+
+
         })()
