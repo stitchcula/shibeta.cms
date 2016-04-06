@@ -26,10 +26,10 @@ block style
                     .card-action
                         #onLogin
                             margin-left 20px
-                    .card-action a
-                        color #65BEF3
-                    .card-action a:hover
-                        color #8ed7ff
+                    .card-action a.btn-flat
+                        color #65BEF3!important
+                    .card-action a.btn-flat:hover
+                        color #8ed7ff!important
                     .card-action .action
                         min-width 120px
                 .row
@@ -119,20 +119,7 @@ block content
                                 div.col.s12.m3
                                     a.btn-flat.waves-effect.waves-teal.yahei.grey-text.text-lighten-1.action &nbsp;
                                     a#toForget.btn-flat.waves-effect.waves-teal.yahei.grey-text.text-lighten-1.action.activator 忘记密码
-                        div.card-action
-                            a.btn-flat.waves-light
-                                i.icon-qq.left
-                                | QQ
-                            a#onLogin.waves-effect.waves-light.white-text.btn.right.yahei.action 登陆
-                            div#onLogining.preloader-wrapper.small.right
-                                div.spinner-layer.spinner-red-only
-                                    div.circle-clipper.left
-                                        div.circle
-                                    div.gap-patch
-                                        div.circle
-                                    div.circle-clipper.right
-                                        div.circle
-                            div#res1.yahei.right.resNsg
+
                         div.card-reveal
                             span.card-title.grey-text.text-darken-4.yahei 重置密码
                                 i.material-icons.right close
@@ -150,7 +137,6 @@ block content
                                     input#i4.validate.yahei(type="password",placeholder="")
                                     label.yahei(for="i4",data-error="") 重复密码
                                 div.col.s12
-                                    //div#res2.yahei.resMsg
                                     p
                                         input#onForgetByMobile(type="checkbox")
                                         label(for="onForgetByMobile").yahei 通过手机验证
@@ -164,6 +150,20 @@ block content
                                                 div.circle
                                     a#onForget.waves-effect.waves-light.white-text.btn.right
                                         i.material-icons done_all
+                        div.card-action
+                            a.btn-flat.waves-light
+                                i.icon-qq.left
+                                | QQ
+                            a#onLogin.waves-effect.waves-light.white-text.btn.right.yahei.action 登陆
+                            div#onLogining.preloader-wrapper.small.right
+                                div.spinner-layer.spinner-red-only
+                                    div.circle-clipper.left
+                                        div.circle
+                                    div.gap-patch
+                                        div.circle
+                                    div.circle-clipper.right
+                                        div.circle
+                            div#res1.yahei.right.resNsg
         //slider bg
         div.slider.fullscreen
             ul.slides

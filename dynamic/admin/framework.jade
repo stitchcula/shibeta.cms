@@ -85,13 +85,15 @@ block content
                 jQuery('.button-collapse').sideNav({
                     menuWidth: 240,
                     edge: 'left',
-                    closeOnClick: true
+                    closeOnClick: false
                 })
 
                 jQuery("#slide-nav li._active").each(function(){
                     jQuery(this).click(function(){
                         jQuery("#slide-nav li._active").toggleClass("active",false)
                         jQuery(this).toggleClass("active",true)
+                        if (jQuery('a[data-activates="slide-nav"]').css("display") != "none")
+                            $('.button-collapse').sideNav('hide')
                     })
                 })
 
