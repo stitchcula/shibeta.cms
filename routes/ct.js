@@ -13,13 +13,24 @@ router.use('/',function*(next){//验证权限
 }).get('/',function*(next){//查看合同by kw,pg
     var pg=(this.query.pg)?this.query.pg:1
     var sort=(this.query.sort)?this.query.sort:-1
+    var status=(this.query.status=="true")?0:1
     var cts=[]
-    console.log(this.query.kw)
+    //console.log(this.query.kw)
     if(this.session.pms[4]){//所有用户
+
+        if(/^[0-9a-zA-Z]{1,14}$/.test(this.query.kw))
+            cts=yield this.cts.find({"status.0":status,id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+        else{
+            cts=yield this.cts.find({"status.0":status,name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            if(cts.length==0)
+                cts=yield this.cts.find({"status.0":status,"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            if(cts.length==0)
+                cts=yield this.cts.find({"status.0":status,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+        /*
         if(!this.query.kw){
-            cts=yield this.cts.find({"status.0":0},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            cts=yield this.cts.find({},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
         }else{
-            if(this.query.kw=="all") cts=yield this.cts.find({},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            if(this.query.kw=="HS") cts=yield this.cts.find({},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             else{
                 if(/^[0-9a-zA-Z]{1,14}$/.test(this.query.kw))
                     cts=yield this.cts.find({id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
@@ -30,9 +41,19 @@ router.use('/',function*(next){//验证权限
                     if(cts.length==0)
                         cts=yield this.cts.find({"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
                 }
-            }
+            }*/
         }
     }else{//仅查看本用户
+        if(/^[0-9a-zA-Z]{1,14}$/.test(this.query.kw))
+            cts=yield this.cts.find({"status.0":status,uin:this.session.uin,id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+        else{
+            cts=yield this.cts.find({"status.0":status,uin:this.session.uin,name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            if(cts.length==0)
+                cts=yield this.cts.find({"status.0":status,uin:this.session.uin,"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            if(cts.length==0)
+                cts=yield this.cts.find({"status.0":status,uin:this.session.uin,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+        }
+        /*
         if(!this.query.kw){
             cts=yield this.cts.find({uin:this.session.uin},{skip:pg*10-10,limit: 11})
         }else{
@@ -45,13 +66,13 @@ router.use('/',function*(next){//验证权限
                 if(cts.length==0)
                     cts=yield this.cts.find({uin:this.session.uin,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             }
-        }
+        }*/
     }
     for(var i=0;i<cts.length;i++) {
         cts[i]._id=""
         cts[i].key=new Buffer(cts[i].id+cts[i].key).toString('base64')
     }
-    this.body=cts
+    this.body={result:200,cts:cts}
     yield next
 }).post('/autosave',function*(next){
     if(this.request.body!={})

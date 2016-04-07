@@ -19,7 +19,7 @@ div.container.cms_edit
                     input(type="checkbox",checked=true)
                     span.lever
                     |仅未授权
-            a.btn.waves-effect(href=false).yahei.right 查询全部
+            //a.btn.waves-effect(href=false).yahei.right 查询全部
         div.col.s10.offset-s1.m8.offset-m2.l12
             blockquote.yahei.grey-text
                 i.material-icons.red-text warning
@@ -27,17 +27,27 @@ div.container.cms_edit
                 i.material-icons.green-text check_circle
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
-        div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up
+        div#cms_edit_cts_modal.modal.modal-fixed-footer
+            div.modal-content
+                div.container
+
+            div.modal-header
+                a.waves-effect.btn-flat.red-text.modal-action.modal-close.right
+                    i.material-icons close
+            div.modal-footer
+                a.waves-effect.green.btn.yahei 确定
+                a.waves-effect.red.btn.yahei 重置
+        div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up.cms_edit_cts_operate
             a.btn-floating.btn-large.teal
-                i.large.material-icons mode_edit
+                i.large.material-icons build
             ul
                 li
                     a.btn-floating.red
-                        i.material-icons publish
+                        i.material-icons delete
                 li
-                    a.btn-floating.red
-                        i.material-icons publish
-        div.card-panel.row.hide-on-small-only
+                    a.btn-floating.green
+                        i.material-icons open_in_browser
+        div.card-panel.row.hide-on-small-only.cms_edit_cts_title.hide
             div.col.s2
                 p.yahei 编码
             div.col.s4
@@ -48,49 +58,29 @@ div.container.cms_edit
                 p.yahei 状态
             div.col.s2
                 p.yahei 操作
-        div.card-panel.row(ct_status="gived")
+        div.card-panel.row.cms_edit_cts_ct
             div.col.s4.hide-on-med-and-up
                 p.yahei 编码
             div.col.m2.l2.s8
                 i.material-icons.left.red-text.hide-on-med-and-up warning
                 i.material-icons.left.green-text.hide-on-med-and-up check_circle
-                p.truncate HS123456789111
+                p.truncate.cms_edit_cts_ct_show N/a
             div.col.s4.hide-on-med-and-up
                 p.yahei 合同名称
             div.col.m4.l4.s8
-                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
+                p.yahei.truncate.cms_edit_cts_ct_show N/a
             div.col.s4.hide-on-med-and-up
                 p.yahei 甲方
             div.col.m3.l3.s8
-                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
-            div.col.m1.l1.s8.hide-on-small-only
+                p.yahei.truncate.cms_edit_cts_ct_show N/a
+            div.col.m1.l1.s8.hide-on-small-only.cms_edit_cts_ct_status
                 i.material-icons.red-text warning
-            div.col.m2.l2.s8.hide-on-small-only
-                p.yahei.truncate 一二三四
-            input#HS123456789111(name="cts" type="radio").hide-on-med-and-up
-            label(for="HS123456789111").hide-on-med-and-up
-
-        div.card-panel.row(ct_status="ingived")
-            div.col.s4.hide-on-med-and-up
-                p.yahei 编码
-            div.col.m2.l2.s8
-                i.material-icons.left.red-text.hide-on-med-and-up warning
-                i.material-icons.left.green-text.hide-on-med-and-up check_circle
-                p.truncate HS123456789112
-            div.col.s4.hide-on-med-and-up
-                p.yahei 合同名称
-            div.col.m4.l4.s8
-                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
-            div.col.s4.hide-on-med-and-up
-                p.yahei 甲方
-            div.col.m3.l3.s8
-                p.yahei.truncate 一二三四五六七八九十一二三四五六七八九十
-            div.col.m1.l1.s8.hide-on-small-only
-                i.material-icons.red-text warning
-            div.col.m2.l2.s8.hide-on-small-only
-                p.yahei.truncate 一二三四
-            input#HS123456789112(name="cts" type="radio").hide-on-med-and-up
-            label(for="HS123456789112").hide-on-med-and-up
+                i.material-icons.green-text check_circle
+            div.col.m2.l2.s8.hide-on-small-only.cms_edit_cts_ct_operate
+                i.material-icons.red-text delete
+                i.material-icons.green-text open_in_browser
+            input#Na(name="cts" type="radio").hide-on-med-and-up
+            label(for="N/a").hide-on-med-and-up
 
     style
         :stylus
@@ -98,7 +88,7 @@ div.container.cms_edit
                 .yahei
                     font-family "Microsoft YaHei"!important
                 .cms_edit_search
-                    margin-top 16px
+                    margin-top 24%
                     .cms_edit_search_option
                         height 60px
                         .switch
@@ -135,15 +125,30 @@ div.container.cms_edit
                         i
                             font-size 0.8rem
                 .cms_edit_cts
+                    #cms_edit_cts_modal
+                        .modal-footer
+                            a
+                                margin 6px 6px
+                    .cms_edit_cts_ct
+                        display: none
                     .fixed-action-btn
-                        bottom 64px
-                        rigth 12px
+                        bottom 16px
+                        rigth 16px
                     .card-panel
                         margin: 0
                         padding: 0
                         i
                             line-height 52px
                             display: inline
+                        .cms_edit_cts_ct_operate i
+                            margin 0 6px
+                            cursor: pointer
+                    .card-panel[ct_status="0"]
+                        .cms_edit_cts_ct_status i:nth-of-type(2)
+                            display: none
+                    .card-panel.cms_edit_cts_ct_status[ct_status="1"]
+                        .cms_edit_cts_ct_status i:nth-of-type(1)
+                            display: none
                     @media only screen and (max-width: 600px)
                         .card-panel
                             margin-bottom 1.6rem
@@ -181,13 +186,13 @@ div.container.cms_edit
                                 -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
                                 -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
                                 box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
-                        .card-panel[ct_status="ingived"]
+                        .card-panel.cms_edit_cts_ct_status[ct_status="0"]
                             background #ffe6e8
-                            i:nth-of-type(2)
+                            .cms_edit_cts_ct_status i:nth-of-type(2)
                                 display: none
-                        .card-panel[ct_status="gived"]
+                        .card-panel.cms_edit_cts_ct_status[ct_status="1"]
                             background #E8F5E9
-                            i:nth-of-type(1)
+                            .cms_edit_cts_ct_status i:nth-of-type(1)
                                 display: none
 
 
@@ -195,7 +200,107 @@ div.container.cms_edit
         (function(){
 
             var cts=[]//globe contracts array
-            var ct_focu=null
 
+            $('.cms_edit_search_input i').click(function(){
+                var i=$('.cms_edit_search_input input').val().toUpperCase()
+                var j=$('.cms_edit_search_option .switch input').prop('checked')
+                cts_search(i,j)
+            })
+            //open modal
+            $('.cms_edit_cts_operate i').eq(2).click(function () {
+                cts_operate_open()
+            })
+            $('.cms_edit_cts_ct_operate i').eq(1).click(function () {
+                cts_operate_open()
+            })
+            //delete ct
+            $('.cms_edit_cts_operate i').eq(1).click(function () {
 
+            })
+            $('.cms_edit_cts_ct_operate i').eq(0).click(function () {
+
+            })
+
+            function cts_operate_open(id){
+                $('#cms_edit_cts_modal').openModal()
+            }
+
+            function cts_operate_delete(id){
+                swal()
+            }
+
+            function cts_search(kw,status){
+                ajax('/ct?pg=1&kw='+kw+'&status='+status,'GET',function(err,res){
+                    if(err) console.log(err)
+                    res=JSON.parse(res)
+                    if(res.result==200){
+                        res.cts=cts_parse2Arr(res.cts)
+                        $(".cms_edit_search").animate({marginTop:"16px"},350,function(){
+                            $('.cms_edit_cts_title').toggleClass("hide",false)
+                            cts_render(res.cts)
+                        })
+                    }
+                })
+            }
+            function cts_render(_cts){
+                $('.cms_edit_cts_ct[ct_status]').remove()
+                for(var i=0;i<_cts.length;i++){
+                    $('.cms_edit_cts').append($('.cms_edit_cts_ct').eq(0).clone(true))
+                    $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(0).html(_cts[i][0])
+                    $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(1).html(_cts[i][1])
+                    $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(2).html(_cts[i][2])
+                    $('.cms_edit_cts_ct').eq(i+1).attr("ct_status",_cts[i][11][0])
+                    $('.cms_edit_cts_ct').eq(i+1).find("input").attr("id",_cts[i][0])
+                    $('.cms_edit_cts_ct').eq(i+1).find("label").attr("for",_cts[i][0])
+                    $('.cms_edit_cts_ct').eq(i+1).fadeIn()
+                }
+            }
+            function cts_parse2Arr(_cts){
+                _cts=(typeof(_cts.length)=="number")?_cts:[_cts]
+                for(var i=0;i<_cts.length;i++){
+                    _cts[i]=[_cts[i].id,_cts[i].name,
+                        _cts[i].ext.partys[0],_cts[i].ext.rprs[0],
+                        _cts[i].ext.partys[1],_cts[i].ext.rprs[1],
+                        _cts[i].ext.time,_cts[i].ext.location,
+                        _cts[i].ext.exp[0],_cts[i].ext.exp[1],
+                        _cts[i].ext.money,_cts[i].status
+                    ]
+                }
+                return _cts
+            }
+            function cts_parse2Obj(_cts){//[[]],[]
+                _cts=(typeof(_cts.length)=="number"&&typeof(_cts[0].length)=="number")?_cts:[_cts]
+                for(var i=0;i<_cts.length;i++){
+                    _cts[i]={
+                        id:_cts[i][0],name: _cts[i][1],
+                        a: _cts[i][2],aa: _cts[i][3],
+                        b: _cts[i][4],bb: _cts[i][5],
+                        time:_cts[i][6],location: _cts[i][7],
+                        begin: _cts[i][8],end: _cts[i][9],
+                        money: _cts[i][10]
+                    }
+                }
+                return _cts
+            }
+            function ajax(path,method,data,callback){
+                if(!callback) callback=data
+                $.ajax({url:path,type:method,cache:false,data:data,
+                    beforeSend:function(){
+                        jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete:function(res){
+                        jQuery("footer>.ajaxLoad").fadeOut(200)
+                        if(res.status==0) Materialize.toast('网络故障……', 4000)
+                        if(res.status==403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
+                        if(res.status==404) Materialize.toast('服务器懵逼了', 4000)
+                        if(res.status==500) Materialize.toast('服务器傻掉了', 4000)
+                        if(res.status==200) try{
+                            JSON.parse(res.responseText)
+                        }catch(e){
+                            jQuery('main').append(res.responseText)
+                        }
+                        callback(res.responseText.code,res.responseText)
+                    }
+                })
+            }
         })()
