@@ -61,7 +61,7 @@ div.container.cms_edit
         div.card-panel.row.cms_edit_cts_ct
             div.col.s4.hide-on-med-and-up
                 p.yahei 编码
-            div.col.m2.l2.s8
+            div.col.m2.l2.s8.cms_edit_cts_ct_status
                 i.material-icons.left.red-text.hide-on-med-and-up warning
                 i.material-icons.left.green-text.hide-on-med-and-up check_circle
                 p.truncate.cms_edit_cts_ct_show N/a
@@ -146,7 +146,7 @@ div.container.cms_edit
                     .card-panel[ct_status="0"]
                         .cms_edit_cts_ct_status i:nth-of-type(2)
                             display: none
-                    .card-panel.cms_edit_cts_ct_status[ct_status="1"]
+                    .card-panel[ct_status="1"]
                         .cms_edit_cts_ct_status i:nth-of-type(1)
                             display: none
                     @media only screen and (max-width: 600px)
@@ -186,11 +186,11 @@ div.container.cms_edit
                                 -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
                                 -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
                                 box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
-                        .card-panel.cms_edit_cts_ct_status[ct_status="0"]
+                        .card-panel[ct_status="0"]
                             background #ffe6e8
                             .cms_edit_cts_ct_status i:nth-of-type(2)
                                 display: none
-                        .card-panel.cms_edit_cts_ct_status[ct_status="1"]
+                        .card-panel[ct_status="1"]
                             background #E8F5E9
                             .cms_edit_cts_ct_status i:nth-of-type(1)
                                 display: none
