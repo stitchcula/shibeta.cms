@@ -20,6 +20,11 @@ for(var r of menu){
                     ding: this.session.job
                 })
             }
+            if(this.path=="/admin/cms_edit") { //兼容jade
+                return this.render(this.path, {
+                    pms: this.session.pms
+                })
+            }
             if(this.path=="/admin/cms_push"){
                 return this.render(this.path,{
                     autosave:this.session.autosave,

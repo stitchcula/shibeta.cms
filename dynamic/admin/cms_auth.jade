@@ -20,7 +20,7 @@ div.container.cms_auth
                     div.row
                         div.input-field.col.s12.m12.l10.offset-l1.roInput
                             input.validate.yahei(disabled,type="text",value="N/a")
-                            p.right.red-text.p_status 未授权
+                            p.right.red-text.p_status.yahei N/a
                         div.input-field.col.s12.m12.l5.offset-l1.roInput
                             input.validate.yahei(disabled,type="text",value="N/a")
                             label.active.yahei 甲方
@@ -28,7 +28,7 @@ div.container.cms_auth
                             input.validate.yahei(disabled,type="text",value="N/a")
                             label.active.yahei 甲方代表
                         div.input-field.col.s12.m12.l5.offset-l1.roInput
-                            input.validate.yahei(disabled,value=value="N/a",type="text")
+                            input.validate.yahei(disabled,value="N/a",type="text")
                             label.active.yahei 乙方
                         div.input-field.col.s12.m12.l5.roInput
                             input.validate.yahei(disabled,type="text",value="N/a")
@@ -92,6 +92,9 @@ div.container.cms_auth
                             cursor: pointer;
                 .ct_inner,.ct_inner_404
                     display: none
+                    margin-bottom 0!important
+                    .row
+                        margin-bottom 0!important
                     input
                         border-bottom 1px solid #9E9E9E!important
                         box-shadow 0 0 0 0 #9e9e9e!important
@@ -137,6 +140,7 @@ div.container.cms_auth
                                 for(var m=0;m<$(".ct_inner").eq(0).find("input").length;m++){
                                     document.querySelectorAll(".ct_inner")[0].querySelectorAll("input")[m].value=res.cts[n][m]
                                 }
+                                $(".ct_inner").eq(0).find(".p_status").text(res.cts[n][10])
                                 $('.cms_auth').append( $('.ct_inner').eq(0).clone(true))
                                 $('.ct_inner').eq(n+1).addClass('ct_inner_clone').fadeIn(100)
                             }

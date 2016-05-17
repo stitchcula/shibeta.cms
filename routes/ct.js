@@ -116,7 +116,10 @@ router.use('/',function*(next){//验证权限
         var cts=yield this.cts.findOne({id:this.request.body.fields.id})
         if(cts){
             var test=yield this.cts.update({id:this.request.body.fields.id},{$set:{name:this.request.body.fields.name,ext:{partys:[this.request.body.fields.a,this.request.body.fields.b],time:this.request.body.fields.time,location:this.request.body.fields.location,exp:[this.request.body.fields.begin,this.request.body.fields.end],rprs:[this.request.body.fields.aa,this.request.body.fields.bb],money:this.request.body.fields.money}}})
-            this.body=yield this.cts.findOne({id:this.request.body.fields.id})
+            var resCt=yield this.cts.findOne({id:this.request.body.fields.id})
+            delete resCt._id
+            resCt.key=new Buffer(resCt.id+resCt.key).toString('base64')
+            this.body={result:200,cts:[resCt]}
         }
     }else this.status=403
     yield next

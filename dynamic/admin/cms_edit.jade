@@ -27,16 +27,50 @@ div.container.cms_edit
                 i.material-icons.green-text check_circle
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
-        div#cms_edit_cts_modal.modal.modal-fixed-footer
-            div.modal-content
-                div.container
-
+        div#cms_edit_cts_modal.modal.modal-fixed-footer.ct_inner(ct_edit="disable",onmousewheel="return scroll(event,this)")
+            div.modal-content.left-align
+                div.row
+                    div.input-field.col.s12.m12.l10.offset-l1.roInput
+                        input.validate.yahei(type="text",value="N/a")
+                        p.right.red-text.ct_inner_status.yahei N/a
+                        p.left.ct_inner_id.yahei N/a
+                    div.input-field.col.s12.m12.l5.offset-l1.roInput
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 甲方
+                    div.input-field.col.s12.m12.l5.roInput
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 甲方代表
+                    div.input-field.col.s12.m12.l5.offset-l1.roInput
+                        input.validate.yahei(value = "N/a",type="text")
+                        label.active.yahei 乙方
+                    div.input-field.col.s12.m12.l5.roInput
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 乙方代表
+                    div.input-field.col.s12.m12.l5.offset-l1.roInput
+                        input.datepicker.yahei(type="date",value="N/a")
+                        label.active.yahei 签订时间
+                    div.input-field.col.s12.m12.l5.roInput
+                        input.validate.yahei(type="text",value="N/a")
+                        label.active.yahei 签订地点
+                    div.input-field.col.s6.m6.l5.offset-l1.roInput
+                        input.datepicker.yahei(type="date",placeholder="起始日期",value="N/a")
+                        label.active.yahei 有效期限
+                    div.input-field.col.s6.m6.l5.roInput
+                        input.datepicker.yahei(type="date",placeholder="终止日期",value="N/a")
+                        label.active.yahei 到
+                    div.input-field.col.s10.m11.l5.offset-l1.roInput
+                        input.validate.yahei(type="number",placeholder="人民币",value=0)
+                        label.active.yahei 合同金额
+                    div.input-field.col.s2.m1.l1
+                        p.yahei 元
             div.modal-header
                 a.waves-effect.btn-flat.red-text.modal-action.modal-close.right
                     i.material-icons close
             div.modal-footer
-                a.waves-effect.green.btn.yahei 确定
+                a.waves-effect.green.btn.yahei 保存
+                a.waves-effect.btn.yahei 授权
                 a.waves-effect.red.btn.yahei 重置
+                a.waves-effect.btn.yahei 请求授权
         div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up.cms_edit_cts_operate
             a.btn-floating.btn-large.teal
                 i.large.material-icons build
@@ -80,7 +114,7 @@ div.container.cms_edit
                 i.material-icons.red-text delete
                 i.material-icons.green-text open_in_browser
             input#Na(name="cts" type="radio").hide-on-med-and-up
-            label(for="N/a").hide-on-med-and-up
+            label(for="Na").hide-on-med-and-up
 
     style
         :stylus
@@ -127,8 +161,22 @@ div.container.cms_edit
                 .cms_edit_cts
                     #cms_edit_cts_modal
                         .modal-footer
+                            a:last-of-type
+                                display: none
                             a
                                 margin 6px 6px
+                    #cms_edit_cts_modal[ct_edit="disable"]
+                        .modal-footer
+                            a
+                                display: none
+                            a:last-of-type
+                                display: inline-block
+                    .ct_inner[ct_edit="disable"]
+                        .roInput
+                            input
+                                color #222222 !important
+                            label
+                                color #9e9e9e !important
                     .cms_edit_cts_ct
                         display: none
                     .fixed-action-btn
@@ -198,8 +246,12 @@ div.container.cms_edit
 
     script.
         (function(){
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 10
+            })
 
-            var cts=[]//globe contracts array
+            var g_cts=[]//globe contracts array
 
             $('.cms_edit_search_input i').click(function(){
                 var i=$('.cms_edit_search_input input').val().toUpperCase()
@@ -208,25 +260,111 @@ div.container.cms_edit
             })
             //open modal
             $('.cms_edit_cts_operate i').eq(2).click(function () {
-                cts_operate_open()
+                var id=$("input[name='cts']:checked").attr("id")
+                cts_operate_open(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(1).click(function () {
-                cts_operate_open()
+                var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
+                cts_operate_open(id)
             })
             //delete ct
             $('.cms_edit_cts_operate i').eq(1).click(function () {
-
+                var id=$("input[name='cts']:checked").attr("id")
+                cts_operate_delete(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(0).click(function () {
-
+                var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
+                cts_operate_delete(id)
+            })
+            //save ct
+            $("#cms_edit_cts_modal .modal-footer a").eq(0).click(function () {
+                var id=$(".ct_inner").eq(0).find(".ct_inner_id").text()
+                cts_operate_save(id)
+            })
+            //reset ct
+            $("#cms_edit_cts_modal .modal-footer a").eq(2).click(function () {
+                var id=$(".ct_inner").eq(0).find(".ct_inner_id").text()
+                cts_flush(id)
             })
 
             function cts_operate_open(id){
+                cts_flush(id)
+                //显示
                 $('#cms_edit_cts_modal').openModal()
             }
 
             function cts_operate_delete(id){
-                swal()
+                for (var i in g_cts) {
+                    if (g_cts[i][0] == id) {
+                        swal({
+                            title: "确定删除该合同？",
+                            text: "请再次确定合同名称为：" + g_cts[i][1] + "。删除后将无法恢复！",
+                            type: "info",
+                            cancelButtonText:"取消",
+                            confirmButtonText:"确定删除",
+                            showCancelButton: true,
+                            closeOnConfirm: false,
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#F44336",
+                        }, function () {
+                            ajax('/ct?id='+id, 'DELETE', function (err, res) {
+                                if (err) console.log(err)
+                                res = JSON.parse(res)
+                                if (res.result == 200) {
+                                    swal({title:"删除成功！",type:'success',showConfirmButton: false,allowOutsideClick:true,timer:820})
+                                    g_cts.splice(i,1)
+                                    cts_render(g_cts)
+                                }
+                            })
+                        });
+                    }
+                }
+            }
+
+            function cts_operate_save(id){
+                for (var i in g_cts) {
+                    if (g_cts[i][0] == id) {
+                        for (var m = 0; m < 10; m++)
+                            g_cts[i][m + 1]=document.querySelectorAll(".ct_inner")[0].querySelectorAll("input")[m].value
+                        var reqObj=cts_parse2Obj(g_cts[i])
+                        ajax('/ct','PUT',reqObj[0],function (err, res) {
+                            if (err) console.log(err)
+                            res = JSON.parse(res)
+                            if (res.result == 200) {
+                                swal({title:"保存修改成功！",type:'success',showConfirmButton: false,allowOutsideClick:true,timer:820})
+                                g_cts[i]=cts_parse2Arr(res.cts)[0]
+                                cts_flush(g_cts[i][0])
+                            }
+                        })
+                    }
+                }
+            }
+
+            function cts_operate_give(id) {
+
+            }
+
+            function cts_flush(id){
+                for (var i in g_cts) {
+                    if (g_cts[i][0] == id) {
+                        //充填
+                        for (var m = 0; m < 10; m++)
+                            document.querySelectorAll(".ct_inner")[0].querySelectorAll("input")[m].value = g_cts[i][m + 1]
+                        //充填授权状态
+                        var newDate = new Date(g_cts[i][11][1])
+                        var ifGive = (g_cts[i][11][0] == "1") ? (newDate.getFullYear() + "年" + (newDate.getMonth() + 1) + "月" + newDate.getDate() + "日") : "未授权"
+                        $(".ct_inner").eq(0).find(".ct_inner_status").text(ifGive)
+                        $(".ct_inner").eq(0).find(".ct_inner_id").text(g_cts[i][0])
+                        //授权按钮
+                        if (g_cts[i][11][0] != "0") {
+                            $("#cms_edit_cts_modal .modal-footer a").eq(1).toggleClass("disabled", true)
+                            $("#cms_edit_cts_modal .modal-footer a").eq(3).toggleClass("disabled", true)
+                        } else {
+                            $("#cms_edit_cts_modal .modal-footer a").eq(1).toggleClass("disabled", false)
+                            $("#cms_edit_cts_modal .modal-footer a").eq(3).toggleClass("disabled", false)
+                        }
+                    }
+                }
             }
 
             function cts_search(kw,status){
@@ -238,6 +376,7 @@ div.container.cms_edit
                         $(".cms_edit_search").animate({marginTop:"16px"},350,function(){
                             $('.cms_edit_cts_title').toggleClass("hide",false)
                             cts_render(res.cts)
+                            g_cts=res.cts
                         })
                     }
                 })
@@ -269,7 +408,7 @@ div.container.cms_edit
                 return _cts
             }
             function cts_parse2Obj(_cts){//[[]],[]
-                _cts=(typeof(_cts.length)=="number"&&typeof(_cts[0].length)=="number")?_cts:[_cts]
+                _cts=(typeof(_cts[0])!="string")?_cts:[_cts]
                 for(var i=0;i<_cts.length;i++){
                     _cts[i]={
                         id:_cts[i][0],name: _cts[i][1],
@@ -282,6 +421,13 @@ div.container.cms_edit
                 }
                 return _cts
             }
+
+            var scroll = function (event, scroller) {
+                var k = event.wheelDelta ? event.wheelDelta : -event.detail * 10;
+                scroller.scrollTop = scroller.scrollTop - k;
+                return false;
+            };
+
             function ajax(path,method,data,callback){
                 if(!callback) callback=data
                 $.ajax({url:path,type:method,cache:false,data:data,
