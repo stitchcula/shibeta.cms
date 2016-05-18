@@ -124,6 +124,17 @@ router.use('/',function*(next){//验证
         this.body={result:200}
     }else this.body={result:404}
     yield next
+}).put('/ding',function*(next){//修改信息
+    var usr=yield this.db.findOne({uin:this.session.uin})
+    if(usr){
+        var usrObj={
+            job:this.request.body.fields.job
+        }
+        yield this.db.update({uin:this.session.uin},{$set:usrObj})
+        this.session.job=usrObj.job
+        this.body={result:200}
+    }else this.body={result:404}
+    yield next
 }).put('/pwd',function*(next){//修改密码
     var usr=yield this.db.findOne({uin:this.session.uin})
     if(usr){

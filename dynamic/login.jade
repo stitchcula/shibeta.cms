@@ -175,6 +175,7 @@ block content
         script(src="//g.alicdn.com/ilw/ding/0.9.2/scripts/dingtalk.js")
         p#jsapi_config.hide=jsapi_config
         script.
+            var g_bind
             (function () {
                 var config = JSON.parse($("p#jsapi_config").text())
                 dd.config({
@@ -209,6 +210,10 @@ block content
                                         return window.location.replace("/admin")
                                     }, 820);
                                 }
+                                if(res.result == 403)
+                                    g_bind=res.userid
+                                if(res.result == 500)
+                                    swal("钉钉免登失败", "请尝试手动登陆。(error code:500)", "error");
                             })
                         },
                         onFail: function (err) {
@@ -236,7 +241,31 @@ block content
                     if(err) console.log(err)
                     res=JSON.parse(res)
                     if(res.result==200){
-                        return window.location = "/admin"/*?rd="+Math.random().toString(36).substr(2)*/
+                        if(g_bind) {
+                            swal({
+                                title: "尚未绑定钉钉账号",
+                                text: "是否需要与钉钉账号 "+g_bind+" 绑定？绑定后可在钉钉APP免密登陆。",
+                                type: "info",
+                                cancelButtonText: "暂时不用",
+                                confirmButtonText: "绑定",
+                                showCancelButton: true,
+                                closeOnConfirm: false,
+                                showLoaderOnConfirm: true,
+                                confirmButtonColor: "#26a69a",
+                            }, function () {
+                                ajax('/admin/ding', 'PUT', {
+                                    job: g_bind
+                                }, function (err, res) {
+                                    if (err) console.log(err)
+                                    res = JSON.parse(res)
+                                    if(res.result==200){
+                                        swal({title:"绑定成功！",type:'success',showConfirmButton: false,allowOutsideClick:true,timer:820})
+                                        return window.location.replace("/admin")
+                                    }
+                                })
+                            });
+                        }else
+                            return window.location = "/admin"/*?rd="+Math.random().toString(36).substr(2)*/
                     }
                     else{
                         return swal({title:"账户或密码错误~",type:'error',showConfirmButton: false,allowOutsideClick:true,timer:820})

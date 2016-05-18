@@ -65,6 +65,10 @@ router.get('/login',ding_redirect,function*(next){//登陆页面
         msg=yield this.db.findOne({job:res.userid})
         if(msg)
             this.request.body={pwd:msg.pwd}
+        else {
+            this.session=null
+            return this.body={result:403,userid:res.userid}
+        }
     }else{
         if(!this.request.body.usr||!this.request.body.pwd) return this.body={result:403}
         if(/[@]/.test(this.request.body.usr)){
