@@ -33,16 +33,18 @@ router.get('/test',function*(next){
 })
 
 router.get('/',function*(next){//跳转登陆
-    this.redirect('/login')
+    this.redirect('/login?'+this.querystring)
     yield next
 })
 
-router.get('/login',function*(next){//登陆页面
+router.get('/login',redirectDD,function*(next){//登陆页面
     this.render('login',{
         title:"登陆",
         default_face:"/static/img/default_face.jpg",
         title_img:"/static/img/login_title_img.jpg",
         off_footer:1,
+        jsapi:(this.query.corpid?"ding":""),
+        jsapi_config:(this.query.corpid?this.ding.jsapi_config:{}),
         slides:[
             {img:"/static/img/bg1.jpg"},
             {img:"/static/img/bg2.jpg"},
@@ -217,4 +219,46 @@ function rqGet(url){
     return function(callback){
         require('request')(url,callback)
     }
+}
+
+//function for ding
+function *redirectDD(next) {
+    if(this.query.corpid==process.env["DING_CORP_ID"]){
+        var nonceStr = 'shibeta';
+        var timeStamp = new Date().getTime();
+        var signedUrl = decodeURIComponent(this.path);
+
+        var signature = sign({
+            nonceStr: nonceStr,
+            timeStamp: timeStamp,
+            url: signedUrl,
+            ticket: this.ding.ticket
+        });
+
+        this.ding.jsapi_config={
+            signature: signature,
+            nonceStr: nonceStr,
+            timeStamp: timeStamp,
+            corpId: this.query.corpid
+        };
+    }
+    yield next
+}
+
+function sign(params) {
+    var origUrl = params.url;
+    var origUrlObj =  url.parse(origUrl);
+    delete origUrlObj['hash'];
+    var newUrl = url.format(origUrlObj);
+    var plain = 'jsapi_ticket=' + params.ticket +
+        '&noncestr=' + params.nonceStr +
+        '&timestamp=' + params.timeStamp +
+        '&url=' + newUrl;
+
+    console.log(plain);
+    var sha1 = crypto.createHash('sha1');
+    sha1.update(plain, 'utf8');
+    var signature = sha1.digest('hex');
+    console.log('signature: ' + signature);
+    return signature;
 }

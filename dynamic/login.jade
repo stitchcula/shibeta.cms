@@ -171,6 +171,34 @@ block content
                     li
                         img(src=s.img)
 
+    -if(jsapi=="ding")
+        script(src="//g.alicdn.com/ilw/ding/0.9.2/scripts/dingtalk.js")
+        p#jsapi_config.hide=jsapi_config
+        script.
+            (function () {
+                var config = JSON.parse($("p#jsapi_config").text())
+                alert($("p#jsapi_config").text())
+                dd.config({
+                    agentId: '8714498',
+                    corpId: config.corpId,
+                    timeStamp: config.timeStamp,
+                    nonceStr: config.nonceStr,
+                    signature: config.signature,
+                    jsApiList: ['runtime.permission.requestAuthCode',
+                        'device.notification.confirm',
+                        'device.notification.alert',
+                        'device.notification.prompt',
+                        'biz.chat.chooseConversation',
+                        'biz.ding.post']
+                });
+                dd.ready(function () {
+                    alert('dd ready');
+                })
+                dd.error(function (err) {
+                    alert('dd error: ' + JSON.stringify(err));
+                });
+            })()
+
     script.
         $(function(){
             $('.slider').slider({full_width: true,interval:3000,indicators:false})
