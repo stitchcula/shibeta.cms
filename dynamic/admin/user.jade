@@ -21,10 +21,10 @@ div.container.selfInfo
         div.input-field.col.s12.m12.l5.offset-l1
             input.validate.yahei(value=tel,type="text")
             label.active.yahei 电话号码
-        div.input-field.col.s8.m8.l3.roInput
+        div.input-field.col.s6.m8.l3.roInput
             input.validate.yahei(disabled,value=((ding.length>1)?ding:"尚未绑定"),type="text")
             label.active.yahei 钉钉ID
-        div.col.s4.m4.l2
+        div.col.s6.m4.l2
             a.waves-effect.btn.yahei.right.selfInfo_unbindDing_enter(class=((ding.length>1)?"":"disabled")) 解除绑定
         div.input-field.col.s12.m12.l5.offset-l1.roInput
             input.validate.yahei(disabled,value=(pms[3]?"法人代表":(pms[4]?"管理员":"委托代理人")),type="text")

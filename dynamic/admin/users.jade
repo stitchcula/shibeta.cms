@@ -4,21 +4,459 @@ nav.top-nav
             a.brand-logo
                 i.material-icons.left supervisor_account
                 |用户群组
-div.container
-    div#test
+div.container.users
+    div.row.users_search
+        div.col.s1.m2.hide-on-large-only.right
+            p &nbsp;
+        div.col.s10.m8.l5.right.users_search_input
+            div.card
+                input.yahei
+                i.material-icons search
+        div.col.s10.offset-s1.m8.offset-m2.l7.users_search_option
+            div.switch.left
+                label.yahei
+                    | &nbsp;
+                    input(type="checkbox",checked=true)
+                    span.lever
+                    | 仅管理员
+            a.btn.waves-effect(href=false).yahei.right 添加用户
+        //div.col.s10.offset-s1.m8.offset-m2.l12
+            blockquote.yahei.grey-text
+                i.material-icons.green-text check_box_outline_blank
+                span &nbsp;角色为 普通成员；
+                i.material-icons.yellow-text check_box
+                span &nbsp;角色为 管理员。
+    div.users_users.center-align
+        div#users_users_modal.modal.modal-fixed-footer.user_inner(onmousewheel="return scroll(event,this)")
+            div.modal-content.left-align(onmousewheel="return scroll(event,this)")
+                p.hide.user_inner_uin
+                div.row
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.validate.yahei(value="N/a",type="text")
+                        label.active.yahei 用 户 名
+                    div.input-field.col.s12.m12.l5
+                        input.validate.yahei(value="N/a",type="text")
+                        label.active.yahei 姓    名
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.validate.yahei(value="N/a",type="text")
+                        label.active.yahei 身份证号
+                    div.input-field.col.s12.m12.l5
+                        input.validate.yahei(value="N/a",type="text")
+                        label.active.yahei 电子邮箱
+                    div.input-field.col.s12.m12.l5.offset-l1
+                        input.validate.yahei(value="N/a",type="text")
+                        label.active.yahei 电话号码
+                    div.input-field.col.s6.m8.l3.roInput
+                        input.validate.yahei(disabled,value="N/a",type="text")
+                        label.active.yahei 钉钉ID
+                    div.col.s6.m4.l2
+                        a.waves-effect.btn.yahei.right.user_inner_unbindDing 解除绑定
+                    div.input-field.col.s12.m12.l5.offset-l1.yahei
+                        select
+                            option(value="0") 成员
+                            option(value="1") 管理员
+                        label.yahei  角    色
+            div.modal-header
+                a.waves-effect.btn-flat.red-text.modal-action.modal-close.right
+                    i.material-icons close
+            div.modal-footer
+                a.waves-effect.green.btn.yahei 保存
+                a.waves-effect.yellow.btn.yahei 还原
+                a.waves-effect.red.btn.yahei.hide 重置密码
+        div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up.users_users_operate
+            a.btn-floating.btn-large.teal
+                i.large.material-icons build
+            ul
+                li
+                    a.btn-floating.red
+                        i.material-icons delete
+                li
+                    a.btn-floating.green
+                        i.material-icons open_in_browser
+        div.card-panel.row.hide-on-small-only.users_users_title.hide
+            div.col.s2
+                p.yahei 用户名
+            div.col.s3
+                p.yahei 姓名
+            div.col.s3
+                p.yahei 手机号
+            div.col.s2
+                p.yahei 管理员
+            div.col.s2
+                p.yahei 操作
+        div.card-panel.row.users_users_user
+            div.col.s4.hide-on-med-and-up
+                p.yahei 用户名
+            div.col.m2.l2.s8.users_users_user_status
+                i.material-icons.left.teal-text.hide-on-med-and-up check_box_outline_blank
+                i.material-icons.left.teal-text.hide-on-med-and-up check_box
+                p.truncate.users_users_user_show N/a
+            div.col.s4.hide-on-med-and-up
+                p.yahei 姓名
+            div.col.m3.l3.s8
+                p.yahei.truncate.users_users_user_show N/a
+            div.col.s4.hide-on-med-and-up
+                p.yahei 手机号
+            div.col.m3.l3.s8
+                p.yahei.truncate.users_users_user_show N/a
+            div.col.m2.l2.s8.hide-on-small-only.users_users_user_status
+                i.material-icons.teal-text check_box_outline_blank
+                i.material-icons.teal-text check_box
+            div.col.m2.l2.s8.hide-on-small-only.users_users_user_operate
+                i.material-icons.red-text delete
+                i.material-icons.green-text open_in_browser
+            input#Na(name="users" type="radio").hide-on-med-and-up
+            label(for="Na").hide-on-med-and-up
+
     style
         :stylus
-            #test {
-                width: 100px;
-                height: 100px;
-                background: #000;
-                animation: circling 1s linear 0s infinite;
+            .users
+                .yahei
+                    font-family "Microsoft YaHei" !important
+                .users_search
+                    margin-top 24%
+                    .users_search_option
+                        height 60px
+                        .switch
+                            line-height 60px
+                            display inline
+                        a.btn
+                            margin 12px 0
+                    .users_search_input
+                        .card
+                            input
+                                display block
+                                font-size 16px
+                                font-weight 300
+                                width 100%
+                                height 45px
+                                margin 0
+                                padding 0 45px 0 15px
+                                border 0
+                                outline none
+                                box-shadow: none
+                                -webkit-transition: all 0.3s
+                                -moz-transition: all 0.3s
+                                -ms-transition: all 0.3s
+                                -o-transition: all 0.3s
+                                transition: all 0.3s
+                            i
+                                position: absolute
+                                top: 10px
+                                right: 10px
+                                cursor: pointer;
+                    blockquote
+                        margin 0.4rem 0
+                        font-size 0.8rem
+                        i
+                            font-size 0.8rem
+                .users_users
+                    #users_users_modal
+                        .modal-footer
+                            a
+                                margin 6px 6px
+                    @media only screen and (max-width: 992px)
+                        #users_users_modal.modal
+                            width 100%
+                            max-height: 90%
+                        #users_users_modal.modal.modal-fixed-footer
+                            height 90%
+                    .user_inner
+                        .user_inner_unbindDing
+                            margin-top 20px
+                        .roInput
+                            input
+                                color #222222 !important
+                            label
+                                color #9e9e9e !important
+                    .users_users_user
+                        display: none
+                    .fixed-action-btn
+                        bottom 16px
+                        rigth 16px
+                    .card-panel
+                        margin: 0
+                        padding: 0
+                        i
+                            line-height 52px
+                            display: inline
+                        .users_users_user_operate i
+                            margin 0 6px
+                            cursor: pointer
+                    .card-panel[user_status="0"]
+                        .users_users_user_status i:nth-of-type(2)
+                            display: none
+                    .card-panel[user_status="1"]
+                        .users_users_user_status i:nth-of-type(1)
+                            display: none
+                    @media only screen and (max-width: 600px)
+                        .card-panel
+                            margin-bottom 1.6rem
+                            position: relative
+                            [type="radio"]:not(:checked) + label, [type="radio"]:checked + label
+                                padding 0
+                                position: absolute
+                                left 0
+                                width 100%
+                                height 100%
+                                line-height 100%
+                            [type="radio"] + label:before, [type="radio"] + label:after
+                                left 0
+                                top 0
+                                width 8px
+                                margin 0
+                                height 100%
+                                -webkit-border-radius: 0
+                                -moz-border-radius: 0
+                                border-radius: 0
+                                border 0px solid #FFFFFF
+                            [type="radio"]:checked + label:after
+                                -webkit-border-radius: 0
+                                -moz-border-radius: 0
+                                border-radius: 0
+                                border 0px solid #FFFFFF
+                                background: #26a69a
+                                -webkit-transform: scale(1.0)
+                                -moz-transform: scale(1.0)
+                                -ms-transform: scale(1.0)
+                                -o-transform: scale(1.0)
+                                transform: scale(1.0)
+                                -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                                -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                                box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+
+                        .card-panel[user_status="0"]
+                            background #E8F5E9
+                            .users_users_user_status i:nth-of-type(2)
+                                display: none
+                        .card-panel[user_status="1"]
+                            background #fdffe2
+                            .users_users_user_status i:nth-of-type(1)
+                                display: none
+
+    script.
+        (function () {
+            (function () {
+                if ($("#users_users_modal").attr("user_edit") == "disable")
+                    $(".user_inner input").attr("disabled", "disabled")
+            })()
+            $('select').material_select();
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 10
+            })
+
+            var g_users = []//globe users array
+            var g_newUser=["999999","","","","","","","0"]
+
+            $('.users_search_input i').click(function () {
+                var i = $('.users_search_input input').val().toUpperCase()
+                var j = $('.users_search_option .switch input').prop('checked')
+                users_search(i, j)
+            })
+            //open modal
+            $('.users_users_operate i').eq(2).click(function () {
+                var id = $("input[name='users']:checked").attr("id")
+                if(id)
+                    users_operate_open(id)
+            })
+            $('.users_users_user_operate i').eq(1).click(function () {
+                var id = $(this).closest(".users_users_user").find("input[name='users']").eq(0).attr("id")
+                users_operate_open(id)
+            })
+            //delete ct
+            $('.users_users_operate i').eq(1).click(function () {
+                var id = $("input[name='users']:checked").attr("id")
+                if(id)
+                    users_operate_delete(id)
+            })
+            $('.users_users_user_operate i').eq(0).click(function () {
+                var id = $(this).closest(".users_users_user").find("input[name='users']").eq(0).attr("id")
+                users_operate_delete(id)
+            })
+            //save user
+            $("#users_users_modal .modal-footer a").eq(0).click(function () {
+                var id = $(".user_inner").eq(0).find(".user_inner_uin").text()
+                users_operate_save(id)
+            })
+            //reset user
+            $("#users_users_modal .modal-footer a").eq(1).click(function () {
+                var id = $(".user_inner").eq(0).find(".user_inner_uin").text()
+                users_flush(id)
+            })
+            //reset pwd
+            $("#users_users_modal .modal-footer a").eq(2).click(function () {
+                var id = $(".user_inner").eq(0).find(".user_inner_uin").text()
+                users_flush(id)
+            })
+
+            function users_operate_open(id) {
+                users_flush(id)
+                //显示
+                $('#users_users_modal').openModal()
             }
 
-            @keyframes circling {
+            function users_operate_delete(id) {
+                for (var i in g_users) {
+                    if (g_users[i][0] == id) {
+                        swal({
+                            title: "确定删除该合同？",
+                            text: "请再次确定合同名称为：" + g_users[i][1] + "。删除后将无法恢复！",
+                            type: "info",
+                            cancelButtonText: "取消",
+                            confirmButtonText: "确定删除",
+                            showCancelButton: true,
+                            closeOnConfirm: false,
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#F44336",
+                        }, function () {
+                            ajax('/ct?id=' + id, 'DELETE', function (err, res) {
+                                if (err) console.log(err)
+                                res = JSON.parse(res)
+                                if (res.result == 200) {
+                                    swal({
+                                        title: "删除成功！",
+                                        type: 'success',
+                                        showConfirmButton: false,
+                                        allowOutsideClick: true,
+                                        timer: 820
+                                    })
+                                    g_users.splice(i, 1)
+                                    users_render(g_users)
+                                }
+                            })
+                        });
+                    }
+                }
+            }
 
-                from
-                    transform:rotate(0)
+            function users_operate_save(id) {
+                for (var i in g_users) {
+                    if (g_users[i][0] == id) {
+                        for (var m = 0; m < 10; m++)
+                            g_users[i][m + 1] = document.querySelectorAll(".user_inner")[0].querySelectorAll("input")[m].value
+                        var reqObj = users_parse2Obj(g_users[i])
+                        ajax('/ct', 'PUT', reqObj[0], function (err, res) {
+                            if (err) console.log(err)
+                            res = JSON.parse(res)
+                            if (res.result == 200) {
+                                swal({
+                                    title: "保存修改成功！",
+                                    type: 'success',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: true,
+                                    timer: 820
+                                })
+                                g_users[i] = users_parse2Arr(res.cts)[0]
+                                users_flush(g_users[i][0])
+                            }
+                        })
+                    }
+                }
+            }
 
-                to
-                    transform:rotate(360)
+            function users_flush(id) {
+                var _g_users=((id=="999999")?g_newUser:g_users)
+                for (var i in _g_users) {
+                    if (_g_users[i][0] == id) {
+                        //充填
+                        for (var m = 0; m < 6; m++)
+                            document.querySelectorAll(".user_inner")[0].querySelectorAll("input")[m].value = _g_users[i][m + 1]
+                        //充填角色
+                        $('.user_inner select').material_select('destroy');
+                        $(".user_inner select option").removeAttr("selected")
+                        $('.user_inner select option[value="' + _g_users[i][7] + '"]').attr("selected", true)
+                        $('.user_inner select').material_select();
+                        $(".user_inner").eq(0).find(".user_inner_uin").text(_g_users[i][0])
+                        //解绑按钮
+                        if (_g_users[i][6] != "")
+                            $(".user_inner .user_inner_unbindDing").toggleClass("disabled", false)
+                        else
+                            $(".user_inner .user_inner_unbindDing").toggleClass("disabled", true)
+                    }
+                }
+            }
+
+            function users_search(kw, status) {
+                ajax('/usrs?pg=1&kw=' + kw + '&status=' + status, 'GET', function (err, res) {
+                    if (err) console.log(err)
+                    res = JSON.parse(res)
+                    if (res.result == 200) {
+                        res.users = users_parse2Arr(res.users)
+                        $(".users_search").animate({marginTop: "16px"}, 350, function () {
+                            $('.users_users_title').toggleClass("hide", false)
+                            users_render(res.users)
+                            g_users = res.users
+                        })
+                    }
+                })
+            }
+
+            function users_render(_users) {
+                $('.users_users_user[user_status]').remove()
+                for (var i = 0; i < _users.length; i++) {
+                    $('.users_users').append($('.users_users_user').eq(0).clone(true))
+                    $('.users_users_user').eq(i + 1).find('.users_users_user_show').eq(0).html(_users[i][1])
+                    $('.users_users_user').eq(i + 1).find('.users_users_user_show').eq(1).html(_users[i][2])
+                    $('.users_users_user').eq(i + 1).find('.users_users_user_show').eq(2).html(_users[i][5])
+                    $('.users_users_user').eq(i + 1).attr("user_status", _users[i][7])
+                    $('.users_users_user').eq(i + 1).find("input").attr("id", _users[i][0])
+                    $('.users_users_user').eq(i + 1).find("label").attr("for", _users[i][0])
+                    $('.users_users_user').eq(i + 1).fadeIn()
+                }
+            }
+
+            function users_parse2Arr(_users) {//todo
+                _users = (typeof(_users.length) == "number") ? _users : [_users]
+                for (var i = 0; i < _users.length; i++) {
+                    _users[i] = [_users[i].uin, _users[i].usr,
+                        _users[i].name, _users[i].idf,
+                        _users[i].em, _users[i].tel,
+                        _users[i].job, _users[i].pm
+                    ]
+                }
+                return _users
+            }
+
+            function users_parse2Obj(_users) {//[[]],[] todo
+                _users = (typeof(_users[0]) != "string") ? _users : [_users]
+                for (var i = 0; i < _users.length; i++) {
+                    _users[i] = {
+                        uin: _users[i][0], usr: _users[i][1],
+                        name: _users[i][2], idf: _users[i][3],
+                        em: _users[i][4], tel: _users[i][5],
+                        job: _users[i][6], pm: _users[i][7]
+                    }
+                }
+                return _users
+            }
+
+            var scroll = function (event, scroller) {
+                var k = event.wheelDelta ? event.wheelDelta : -event.detail * 10;
+                scroller.scrollTop = scroller.scrollTop - k;
+                return false;
+            };
+
+            function ajax(path, method, data, callback) {
+                if (!callback) callback = data
+                $.ajax({
+                    url: path, type: method, cache: false, data: data,
+                    beforeSend: function () {
+                        jQuery("footer>.ajaxLoad").fadeIn(200)
+                    },
+                    complete: function (res) {
+                        jQuery("footer>.ajaxLoad").fadeOut(200)
+                        if (res.status == 0) Materialize.toast('网络故障……', 4000)
+                        if (res.status == 403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
+                        if (res.status == 404) Materialize.toast('服务器懵逼了', 4000)
+                        if (res.status == 500) Materialize.toast('服务器傻掉了', 4000)
+                        if (res.status == 200) try {
+                            JSON.parse(res.responseText)
+                        } catch (e) {
+                            jQuery('main').append(res.responseText)
+                        }
+                        callback(res.responseText.code, res.responseText)
+                    }
+                })
+            }
+        })()

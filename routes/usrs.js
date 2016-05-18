@@ -41,12 +41,12 @@ router.use('/',function*(next){//验证权限
         idf:usrs[i].idf,
         tel:usrs[i].tel,
         em:usrs[i].em,
-        job:new Buffer(usrs[i].job,'base64').toString(),
+        job:usrs[i].job,
         time:usrs[i].time,
         uin:usrs[i].uin,
         pm:usrs[i].pms[4]
     }
-    this.body=resUsrs
+    this.body={result:200,users:resUsrs}
     yield next
 }).post('/',function*(next){//新增用户
     if(this.session.pms[3]){
@@ -61,7 +61,7 @@ router.use('/',function*(next){//验证权限
                 idf: this.request.body.idf,
                 name: new Buffer(this.request.body.name).toString('base64'),
                 tel:this.request.body.tel,
-                job:new Buffer(this.request.body.job).toString('base64')
+                job:this.request.body.job
             }
             if(usr.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709"&&usr.idf){
                 usr.usr=(usr.usr)?usr.usr:new Buffer(usr.uin).toString('base64')
@@ -83,7 +83,7 @@ router.use('/',function*(next){//验证权限
                 idf: this.request.body.fields.idf,
                 name:new Buffer(this.request.body.fields.name).toString('base64'),
                 tel:this.request.body.fields.tel,
-                job:new Buffer(this.request.body.fields.job).toString('base64')
+                job:this.request.body.fields.job
             }
             if(this.request.body.fields.pwd&&this.request.body.fields.pwd!="da39a3ee5e6b4b0d3255bfef95601890afd80709")
                 usrObj.pwd=this.request.body.fields.pwd

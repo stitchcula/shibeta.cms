@@ -69,7 +69,7 @@ div.container.cms_edit
             div.modal-footer
                 a.waves-effect.green.btn.yahei 保存
                 a.waves-effect.btn.yahei 授权
-                a.waves-effect.red.btn.yahei 重置
+                a.waves-effect.red.btn.yahei 还原
                 a.waves-effect.btn.yahei 请求授权
         div.fixed-action-btn.horizontal.click-to-toggle.hide-on-med-and-up.cms_edit_cts_operate
             a.btn-floating.btn-large.teal
@@ -271,7 +271,8 @@ div.container.cms_edit
             //open modal
             $('.cms_edit_cts_operate i').eq(2).click(function () {
                 var id=$("input[name='cts']:checked").attr("id")
-                cts_operate_open(id)
+                if(id)
+                    cts_operate_open(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(1).click(function () {
                 var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
@@ -280,7 +281,8 @@ div.container.cms_edit
             //delete ct
             $('.cms_edit_cts_operate i').eq(1).click(function () {
                 var id=$("input[name='cts']:checked").attr("id")
-                cts_operate_delete(id)
+                if(id)
+                    cts_operate_delete(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(0).click(function () {
                 var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
