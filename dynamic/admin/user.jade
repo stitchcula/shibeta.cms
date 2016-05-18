@@ -21,9 +21,11 @@ div.container.selfInfo
         div.input-field.col.s12.m12.l5.offset-l1
             input.validate.yahei(value=tel,type="text")
             label.active.yahei 电话号码
-        div.input-field.col.s12.m12.l5
-            input.validate.yahei(value=ding,type="text")
+        div.input-field.col.s8.m8.l3.roInput
+            input.validate.yahei(disabled,value=((ding.length>1)?ding:"尚未绑定"),type="text")
             label.active.yahei 钉钉ID
+        div.col.s4.m4.l2
+            a.waves-effect.btn.yahei.right.selfInfo_unbindDing_enter(class=((ding.length>1)?"":"disabled")) 解除绑定
         div.input-field.col.s12.m12.l5.offset-l1.roInput
             input.validate.yahei(disabled,value=(pms[3]?"法人代表":(pms[4]?"管理员":"委托代理人")),type="text")
             label.active.yahei 角    色
@@ -46,8 +48,8 @@ div.container.selfInfo
                                 input.validate.yahei(type="password")
                                 label.active.yahei 再输一遍
                 div.modal-footer
-                    a.modal-action.modal-close.waves-effect.waves-red.btn-flat.yahei.yahei 取消
-                    a.waves-effect.waves-green.btn.yahei.selfInfo_changePwd_enter.yahei 修改
+                    a.modal-action.modal-close.waves-effect.waves-red.btn-flat.yahei 取消
+                    a.waves-effect.waves-green.btn.selfInfo_changePwd_enter.yahei 修改
 
         div.col.s6.m6.l5
             a.waves-effect.btn.yahei.right.selfInfo_enter
@@ -56,6 +58,8 @@ div.container.selfInfo
 
     style
         :stylus
+            .selfInfo_unbindDing_enter
+                margin-top 20px
             .selfInfo
                 .row:first-of-type
                     margin-top 42px
@@ -68,6 +72,26 @@ div.container.selfInfo
         $(function(){
             $('.tooltipped').tooltip({delay: 50})
             $('.modal-trigger').leanModal()
+
+            $('.selfInfo_unbindDing_enter').click(function () {
+                var ding=$('.selfInfo_input input').eq(5).val()
+                if(ding=="尚未绑定"||ding.length<5)
+                    return
+                ajax('/admin/ding', 'DELETE', function (err, res) {
+                    if (err) console.log(err)
+                    res = JSON.parse(res)
+                    if (res.result == 200) {
+                        swal({
+                            title: "解绑成功！",
+                            type: 'success',
+                            showConfirmButton: false,
+                            allowOutsideClick: true,
+                            timer: 820
+                        })
+                        window.location.reload()
+                    }
+                })
+            })
 
             $('.selfInfo_enter').click(function(){
                 var i = []
@@ -83,8 +107,7 @@ div.container.selfInfo
                     name:i[1],
                     idf:i[2],
                     em:i[3],
-                    tel:i[4],
-                    job:i[5]
+                    tel:i[4]
                 },function(err,res){
                     console.log(err)
                     console.log(res)

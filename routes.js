@@ -67,7 +67,8 @@ router.get('/login',ding_redirect,function*(next){//登陆页面
             this.request.body={pwd:msg.pwd}
         else {
             this.session=null
-            return this.body={result:403,userid:res.userid}
+            var key=crypto.createHmac('sha1',new Buffer(res.userid).toString('base64')).digest('hex')
+            return this.body={result:403,userid:res.userid,key:key}
         }
     }else{
         if(!this.request.body.usr||!this.request.body.pwd) return this.body={result:403}

@@ -1,6 +1,7 @@
 "use strict"
 
 var router=require('koa-router')()
+    ,crypto=require('crypto')
 
 var cLocal=require('../lib/cLocal.js')
 
@@ -111,8 +112,7 @@ router.use('/',function*(next){//验证
             em: this.request.body.fields.em,
             idf: this.request.body.fields.idf,
             name:new Buffer(this.request.body.fields.name).toString('base64'),
-            tel:this.request.body.fields.tel,
-            job:this.request.body.fields.job
+            tel:this.request.body.fields.tel
         }
         yield this.db.update({uin:this.session.uin},{$set:usrObj})
         this.session.tel=usrObj.tel
@@ -120,15 +120,28 @@ router.use('/',function*(next){//验证
         this.session.idf=usrObj.idf
         this.session.name=usrObj.name
         this.session.usr=usrObj.usr
-        this.session.job=usrObj.job
         this.body={result:200}
     }else this.body={result:404}
     yield next
-}).put('/ding',function*(next){//修改信息
+}).put('/ding',function*(next){//绑定钉钉
+    var key=crypto.createHmac('sha1',new Buffer(this.request.body.fields.job).toString('base64')).digest('hex')
+    if(key!=this.request.body.fields.key)
+        return
     var usr=yield this.db.findOne({uin:this.session.uin})
     if(usr){
         var usrObj={
             job:this.request.body.fields.job
+        }
+        yield this.db.update({uin:this.session.uin},{$set:usrObj})
+        this.session.job=usrObj.job
+        this.body={result:200}
+    }else this.body={result:404}
+    yield next
+}).del('/ding',function*(next){//解绑钉钉
+    var usr=yield this.db.findOne({uin:this.session.uin})
+    if(usr){
+        var usrObj={
+            job:""
         }
         yield this.db.update({uin:this.session.uin},{$set:usrObj})
         this.session.job=usrObj.job

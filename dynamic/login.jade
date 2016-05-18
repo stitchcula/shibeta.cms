@@ -171,11 +171,13 @@ block content
                     li
                         img(src=s.img)
 
+    script.
+        var g_bind
+
     -if(jsapi=="ding")
         script(src="//g.alicdn.com/ilw/ding/0.9.2/scripts/dingtalk.js")
         p#jsapi_config.hide=jsapi_config
         script.
-            var g_bind
             (function () {
                 var config = JSON.parse($("p#jsapi_config").text())
                 dd.config({
@@ -211,7 +213,7 @@ block content
                                     }, 820);
                                 }
                                 if(res.result == 403)
-                                    g_bind=res.userid
+                                    g_bind={userid:res.userid,key:res.key}
                                 if(res.result == 500)
                                     swal("钉钉免登失败", "请尝试手动登陆。(error code:500)", "error");
                             })
@@ -254,7 +256,8 @@ block content
                                 confirmButtonColor: "#26a69a",
                             }, function () {
                                 ajax('/admin/ding', 'PUT', {
-                                    job: g_bind
+                                    job: g_bind.userid,
+                                    key:g_bind.key
                                 }, function (err, res) {
                                     if (err) console.log(err)
                                     res = JSON.parse(res)
