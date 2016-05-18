@@ -28,7 +28,7 @@ div.container.cms_edit
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
         div#cms_edit_cts_modal.modal.modal-fixed-footer.ct_inner(ct_edit="disable",onmousewheel="return scroll(event,this)")
-            div.modal-content.left-align
+            div.modal-content.left-align(onmousewheel="return scroll(event,this)")
                 div.row
                     div.input-field.col.s12.m12.l10.offset-l1.roInput
                         input.validate.yahei(type="text",value="N/a")
@@ -171,6 +171,12 @@ div.container.cms_edit
                                 display: none
                             a:last-of-type
                                 display: inline-block
+                    @media only screen and (max-width: 992px)
+                        #cms_edit_cts_modal.modal
+                            width 100%
+                            max-height:90%
+                        #cms_edit_cts_modal.modal.modal-fixed-footer
+                            height 90%
                     .ct_inner[ct_edit="disable"]
                         .roInput
                             input
@@ -246,6 +252,10 @@ div.container.cms_edit
 
     script.
         (function(){
+            (function () {
+                if($("#cms_edit_cts_modal").attr("ct_edit")=="disable")
+                    $(".ct_inner input").attr("disabled","disabled")
+            })()
             $('.datepicker').pickadate({
                 selectMonths: true,
                 selectYears: 10
