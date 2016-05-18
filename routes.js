@@ -3,6 +3,7 @@
 var router=require('koa-router')()
     ,jade=require('jade')
     ,crypto=require('crypto')
+    ,request=require('co-request')
     ,os=require('os')
 
 var DEFPMS=[0,0,0,1,1,1]//法人，管理，普通
@@ -18,6 +19,7 @@ router.use(function*(next){
     }
     //push redis to mongo
 })
+router.use(ding_init)
 
 //load routes
 var routes=require('dir-requirer')(__dirname)('./routes')
@@ -37,7 +39,7 @@ router.get('/',function*(next){//跳转登陆
     yield next
 })
 
-router.get('/login',redirectDD,function*(next){//登陆页面
+router.get('/login',ding_redirect,function*(next){//登陆页面
     this.render('login',{
         title:"登陆",
         default_face:"/static/img/default_face.jpg",
@@ -222,7 +224,31 @@ function rqGet(url){
 }
 
 //function for ding
-function *redirectDD(next) {
+function *ding_init(next) {
+    this.ding={}
+    var ding_token=yield this.redis.hgetall("ding_access_token")
+    if(!(ding_token&&ding_token.expireTime&&(ding_token.expireTime-new Date().getTime()>10000))){
+        var res=yield request("https://oapi.dingtalk.com/gettoken?corpid="+process.env["DING_CORP_ID"]+"&corpsecret="+process.env["DING_CORP_SECRET"],
+            {method:"GET"})
+        res=JSON.parse(res.body)
+        ding_token={accessToken:res.access_token,expireTime:new Date().getTime()+7200*1000}
+        yield this.redis.hmset("ding_access_token",ding_token)
+    }
+    this.ding.token=ding_token.accessToken
+
+    var ding_ticket=yield this.redis.hgetall("ding_jsapi_ticket")
+    if(!(ding_ticket&&ding_ticket.expireTime&&(ding_ticket.expireTime-new Date().getTime()>10000))){
+        var res=yield request("https://oapi.dingtalk.com/get_jsapi_ticket?access_token="+this.ding.token,
+            {method:"GET"})
+        res=JSON.parse(res.body)
+        ding_ticket={ticket:res.ticket,expireTime:new Date().getTime()+res.expires_in*1000}
+        yield this.redis.hmset("ding_jsapi_ticket",ding_ticket)
+    }
+    this.ding.ticket=ding_ticket.ticket
+
+    yield next
+}
+function *ding_redirect(next) {
     if(this.query.corpid==process.env["DING_CORP_ID"]){
         var nonceStr = 'shibeta';
         var timeStamp = new Date().getTime();
@@ -245,6 +271,7 @@ function *redirectDD(next) {
     yield next
 }
 
+var url = require('url');
 function sign(params) {
     var origUrl = params.url;
     var origUrlObj =  url.parse(origUrl);
