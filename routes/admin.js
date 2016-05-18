@@ -41,7 +41,7 @@ for(var r of menu){
 router.use('/',function*(next){//验证
     if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
         this.session.ol+=7200000
-    }else return this.render('redirectLogin')
+    }else return this.render('redirectLogin',{querystring:this.querystring})
     yield next
 }).get('/',function*(next){
     this.render('admin/framework',{

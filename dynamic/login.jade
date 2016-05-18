@@ -177,7 +177,6 @@ block content
         script.
             (function () {
                 var config = JSON.parse($("p#jsapi_config").text())
-                alert($("p#jsapi_config").text())
                 dd.config({
                     agentId: '8714498',
                     corpId: config.corpId,
@@ -192,10 +191,31 @@ block content
                         'biz.ding.post']
                 });
                 dd.ready(function () {
-                    alert('dd ready');
+                    dd.runtime.permission.requestAuthCode({
+                        corpId: config.corpId,
+                        onSuccess: function (result) {
+                            ajax('/login?code='+result.code,'POST', function (err, res) {
+                                if (err) console.log(err)
+                                res = JSON.parse(res)
+                                if (res.result == 200) {
+                                    swal({
+                                        title: "登陆成功！",
+                                        type: 'success',
+                                        showConfirmButton: false,
+                                        allowOutsideClick: true,
+                                        timer: 820
+                                    })
+                                    
+                                }
+                            })
+                        },
+                        onFail: function (err) {
+                            swal("钉钉免登失败", "请尝试手动登陆。("+JSON.stringify(err)+")", "error");
+                        }
+                    })
                 })
                 dd.error(function (err) {
-                    alert('dd error: ' + JSON.stringify(err));
+                    swal("DingTalk Error", JSON.stringify(err), "error");
                 });
             })()
 

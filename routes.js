@@ -46,7 +46,7 @@ router.get('/login',ding_redirect,function*(next){//登陆页面
         title_img:"/static/img/login_title_img.jpg",
         off_footer:1,
         jsapi:(this.query.corpid?"ding":""),
-        jsapi_config:(this.query.corpid?this.ding.jsapi_config:{}),
+        jsapi_config:(this.query.corpid?JSON.stringify(this.ding.jsapi_config):""),
         slides:[
             {img:"/static/img/bg1.jpg"},
             {img:"/static/img/bg2.jpg"},
@@ -55,35 +55,29 @@ router.get('/login',ding_redirect,function*(next){//登陆页面
     })
     yield next
 }).post('/login',function*(next){//登陆
-    /*
-     var usr={//强制注册
-     uin: "000000",
-     usr: new Buffer("stcula").toString('base64'),//->base64
-     pwd: this.request.body.pwd,
-     em:"1132463097@qq.com",
-     pms: [0,0,0,0,0,1],
-     time: new Date(),
-     idf: "111111199706201111",
-     name: new Buffer("李卓恒").toString('base64'),
-     tel:"15917597227",
-     job:new Buffer("无").toString('base64')
-     }
-     console.log(usr)
-     this.body=yield this.db.insert(usr)
-    */
-    if(!this.request.body.usr||!this.request.body.pwd) return this.body={result:403}
     var msg=null
-    if(/[@]/.test(this.request.body.usr)){
-        msg=yield this.db.findOne({em:this.request.body.usr})
-    }else if(/^[0-9]{11}$/.test(this.request.body.usr)){
-        msg=yield this.db.findOne({tel:this.request.body.usr})
-    }else if(/^(\w){6,12}$/.test(this.request.body.usr)){
-        msg=yield this.db.findOne({usr:new Buffer(this.request.body.usr).toString('base64')})
+    if(this.query.code){
+        var res=yield request("https://oapi.dingtalk.com/user/getuserinfo?access_token="+this.ding.token+"&code="+this.query.code,
+            {method:"GET"})
+        res=JSON.parse(res.body)
+        if(res.errcode!=0)
+            return this.body={result:500}
+        msg=yield this.db.findOne({job:res.userid})
+        if(msg)
+            this.request.body={pwd:msg.pwd}
+    }else{
+        if(!this.request.body.usr||!this.request.body.pwd) return this.body={result:403}
+        if(/[@]/.test(this.request.body.usr)){
+            msg=yield this.db.findOne({em:this.request.body.usr})
+        }else if(/^[0-9]{11}$/.test(this.request.body.usr)){
+            msg=yield this.db.findOne({tel:this.request.body.usr})
+        }else if(/^(\w){6,12}$/.test(this.request.body.usr)){
+            msg=yield this.db.findOne({usr:new Buffer(this.request.body.usr).toString('base64')})
+        }
     }
     console.log(JSON.stringify(msg))
-    console.log(this.request.body)
     if(msg&&(this.request.body.pwd==msg.pwd)){
-        this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+7200000}
+        this.session={job:msg.job,tel:msg.tel,em:msg.em,idf:msg.idf,name:msg.name,usr:msg.usr,uin:msg.uin,pms:msg.pms,ip:this.ip,ol:new Date().getTime()+14400000}
         this.body={result:200}
     }else{
         this.body={result:403}
@@ -252,7 +246,8 @@ function *ding_redirect(next) {
     if(this.query.corpid==process.env["DING_CORP_ID"]){
         var nonceStr = 'shibeta';
         var timeStamp = new Date().getTime();
-        var signedUrl = decodeURIComponent(this.path);
+        var url="http://121.40.249.9:805"+this.path+"?"+this.querystring
+        var signedUrl = decodeURIComponent(url);
 
         var signature = sign({
             nonceStr: nonceStr,
@@ -289,3 +284,20 @@ function sign(params) {
     console.log('signature: ' + signature);
     return signature;
 }
+
+/*
+ var usr={//强制注册
+ uin: "000000",
+ usr: new Buffer("stcula").toString('base64'),//->base64
+ pwd: this.request.body.pwd,
+ em:"1132463097@qq.com",
+ pms: [0,0,0,0,0,1],
+ time: new Date(),
+ idf: "111111199706201111",
+ name: new Buffer("李卓恒").toString('base64'),
+ tel:"15917597227",
+ job:new Buffer("无").toString('base64')
+ }
+ console.log(usr)
+ this.body=yield this.db.insert(usr)
+ */
