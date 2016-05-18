@@ -205,7 +205,9 @@ block content
                                         allowOutsideClick: true,
                                         timer: 820
                                     })
-                                    
+                                    setTimeout(function(){
+                                        return window.location.replace("/admin")
+                                    }, 820);
                                 }
                             })
                         },
@@ -340,22 +342,22 @@ block content
                     }
                 })
             })
-
-
-            function ajax(path,method,data,callback){
-                if(!callback) callback=data
-                $.ajax({url:path,type:method,cache:false,data:data,
-                    beforeSend:function(){
-                        jQuery("footer>.ajaxLoad").fadeIn(200)
-                    },
-                    complete:function(res){
-                        jQuery("footer>.ajaxLoad").fadeOut(200)
-                        if(res.status==0) Materialize.toast('网络故障……', 4000)
-                        if(res.status==403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
-                        if(res.status==404) Materialize.toast('服务器懵逼了', 4000)
-                        if(res.status==500) Materialize.toast('服务器傻掉了', 4000)
-                        callback(res.responseText.code,res.responseText)
-                    }
-                })
-            }
         })
+
+        function ajax(path, method, data, callback) {
+            if (!callback) callback = data
+            $.ajax({
+                url: path, type: method, cache: false, data: data,
+                beforeSend: function () {
+                    jQuery("footer>.ajaxLoad").fadeIn(200)
+                },
+                complete: function (res) {
+                    jQuery("footer>.ajaxLoad").fadeOut(200)
+                    if (res.status == 0) Materialize.toast('网络故障……', 4000)
+                    if (res.status == 403) Materialize.toast('服务器残忍地拒绝了这次请求', 4000)
+                    if (res.status == 404) Materialize.toast('服务器懵逼了', 4000)
+                    if (res.status == 500) Materialize.toast('服务器傻掉了', 4000)
+                    callback(res.responseText.code, res.responseText)
+                }
+            })
+        }
