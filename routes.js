@@ -30,7 +30,18 @@ for(var r in routes){
 /*----------------------------------------------------------------*/
 
 router.get('/test',function*(next){
-    this.render('_ct_inner',{without_footer:1})
+    var ct=yield this.cts.findOne()
+    this.render('_ct',{
+        submit:"略略略",
+        ct:[ct.id,ct.name,
+            ct.ext.partys[0],ct.ext.rprs[0],
+            ct.ext.partys[1],ct.ext.rprs[1],
+            ct.ext.time,ct.ext.location,
+            ct.ext.exp[0]+" 到 "+ct.ext.exp[1],
+            ct.ext.money
+        ],
+        address:""
+    })
     yield next
 })
 

@@ -9,7 +9,7 @@ router.use('/',function*(next){//验证权限
     }else return this.render('redirectLogin',{querystring:this.querystring})
     yield next
 }).get('/',function*(next){//获取用户信息
-    var pms=(this.query.status=="true")?[0,0,0,0,1,1]:[0,0,0,0,0,1]
+    var pms=(this.query.status=="true")?1:0
     var pg=(this.query.pg)?this.query.pg:1
     var usrs=[]
     if(this.query.self||!this.session.pms[3]) {
@@ -18,22 +18,22 @@ router.use('/',function*(next){//验证权限
         if(this.query.kw){
             //盲搜分析
             if(/[@]/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,em:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,em:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9xX]{12,18}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9xX]{6}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9]{1,11}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,tel:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,tel:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9A-Z]{1,6}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,uin:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,uin:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^(\w){6,12}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,usr:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,usr:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[\u4E00-\u9FA5]{1,4}$/.test(this.query.kw)){
-                usrs=yield this.db.find({pms:pms,name:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0,name:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
             }
         }else {
-            usrs=yield this.db.find({pms:pms},{skip:pg*10-10,limit: 11})
+            usrs=yield this.db.find({"pms.4":{"$gte":pms},"pms.3":0},{skip:pg*10-10,limit: 11})
         }
     }
     var resUsrs=[]

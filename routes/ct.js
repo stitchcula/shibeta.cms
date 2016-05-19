@@ -90,11 +90,22 @@ router.use('/',function*(next){//验证权限
             if(this.request.body.ifGive&&this.session.pms[3])   yield this.cts.insert({id:id[0],key:id[1],name:this.request.body.name,status:[1,now],ext:{partys:[this.request.body.a,this.request.body.b],time:this.request.body.time,location:this.request.body.location,exp:[this.request.body.begin,this.request.body.end],rprs:[this.request.body.aa,this.request.body.bb],money:this.request.body.money}})//0未授权，1授权，3过期，4删除
             else{
                 var test=yield this.cts.insert({id:id[0],key:id[1],name:this.request.body.name,status:[0,now],uin:msg.uin,ext:{partys:[this.request.body.a,this.request.body.b],time:this.request.body.time,location:this.request.body.location,exp:[this.request.body.begin,this.request.body.end],rprs:[this.request.body.aa,this.request.body.bb],money:this.request.body.money}})//0未授权，1授权，3过期，4删除
+                var ct=yield this.cts.findOne({id:id[0]})
                 var MO={},SMS={}
                 MO.from = "浩盛消防"
                 MO.to = this.env.MASTER_MAIL
                 MO.subject='浩盛消防 新的未授权合同'
-                MO.html = jade.renderFile(__dirname+'/../dynamic/_ct.jade',{id:id[0],address:new Buffer(id[0]+id[1]).toString('base64'),name:this.request.body.name,sentUsr:new Buffer(this.session.name,'base64').toString(),status:"未授权",p:[this.request.body.a,this.request.body.b,this.request.body.money,this.request.body.begin+"到"+this.request.body.end,undefined,this.request.body.location,this.request.body.aa,this.request.body.bb]},undefined)
+                MO.html = jade.renderFile(__dirname + '/../dynamic/_ct.jade', {
+                    submit:new Buffer(this.session.name, 'base64').toString(),
+                    ct:[ct.id,ct.name,
+                        ct.ext.partys[0],ct.ext.rprs[0],
+                        ct.ext.partys[1],ct.ext.rprs[1],
+                        ct.ext.time,ct.ext.location,
+                        ct.ext.exp[0]+" 到 "+ct.ext.exp[1],
+                        ct.ext.money
+                    ],
+                    address:new Buffer(id[0] + id[1]).toString('base64')
+                }, undefined)
                 this.mailer.post('api/mailer',MO,function(e,r,b){
                     console.log(e)
                     console.log(r.statusCode)
@@ -164,7 +175,7 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname+'/dynamic/gived_.jade',{id:id,name:cts.name,status:GiveTime,p:[cts.ext.partys[0],cts.ext.partys[1],cts.ext.money,cts.ext.exp[0]+"到"+cts.ext.exp[1],cts.ext.time,cts.ext.location,cts.ext.rprs[0],cts.ext.rprs[1]]},undefined)
+                        this.body = jade.renderFile(__dirname+'/dynamic/gived.jade',{id:id,name:cts.name,status:GiveTime,p:[cts.ext.partys[0],cts.ext.partys[1],cts.ext.money,cts.ext.exp[0]+"到"+cts.ext.exp[1],cts.ext.time,cts.ext.location,cts.ext.rprs[0],cts.ext.rprs[1]]},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期
