@@ -4,7 +4,6 @@ var router=require('koa-router')()
     ,crypto=require('crypto')
 
 var cLocal=require('../lib/cLocal.js')
-const roleMenuObj=[]
 
 var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/tree').children
 for(var r of menu){
@@ -48,11 +47,11 @@ router.use('/',function*(next){//验证
 }).get('/',function*(next){
     var menu=[]
     if(this.session.pms[5])
-        menu=roleMenuObj[1]
+        menu=roleMenuObj[0]
     if(this.session.pms[4])
-        menu=roleMenuObj[2]
+        menu=roleMenuObj[1]
     if(this.session.pms[3])
-        menu=roleMenuObj[3]
+        menu=roleMenuObj[2]
     this.render('admin/framework',{
         menu:menu,
         off_footer:1,

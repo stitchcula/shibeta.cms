@@ -275,7 +275,7 @@ div.container.cms_edit
                     cts_operate_open(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(1).click(function () {
-                var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
+                var id=$(this).closest(".cms_edit_cts_ct").find("input[name='cts']").attr("id")
                 cts_operate_open(id)
             })
             //delete ct
@@ -285,17 +285,17 @@ div.container.cms_edit
                     cts_operate_delete(id)
             })
             $('.cms_edit_cts_ct_operate i').eq(0).click(function () {
-                var id=$(this).closest(".cms_edit_cts_ct").find('.cms_edit_cts_ct_show').eq(0).text()
+                var id=$(this).closest(".cms_edit_cts_ct").find("input[name='cts']").attr("id")
                 cts_operate_delete(id)
             })
             //save ct
             $("#cms_edit_cts_modal .modal-footer a").eq(0).click(function () {
-                var id=$(".ct_inner").eq(0).find(".ct_inner_id").text()
+                var id=$(".ct_inner").eq(0).find(".ct_inner_id").attr("hsid")
                 cts_operate_save(id)
             })
             //reset ct
             $("#cms_edit_cts_modal .modal-footer a").eq(2).click(function () {
-                var id=$(".ct_inner").eq(0).find(".ct_inner_id").text()
+                var id=$(".ct_inner").eq(0).find(".ct_inner_id").attr("hsid")
                 cts_flush(id)
             })
 
@@ -373,6 +373,7 @@ div.container.cms_edit
                             ifGive = "授权于"+ifGive
                             $(".ct_inner").eq(0).find(".ct_inner_id").text(g_cts[i][0])
                         }
+                        $(".ct_inner").eq(0).find(".ct_inner_id").attr("hsid",g_cts[i][0])
                         $(".ct_inner").eq(0).find(".ct_inner_status").text(ifGive)
                         //授权按钮
                         if (g_cts[i][11][0] != "0") {
