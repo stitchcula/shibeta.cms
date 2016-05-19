@@ -176,7 +176,7 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname+'/dynamic/gived.jade',{},undefined)
+                        this.body = jade.renderFile(__dirname+'/../dynamic/gived.jade',{},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期

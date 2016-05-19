@@ -306,7 +306,7 @@ div.container.cms_edit
             }
 
             function cts_operate_delete(id){
-                for (var i in g_cts) {
+                for(var i=0;i<g_cts.length;i++)
                     if (g_cts[i][0] == id) {
                         swal({
                             title: "确定删除该合同？",

@@ -331,7 +331,7 @@ div.container.users
             }
 
             function users_operate_delete(id) {
-                for (var i in g_users) {
+                for(var i=0;i<g_users.length;i++)
                     if (g_users[i][0] == id) {
                         swal({
                             title: "确定删除该用户？",
