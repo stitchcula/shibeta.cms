@@ -190,9 +190,4 @@ var getCtId=function(gtle){
     return [gtle+(now.getFullYear()+"0").substr(2,2)+month+((now.getDate()<10)?("0"+now.getDate()):(now.getDate()))+sid[0],sid[1]]
 }
 
-var getUsrId=function(gtle){
-    var random=crypto.createHmac('sha1',new Date().getTime().toString()).digest('hex')
-    return random.substr(0,6).toUpperCase()//+random.substr(8,6).toUpperCase()
-}
-
 module.exports=router

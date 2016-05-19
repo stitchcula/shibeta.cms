@@ -74,7 +74,7 @@ div.container.cms_push
                 $('.cms_push_input input').each(function () {
                     i[j] = $(this).val()
                     if(i[j]==""){
-                        $('.cms_push_input input').eq(j).addClass("invalid")
+                        $('.cms_push_input input').eq(j).toggleClass("invalid",true)
                         exit=true
                     }
                     j++

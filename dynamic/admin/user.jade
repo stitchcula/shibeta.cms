@@ -96,11 +96,29 @@ div.container.selfInfo
             $('.selfInfo_enter').click(function(){
                 var i = []
                 var j = 0
+                var exit=false
 
                 $('.selfInfo_input input').each(function () {
                     i[j] = $(this).val()
+                    if (j!=5&&i[j] == "") {
+                        $('.selfInfo_input input').eq(j).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if(j==2&&!/^[0-9xX]{18}$/.test(i[j])) {
+                        $('.selfInfo_input input').eq(j).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if (j == 3 && !/^[0-9a-zA-Z_@.]{3,32}$/.test(i[j])) {
+                        $('.selfInfo_input input').eq(j).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if (j == 4 && !/^[0-9]{11}$/.test(i[j])) {
+                        $('.selfInfo_input input').eq(j).toggleClass("invalid", true)
+                        exit = true
+                    }
                     j++
                 })
+                if(exit) return swal({title:"请填写完整/正确信息。",type:'error',showConfirmButton: false,allowOutsideClick:true,timer:820})
 
                 ajax('/admin/msg','PUT',{
                     usr:i[0],

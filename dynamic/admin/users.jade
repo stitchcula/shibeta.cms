@@ -19,7 +19,7 @@ div.container.users
                     input(type="checkbox",checked=true)
                     span.lever
                     | 仅管理员
-            a.btn.waves-effect(href=false).yahei.right 添加用户
+            a.btn.waves-effect(href=false).yahei.right.users_add 添加用户
         //div.col.s10.offset-s1.m8.offset-m2.l12
             blockquote.yahei.grey-text
                 i.material-icons.green-text check_box_outline_blank
@@ -38,24 +38,28 @@ div.container.users
                         input.validate.yahei(value="N/a",type="text")
                         label.active.yahei 姓    名
                     div.input-field.col.s12.m12.l5.offset-l1
-                        input.validate.yahei(value="N/a",type="text")
+                        input.validate.yahei(value="N/a",type="text",placeholder="18位的身份证号码")
                         label.active.yahei 身份证号
                     div.input-field.col.s12.m12.l5
                         input.validate.yahei(value="N/a",type="text")
                         label.active.yahei 电子邮箱
                     div.input-field.col.s12.m12.l5.offset-l1
-                        input.validate.yahei(value="N/a",type="text")
+                        input.validate.yahei(value="N/a",type="text",placeholder="用于找回密码和接收信息")
                         label.active.yahei 电话号码
                     div.input-field.col.s6.m8.l3.roInput
-                        input.validate.yahei(disabled,value="N/a",type="text")
+                        input.validate.yahei(disabled,value="N/a",type="text",placeholder="从钉钉APP进入后可绑定")
                         label.active.yahei 钉钉ID
                     div.col.s6.m4.l2
-                        a.waves-effect.btn.yahei.right.user_inner_unbindDing 解除绑定
-                    div.input-field.col.s12.m12.l5.offset-l1.yahei
-                        select
-                            option(value="0") 成员
-                            option(value="1") 管理员
-                        label.yahei  角    色
+                        a.waves-effect.btn.yahei.right.user_inner_unbindDing 解绑
+                    div.input-field.col.s12.m12.l5.offset-l1.yahei.user_inner_pms.dd-select
+                        input.yahei#user_inner_pms_input(readonly="true",value="N/a",type="text")
+                        label.active.yahei  角    色
+                        a.dropdown-button(data-activates='user_inner_pms_dropdown' data-beloworigin="true").hide
+                        ul#user_inner_pms_dropdown.dropdown-content
+                            li
+                                a(value="0") 成员
+                            li
+                                a(value="1") 管理员
             div.modal-header
                 a.waves-effect.btn-flat.red-text.modal-action.modal-close.right
                     i.material-icons close
@@ -234,16 +238,42 @@ div.container.users
                             .users_users_user_status i:nth-of-type(1)
                                 display: none
 
+            .dd-select
+                input
+                    cursor: pointer!important
+                ul.dropdown-content
+                    left 0.75rem!important
+                    top 6px!important
+
+
     script.
         (function () {
             (function () {
                 if ($("#users_users_modal").attr("user_edit") == "disable")
                     $(".user_inner input").attr("disabled", "disabled")
             })()
+            function stopBubleUp(e) {
+                e = e || window.event;
+                if (!+"\v1") {
+                    e.cancelBubble = true;
+                } else {
+                    e.stopPropagation();
+                }
+            }
             $('select').material_select();
             $('.datepicker').pickadate({
                 selectMonths: true,
                 selectYears: 10
+            })
+            $('.dropdown-button').dropdown();
+            //self select init
+            $(".dd-select input").click(function (e) {
+                stopBubleUp(e)
+                $(this).closest(".dd-select").find(".dropdown-button").css("width",$(this).width()+"px").click()
+            })
+            $(".dd-select ul li a").click(function () {
+                $(this).closest(".dd-select").find("input").attr("dd-value",$(this).attr("value"))
+                document.querySelectorAll("#"+$(this).closest(".dd-select").find("input").attr("id"))[0].value=$(this).text()
             })
 
             var g_users = []//globe users array
@@ -264,7 +294,11 @@ div.container.users
                 var id = $(this).closest(".users_users_user").find("input[name='users']").eq(0).attr("id")
                 users_operate_open(id)
             })
-            //delete ct
+            //new user
+            $(".users_add").click(function () {
+                users_operate_open(g_newUser[0])
+            })
+            //delete user
             $('.users_users_operate i').eq(1).click(function () {
                 var id = $("input[name='users']:checked").attr("id")
                 if(id)
@@ -300,8 +334,8 @@ div.container.users
                 for (var i in g_users) {
                     if (g_users[i][0] == id) {
                         swal({
-                            title: "确定删除该合同？",
-                            text: "请再次确定合同名称为：" + g_users[i][1] + "。删除后将无法恢复！",
+                            title: "确定删除该用户？",
+                            text: "请再次确定用户为：" + g_users[i][2] + "。删除后将无法恢复！",
                             type: "info",
                             cancelButtonText: "取消",
                             confirmButtonText: "确定删除",
@@ -310,7 +344,7 @@ div.container.users
                             showLoaderOnConfirm: true,
                             confirmButtonColor: "#F44336",
                         }, function () {
-                            ajax('/ct?id=' + id, 'DELETE', function (err, res) {
+                            ajax('/usrs?uin=' + id, 'DELETE', function (err, res) {
                                 if (err) console.log(err)
                                 res = JSON.parse(res)
                                 if (res.result == 200) {
@@ -331,42 +365,86 @@ div.container.users
             }
 
             function users_operate_save(id) {
-                for (var i in g_users) {
-                    if (g_users[i][0] == id) {
-                        for (var m = 0; m < 10; m++)
-                            g_users[i][m + 1] = document.querySelectorAll(".user_inner")[0].querySelectorAll("input")[m].value
-                        var reqObj = users_parse2Obj(g_users[i])
-                        ajax('/ct', 'PUT', reqObj[0], function (err, res) {
-                            if (err) console.log(err)
-                            res = JSON.parse(res)
-                            if (res.result == 200) {
-                                swal({
-                                    title: "保存修改成功！",
-                                    type: 'success',
-                                    showConfirmButton: false,
-                                    allowOutsideClick: true,
-                                    timer: 820
-                                })
-                                g_users[i] = users_parse2Arr(res.cts)[0]
-                                users_flush(g_users[i][0])
-                            }
-                        })
+                var _g_newUser = [id]
+                var exit = false
+
+                for (var m = 0; m < 6; m++) {
+                    _g_newUser[m + 1] = document.querySelectorAll(".user_inner")[0].querySelectorAll("input")[m].value
+                    if (m == 4 && !/^[0-9]{11}$/.test(_g_newUser[m + 1])) {
+                        $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if (m == 3 && !/^[0-9a-zA-Z_@.]{3,32}$/.test(_g_newUser[m + 1])) {
+                        $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if (m == 2 && !/^[0-9xX]{18}$/.test(_g_newUser[m + 1])) {
+                        $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
+                        exit = true
+                    }
+                    if (m!=5 && _g_newUser[m + 1] == "") {
+                        $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
+                        exit = true
                     }
                 }
+                if (exit) return swal({
+                    title: "请填写完整/正确信息。",
+                    type: 'error',
+                    showConfirmButton: false,
+                    allowOutsideClick: true,
+                    timer: 820
+                })
+                _g_newUser[7] = $(".user_inner .dd-select input").attr("dd-value")
+
+                var reqObj = users_parse2Obj(_g_newUser)
+                ajax('/usrs', ((_g_newUser[0]==g_newUser[0])?'POST':'PUT'), reqObj[0], function (err, res) {
+                    if (err) console.log(err)
+                    res = JSON.parse(res)
+                    if (res.result == 200) {
+                        swal({
+                            title: ((_g_newUser[0]==g_newUser[0])?'添加用户成功！':'保存修改成功！'),
+                            type: 'success',
+                            showConfirmButton: false,
+                            allowOutsideClick: true,
+                            timer: 820
+                        })
+                        if(_g_newUser[0]==g_newUser[0]){
+                            _g_newUser[0] = res.uin
+                            g_users.unshift(_g_newUser)
+                            users_flush(g_users[0][0])
+                            $('#users_users_modal').closeModal();
+
+                        }else{
+                            for (var i in g_users) {
+                                if (g_users[i][0] == id) {
+                                    g_users[i] = _g_newUser
+                                    users_flush(g_users[i][0])
+                                }
+                            }
+                        }
+                        users_render(g_users)
+                    }
+                    if (res.result == 595) {
+                        swal({
+                            title: "已存在相同用户！",
+                            type: 'error',
+                            showConfirmButton: false,
+                            allowOutsideClick: true,
+                            timer: 820
+                        })
+                    }
+                })
             }
 
             function users_flush(id) {
-                var _g_users=((id=="999999")?g_newUser:g_users)
+                var _g_users=((id==g_newUser[0])?[g_newUser]:g_users)
                 for (var i in _g_users) {
                     if (_g_users[i][0] == id) {
                         //充填
                         for (var m = 0; m < 6; m++)
                             document.querySelectorAll(".user_inner")[0].querySelectorAll("input")[m].value = _g_users[i][m + 1]
                         //充填角色
-                        $('.user_inner select').material_select('destroy');
-                        $(".user_inner select option").removeAttr("selected")
-                        $('.user_inner select option[value="' + _g_users[i][7] + '"]').attr("selected", true)
-                        $('.user_inner select').material_select();
+                        $('.user_inner .dd-select ul li a[value="'+_g_users[i][7]+'"]').click()
                         $(".user_inner").eq(0).find(".user_inner_uin").text(_g_users[i][0])
                         //解绑按钮
                         if (_g_users[i][6] != "")
@@ -382,11 +460,18 @@ div.container.users
                     if (err) console.log(err)
                     res = JSON.parse(res)
                     if (res.result == 200) {
-                        res.users = users_parse2Arr(res.users)
+                        g_users = users_parse2Arr(res.users)
+                        if (g_users.length == 0)
+                            return swal({
+                                title: "没有检索到符合条件的用户。",
+                                type: 'info',
+                                showConfirmButton: false,
+                                allowOutsideClick: true,
+                                timer: 820
+                            })
                         $(".users_search").animate({marginTop: "16px"}, 350, function () {
                             $('.users_users_title').toggleClass("hide", false)
-                            users_render(res.users)
-                            g_users = res.users
+                            users_render(g_users)
                         })
                     }
                 })

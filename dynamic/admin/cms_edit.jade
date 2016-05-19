@@ -346,6 +346,7 @@ div.container.cms_edit
                                 swal({title:"保存修改成功！",type:'success',showConfirmButton: false,allowOutsideClick:true,timer:820})
                                 g_cts[i]=cts_parse2Arr(res.cts)[0]
                                 cts_flush(g_cts[i][0])
+                                cts_render(g_cts)
                             }
                         })
                     }
@@ -384,11 +385,18 @@ div.container.cms_edit
                     if(err) console.log(err)
                     res=JSON.parse(res)
                     if(res.result==200){
-                        res.cts=cts_parse2Arr(res.cts)
+                        g_cts=cts_parse2Arr(res.cts)
+                        if (g_cts.length == 0)
+                            return swal({
+                                title: "没有检索到符合条件的合同。",
+                                type: 'info',
+                                showConfirmButton: false,
+                                allowOutsideClick: true,
+                                timer: 820
+                            })
                         $(".cms_edit_search").animate({marginTop:"16px"},350,function(){
                             $('.cms_edit_cts_title').toggleClass("hide",false)
-                            cts_render(res.cts)
-                            g_cts=res.cts
+                            cts_render(g_cts)
                         })
                     }
                 })
