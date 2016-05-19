@@ -9,6 +9,7 @@ router.use('/',function*(next){//验证权限
     }else return this.render('redirectLogin',{querystring:this.querystring})
     yield next
 }).get('/',function*(next){//获取用户信息
+    var pms=(this.query.status=="true")?[0,0,0,0,1,1]:[0,0,0,0,0,1]
     var pg=(this.query.pg)?this.query.pg:1
     var usrs=[]
     if(this.query.self||!this.session.pms[3]) {
@@ -17,19 +18,19 @@ router.use('/',function*(next){//验证权限
         if(this.query.kw){
             //盲搜分析
             if(/[@]/.test(this.query.kw)){
-                usrs=yield this.db.find({em:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,em:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9xX]{12,18}$/.test(this.query.kw)){
-                usrs=yield this.db.find({idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9xX]{6}$/.test(this.query.kw)){
-                usrs=yield this.db.find({idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,idf:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9]{1,11}$/.test(this.query.kw)){
-                usrs=yield this.db.find({tel:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,tel:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[0-9A-Z]{1,6}$/.test(this.query.kw)){
-                usrs=yield this.db.find({uin:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,uin:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^(\w){6,12}$/.test(this.query.kw)){
-                usrs=yield this.db.find({usr:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,usr:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
             }else if(/^[\u4E00-\u9FA5]{1,4}$/.test(this.query.kw)){
-                usrs=yield this.db.find({name:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
+                usrs=yield this.db.find({pms:pms,name:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
             }
         }else {
             usrs=yield this.db.find({},{skip:pg*10-10,limit: 11})
@@ -60,7 +61,6 @@ router.use('/',function*(next){//验证权限
             var usr={
                 uin: getUsrId(""),
                 usr: new Buffer(this.request.body.usr).toString('base64'),//->base64
-                pwd: this.request.body.pwd,
                 em: this.request.body.em,
                 pms: [0,0,0,0,0,1],
                 time: new Date(),
@@ -70,7 +70,9 @@ router.use('/',function*(next){//验证权限
                 job:""
             }
             if(this.request.body.name&&usr.idf&&usr.tel){
-                usr.pms=crypto.createHmac('sha1',usr.idf.substr(12,6)).digest('hex')
+                var sha1 = crypto.createHash('sha1');
+                sha1.update(usr.idf.substr(12,6), 'utf8');
+                usr.pwd=sha1.digest('hex');
                 if(this.request.body.pm=="1") usr.pms[4]=1
                 yield this.db.insert(usr)
                 this.body = {result:200,uin:usr.uin}

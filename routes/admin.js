@@ -4,6 +4,7 @@ var router=require('koa-router')()
     ,crypto=require('crypto')
 
 var cLocal=require('../lib/cLocal.js')
+const roleMenuObj=[]
 
 var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/tree').children
 for(var r of menu){
@@ -45,61 +46,15 @@ router.use('/',function*(next){//验证
     }else return this.render('redirectLogin',{querystring:this.querystring})
     yield next
 }).get('/',function*(next){
+    var menu=[]
+    if(this.session.pms[5])
+        menu=roleMenuObj[1]
+    if(this.session.pms[4])
+        menu=roleMenuObj[2]
+    if(this.session.pms[3])
+        menu=roleMenuObj[3]
     this.render('admin/framework',{
-        menu:[
-            {
-                inner:"通知",
-                icon:"question_answer",
-                href:"#notice"
-            },
-            {
-                inner:"个人信息",
-                icon:"perm_identity",
-                href:"#user"
-            },
-            {
-                inner:"合同管理",
-                icon:"description",
-                href:[
-                    {
-                        inner:"提交合同",
-                        icon:"library_add",
-                        href:"#cms_push"
-                    },
-                    {
-                        inner:"真伪查询",
-                        icon:"find_in_page",
-                        href:"#cms_auth"
-                    },
-                    {
-                        inner:"查看合同",
-                        icon:"chrome_reader_mode",
-                        href:"#cms_edit"
-                    }
-                ]
-            },
-            {
-                inner:"控制面板",
-                icon:"tune",
-                href:[
-                    {
-                        inner:"用户群组",
-                        href:"#users",
-                        icon:"people_outline"
-                    },
-                    {
-                        inner:"UI控制",
-                        href:"#ui",
-                        icon:"view_compact"
-                    }
-                ]
-            },
-            {
-                inner:"注销",
-                icon:"arrow_back",
-                href:"#exit"
-            },
-        ],
+        menu:menu,
         off_footer:1,
         title:"控制台"
     })
@@ -169,5 +124,142 @@ router.use('/',function*(next){//验证
     yield next
 })
 
+const roleMenuObj=[
+    [
+        {
+            inner:"通知",
+            icon:"question_answer",
+            href:"#notice"
+        },
+        {
+            inner:"个人信息",
+            icon:"perm_identity",
+            href:"#user"
+        },
+        {
+            inner:"合同管理",
+            icon:"description",
+            href:[
+                {
+                    inner:"提交合同",
+                    icon:"library_add",
+                    href:"#cms_push"
+                },
+                {
+                    inner:"真伪查询",
+                    icon:"find_in_page",
+                    href:"#cms_auth"
+                },
+                {
+                    inner:"查看合同",
+                    icon:"chrome_reader_mode",
+                    href:"#cms_edit"
+                }
+            ]
+        },
+        {
+            inner:"注销",
+            icon:"arrow_back",
+            href:"#exit"
+        },
+    ],
+    [
+        {
+            inner:"通知",
+            icon:"question_answer",
+            href:"#notice"
+        },
+        {
+            inner:"个人信息",
+            icon:"perm_identity",
+            href:"#user"
+        },
+        {
+            inner:"合同管理",
+            icon:"description",
+            href:[
+                {
+                    inner:"提交合同",
+                    icon:"library_add",
+                    href:"#cms_push"
+                },
+                {
+                    inner:"真伪查询",
+                    icon:"find_in_page",
+                    href:"#cms_auth"
+                },
+                {
+                    inner:"查看合同",
+                    icon:"chrome_reader_mode",
+                    href:"#cms_edit"
+                }
+            ]
+        },
+        {
+            inner:"注销",
+            icon:"arrow_back",
+            href:"#exit"
+        },
+    ],
+    [
+        {
+            inner:"通知",
+            icon:"question_answer",
+            href:"#notice"
+        },
+        {
+            inner:"个人信息",
+            icon:"perm_identity",
+            href:"#user"
+        },
+        {
+            inner:"合同管理",
+            icon:"description",
+            href:[
+                {
+                    inner:"提交合同",
+                    icon:"library_add",
+                    href:"#cms_push"
+                },
+                {
+                    inner:"真伪查询",
+                    icon:"find_in_page",
+                    href:"#cms_auth"
+                },
+                {
+                    inner:"查看合同",
+                    icon:"chrome_reader_mode",
+                    href:"#cms_edit"
+                }
+            ]
+        },
+        {
+            inner:"控制面板",
+            icon:"tune",
+            href:[
+                {
+                    inner:"用户群组",
+                    href:"#users",
+                    icon:"people_outline"
+                }
+            ]
+        },
+        {
+            inner:"注销",
+            icon:"arrow_back",
+            href:"#exit"
+        },
+    ]
+]
 
 module.exports=router
+
+/*
+* ,
+ {
+ inner:"UI控制",
+ href:"#ui",
+ icon:"view_compact"
+ }
+*
+* */

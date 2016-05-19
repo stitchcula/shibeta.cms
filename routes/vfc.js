@@ -7,8 +7,8 @@ router.get('/',function*(next){//验证页面
 }).post('/',function*(next) {//验证结果
     var idReg=/^[A-Z0-9]{14}$/
     if(idReg.test(this.request.body.id)) {
-        //var cts = yield this.cts.findOne({id: this.request.body.id,"status.0":1})
-        var cts = yield this.cts.findOne({id: this.request.body.id})
+        var cts = yield this.cts.findOne({id: this.request.body.id,"status.0":1})
+        //var cts = yield this.cts.findOne({id: this.request.body.id})
         if (cts) {
             //????????????????????权限4
             var newDate=new Date(cts.status[1])

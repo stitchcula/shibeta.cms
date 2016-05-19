@@ -27,7 +27,7 @@ div.container.cms_edit
                 i.material-icons.green-text check_circle
                 span &nbsp;状态为 已授权。
     div.cms_edit_cts.center-align
-        div#cms_edit_cts_modal.modal.modal-fixed-footer.ct_inner(ct_edit="disable",onmousewheel="return scroll(event,this)")
+        div#cms_edit_cts_modal.modal.modal-fixed-footer.ct_inner(ct_edit=(pms[3]!=1)?"disable":"",onmousewheel="return scroll(event,this)")
             div.modal-content.left-align(onmousewheel="return scroll(event,this)")
                 div.row
                     div.input-field.col.s12.m12.l10.offset-l1.roInput
@@ -365,9 +365,15 @@ div.container.cms_edit
                             document.querySelectorAll(".ct_inner")[0].querySelectorAll("input")[m].value = g_cts[i][m + 1]
                         //充填授权状态
                         var newDate = new Date(g_cts[i][11][1])
-                        var ifGive = (g_cts[i][11][0] == "1") ? (newDate.getFullYear() + "年" + (newDate.getMonth() + 1) + "月" + newDate.getDate() + "日") : "未授权"
+                        var ifGive=newDate.getFullYear() + "年" + (newDate.getMonth() + 1) + "月" + newDate.getDate() + "日"
+                        if(g_cts[i][11][0] != "1"){
+                            ifGive=ifGive+"提交，尚未授权"
+                            $(".ct_inner").eq(0).find(".ct_inner_id").text("HS****")
+                        }else{
+                            ifGive = "授权于"+ifGive
+                            $(".ct_inner").eq(0).find(".ct_inner_id").text(g_cts[i][0])
+                        }
                         $(".ct_inner").eq(0).find(".ct_inner_status").text(ifGive)
-                        $(".ct_inner").eq(0).find(".ct_inner_id").text(g_cts[i][0])
                         //授权按钮
                         if (g_cts[i][11][0] != "0") {
                             $("#cms_edit_cts_modal .modal-footer a").eq(1).toggleClass("disabled", true)
@@ -405,7 +411,10 @@ div.container.cms_edit
                 $('.cms_edit_cts_ct[ct_status]').remove()
                 for(var i=0;i<_cts.length;i++){
                     $('.cms_edit_cts').append($('.cms_edit_cts_ct').eq(0).clone(true))
-                    $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(0).html(_cts[i][0])
+                    if(_cts[i][11][0]!="1")
+                        $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(0).html("HS****")
+                    else
+                        $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(0).html(_cts[i][0])
                     $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(1).html(_cts[i][1])
                     $('.cms_edit_cts_ct').eq(i+1).find('.cms_edit_cts_ct_show').eq(2).html(_cts[i][2])
                     $('.cms_edit_cts_ct').eq(i+1).attr("ct_status",_cts[i][11][0])
