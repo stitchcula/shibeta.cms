@@ -306,8 +306,9 @@ div.container.cms_edit
             }
 
             function cts_operate_delete(id){
-                for(var i=0;i<g_cts.length;i++)
+                for(var i=0;i<g_cts.length;i++){
                     if (g_cts[i][0] == id) {
+                        var item=i
                         swal({
                             title: "确定删除该合同？",
                             text: "请再次确定合同名称为：" + g_cts[i][1] + "。删除后将无法恢复！",
@@ -324,7 +325,7 @@ div.container.cms_edit
                                 res = JSON.parse(res)
                                 if (res.result == 200) {
                                     swal({title:"删除成功！",type:'success',showConfirmButton: false,allowOutsideClick:true,timer:820})
-                                    g_cts.splice(i,1)
+                                    g_cts.splice(item,1)
                                     cts_render(g_cts)
                                 }
                             })

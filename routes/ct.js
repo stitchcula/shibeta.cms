@@ -148,6 +148,7 @@ router.use('/',function*(next){//验证权限
 })
 
 router.get('/:sid',function*(next){//授权合同
+    console.log(this.header)
     var sid=new Buffer(this.params.sid,'base64').toString(),
         id=sid.substr(0,14),//MTUwODE5Q0M2QTc5MzVDQzU0
         key=sid.substr(14,6),
@@ -176,11 +177,11 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname+'/../dynamic/gived.jade',{},undefined)
+                        this.body = {result:200,msg: "成功授权！"}//jade.renderFile(__dirname+'/../dynamic/gived.jade',{},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期
-                    this.body = {result: "该合同由于提交时间过久已过期。请重新提交。"}
+                    this.body = {result:403,msg: "该合同由于提交时间过久已过期。请重新提交。"}
                 }
                 break
             /*
@@ -190,9 +191,9 @@ router.get('/:sid',function*(next){//授权合同
                 break
             */
             default ://刷新成0???
-                this.body = {result: "该合同已授权或不存在。"}
+                this.body = {result:402,msg: "该合同由于提交时间过久已过期。请重新提交。"}
         }
-    }else this.body = {result: "该合同已授权或不存在。"}
+    }else this.body = {result:401,msg: "该合同由于提交时间过久已过期。请重新提交。"}
     yield next
 })
 

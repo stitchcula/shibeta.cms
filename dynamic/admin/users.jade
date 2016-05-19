@@ -331,8 +331,9 @@ div.container.users
             }
 
             function users_operate_delete(id) {
-                for(var i=0;i<g_users.length;i++)
+                for(var i=0;i<g_users.length;i++){
                     if (g_users[i][0] == id) {
+                        var item=i
                         swal({
                             title: "确定删除该用户？",
                             text: "请再次确定用户为：" + g_users[i][2] + "。删除后将无法恢复！",
@@ -355,7 +356,7 @@ div.container.users
                                         allowOutsideClick: true,
                                         timer: 820
                                     })
-                                    g_users.splice(i, 1)
+                                    g_users.splice(item, 1)
                                     users_render(g_users)
                                 }
                             })
