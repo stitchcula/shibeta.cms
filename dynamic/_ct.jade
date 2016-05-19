@@ -1,124 +1,122 @@
-
-    div
-        style
-            :stylus
-                .ct_main
-                    margin 0 auto!important
-                    max-width 40rem!important
-                    width 100%!important
-                    min-width: 20rem!important
-                    p
-                        font-family "Microsoft YaHei" !important
-                    .ct_inner
-                        padding 2rem
-                        -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
-                        -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
-                        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
-                        table
-                            width 100%!important
-                            tr:nth-child(odd)
-                                color: #9e9e9e
-                                p
-                                    font-size: 0.8rem
-                                    margin-top 0.75rem
-                                    margin-bottom 0
-                            tr:nth-child(even)
-                                td
-                                    border-bottom 1px solid #9e9e9e
-                                p
-                                    font-size: 1rem
-                                    margin-top 0.75rem
-                                    margin-bottom 0.75rem
-                            tr.ct_name
-                                color #222222
-                                p
-                                    font-size: 1.25rem
-                                    margin-top 0rem
-                                    margin-bottom 0.75rem
-                            tr.ct_id
-                                color: #9e9e9e
-                                td
-                                    border-bottom 0px solid #9e9e9e
-                                p
-                                    font-size: 0.8rem
-                                    margin-top 0.75rem
-                                    margin-bottom 0
-                    table.ct_operate
-                        margin-top 2rem
-                        margin-bottom 3rem
-                        width 100%!important
-                        td
-                            text-align:center
-                    .ct-red
-                        background #ee6e73!important
-                    .ct-teal
-                        background #26a69a!important
-                    .ct-btn
-                        margin 0 auto
-                        border none!important
-                        -webkit-border-radius:2px !important
-                        -moz-border-radius:2px !important
-                        border-radius:2px!important
-                        display: inline-block!important
-                        height: 36px!important
-                        outline: 0!important
-                        padding: 0 1.75rem!important
-                        text-decoration: none!important
-                        color: #ffffff!important
-                        text-align: center!important
-                        letter-spacing: 0.5px!important
-                        cursor: pointer!important
-                        -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
-                        -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
-                        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
-                        p
-                            margin 0!important
-                            line-height:36px!important
-                    .ct-red:hover
-                        -webkit-transition:all .3s ease-out
-                        -moz-transition: all .3s ease-out
-                        -ms-transition: all .3s ease-out
-                        -o-transition: all .3s ease-out
-                        transition: all .3s ease-out
-                        background #ff7277 !important
-                    .ct-teal:hover
-                        -webkit-transition:all .3s ease-out
-                        -moz-transition: all .3s ease-out
-                        -ms-transition: all .3s ease-out
-                        -o-transition: all .3s ease-out
-                        transition: all .3s ease-out
-                        background #2bbbad!important
-
-        div.ct_main
-            p 法人代表：
+style
+    :stylus
+        .ct_main
+            margin 0 auto!important
+            max-width 40rem!important
+            width 100%!important
+            min-width: 20rem!important
             p
-                span &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                span=submit + " 提交了一份未授权合同。确认无误后可以点击以下“确定授权”快捷授权；如需修改，请点击“需要修改”跳转登录后修改。"
-            div.ct_inner
-                table(border=0,cellspacing=0,cellpadding=0)
+                font-family "Microsoft YaHei" !important
+            .ct_inner
+                padding 2rem
+                -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+                -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+                box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+                table
+                    width 100%!important
+                    tr:nth-child(odd)
+                        color: #9e9e9e
+                        p
+                            font-size: 0.8rem
+                            margin-top 0.75rem
+                            margin-bottom 0
+                    tr:nth-child(even)
+                        td
+                            border-bottom 1px solid #9e9e9e
+                        p
+                            font-size: 1rem
+                            margin-top 0.75rem
+                            margin-bottom 0.75rem
                     tr.ct_name
-                        td
-                            p(align="center")=ct[1]
+                        color #222222
+                        p
+                            font-size: 1.25rem
+                            margin-top 0rem
+                            margin-bottom 0.75rem
                     tr.ct_id
+                        color: #9e9e9e
                         td
-                            p(align="right")=ct[0]
-                    -var ct_key=["合同名称","合同编号","甲方","甲方代表","乙方","乙方代表","签订时间","签订地点","有效期限","合同金额"]
-                    -for(var i=2;i<ct.length;i++)
-                        tr
-                            td
-                                p(align="left")=ct_key[i]
-                        tr
-                            td
-                                p(align="left")=ct[i]
-            table(border=0,cellspacing=0,cellpadding=0).ct_operate
+                            border-bottom 0px solid #9e9e9e
+                        p
+                            font-size: 0.8rem
+                            margin-top 0.75rem
+                            margin-bottom 0
+            table.ct_operate
+                margin-top 2rem
+                margin-bottom 3rem
+                width 100%!important
+                td
+                    text-align:center
+            .ct-red
+                background #ee6e73!important
+            .ct-teal
+                background #26a69a!important
+            .ct-btn
+                margin 0 auto
+                border none!important
+                -webkit-border-radius:2px !important
+                -moz-border-radius:2px !important
+                border-radius:2px!important
+                display: inline-block!important
+                height: 36px!important
+                outline: 0!important
+                padding: 0 1.75rem!important
+                text-decoration: none!important
+                color: #ffffff!important
+                text-align: center!important
+                letter-spacing: 0.5px!important
+                cursor: pointer!important
+                -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+                p
+                    margin 0!important
+                    line-height:36px!important
+            .ct-red:hover
+                -webkit-transition:all .3s ease-out
+                -moz-transition: all .3s ease-out
+                -ms-transition: all .3s ease-out
+                -o-transition: all .3s ease-out
+                transition: all .3s ease-out
+                background #ff7277 !important
+            .ct-teal:hover
+                -webkit-transition:all .3s ease-out
+                -moz-transition: all .3s ease-out
+                -ms-transition: all .3s ease-out
+                -o-transition: all .3s ease-out
+                transition: all .3s ease-out
+                background #2bbbad!important
+
+div.ct_main
+    p 法人代表：
+    p
+        span &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        span=submit + " 提交了一份未授权合同。确认无误后可以点击以下“确定授权”快捷授权；如需修改，请点击“需要修改”跳转登录后修改。"
+    div.ct_inner
+        table(border=0,cellspacing=0,cellpadding=0)
+            tr.ct_name
+                td
+                    p(align="center")=ct[1]
+            tr.ct_id
+                td
+                    p(align="right")=ct[0]
+            -var ct_key=["合同名称","合同编号","甲方","甲方代表","乙方","乙方代表","签订时间","签订地点","有效期限","合同金额"]
+            -for(var i=2;i<ct.length;i++)
                 tr
                     td
-                        a(href="http://121.40.249.9:805/ct/" + address)
-                            div.ct-btn.ct-teal
-                                p 确定授权
+                        p(align="left")=ct_key[i]
+                tr
                     td
-                        a(href='http://121.40.249.9:805/admin')
-                            div.ct-btn.ct-red
-                                p 需要修改
+                        p(align="left")=ct[i]
+    table(border=0,cellspacing=0,cellpadding=0).ct_operate
+        tr
+            td
+                a(href="http://121.40.249.9:805/ct/" + address)
+                    div.ct-btn.ct-teal
+                        p 确定授权
+            td
+                a(href='http://121.40.249.9:805/admin')
+                    div.ct-btn.ct-red
+                        p 需要修改
 
 

@@ -30,6 +30,7 @@ for(var r in routes){
 /*----------------------------------------------------------------*/
 
 router.get('/test',function*(next){
+    /*
     var ct=yield this.cts.findOne()
     this.render('_ct',{
         submit:"略略略",
@@ -41,7 +42,7 @@ router.get('/test',function*(next){
             ct.ext.money
         ],
         address:""
-    })
+    })*/
     yield next
 })
 

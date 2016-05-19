@@ -6,9 +6,10 @@ var jade=require('jade')
 var crypto=require('crypto')
 
 router.use('/',function*(next){//验证权限
-    if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
-        this.session.ol+=7200000
-    }else return this.render('redirectLogin')
+    if(this.path=="/ct")
+        if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
+            this.session.ol+=7200000
+        }else return this.render('redirectLogin')
     yield next
 }).get('/',function*(next){//查看合同by kw,pg
     var pg=(this.query.pg)?this.query.pg:1
@@ -19,13 +20,13 @@ router.use('/',function*(next){//验证权限
     if(this.session.pms[4]){//所有用户
 
         if(/^[0-9a-zA-Z]{1,14}$/.test(this.query.kw))
-            cts=yield this.cts.find({"status.0":status,id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            cts=yield this.cts.find({"status.0":{"$lte":status},id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
         else{
-            cts=yield this.cts.find({"status.0":status,name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            cts=yield this.cts.find({"status.0":{"$lte":status},name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             if(cts.length==0)
-                cts=yield this.cts.find({"status.0":status,"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+                cts=yield this.cts.find({"status.0":{"$lte":status},"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             if(cts.length==0)
-                cts=yield this.cts.find({"status.0":status,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+                cts=yield this.cts.find({"status.0":{"$lte":status},"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
         /*
         if(!this.query.kw){
             cts=yield this.cts.find({},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
@@ -45,13 +46,13 @@ router.use('/',function*(next){//验证权限
         }
     }else{//仅查看本用户
         if(/^[0-9a-zA-Z]{1,14}$/.test(this.query.kw))
-            cts=yield this.cts.find({"status.0":status,uin:this.session.uin,id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            cts=yield this.cts.find({"status.0":{"$lte":status},uin:this.session.uin,id:eval('/'+this.query.kw.toUpperCase()+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
         else{
-            cts=yield this.cts.find({"status.0":status,uin:this.session.uin,name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+            cts=yield this.cts.find({"status.0":{"$lte":status},uin:this.session.uin,name:eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             if(cts.length==0)
-                cts=yield this.cts.find({"status.0":status,uin:this.session.uin,"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+                cts=yield this.cts.find({"status.0":{"$lte":status},uin:this.session.uin,"ext.partys":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
             if(cts.length==0)
-                cts=yield this.cts.find({"status.0":status,uin:this.session.uin,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
+                cts=yield this.cts.find({"status.0":{"$lte":status},uin:this.session.uin,"ext.rprs":eval('/'+this.query.kw+'/')},{skip:pg*10-10,limit: 11,sort:{"ext.time":sort}})
         }
         /*
         if(!this.query.kw){
@@ -112,7 +113,7 @@ router.use('/',function*(next){//验证权限
                 })
                 SMS.to=this.env.MASTER_TEL
                 SMS.type="hs_submit_cts"
-                SMS.param=" "+new Buffer(this.session.name,'base64').toString()+","+this.request.body.name+" "
+                SMS.param=" "+new Buffer(this.session.name,'base64').toString()+" , "+this.request.body.name+" "
                 this.mailer.post('api/sms',SMS,function(e,r,b){
                     console.log(e)
                     console.log(r.statusCode)
@@ -175,21 +176,23 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname+'/dynamic/gived.jade',{id:id,name:cts.name,status:GiveTime,p:[cts.ext.partys[0],cts.ext.partys[1],cts.ext.money,cts.ext.exp[0]+"到"+cts.ext.exp[1],cts.ext.time,cts.ext.location,cts.ext.rprs[0],cts.ext.rprs[1]]},undefined)
+                        this.body = jade.renderFile(__dirname+'/dynamic/gived.jade',{},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期
                     this.body = {result: "该合同由于提交时间过久已过期。请重新提交。"}
                 }
                 break
+            /*
             case 1:
-                this.redirect("/usr")
+                this.redirect("/admin")
                 //this.body={result: 595}
                 break
+            */
             default ://刷新成0???
                 this.body = {result: "该合同已授权或不存在。"}
         }
-    }else this.status=404
+    }else this.body = {result: "该合同已授权或不存在。"}
     yield next
 })
 
