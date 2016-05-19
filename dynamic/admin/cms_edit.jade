@@ -393,7 +393,9 @@ div.container.cms_edit
                     res=JSON.parse(res)
                     if(res.result==200){
                         g_cts=cts_parse2Arr(res.cts)
-                        if (g_cts.length == 0)
+                        if (g_cts.length == 0){
+                            $('.cms_edit_cts_title').toggleClass("hide", true)
+                            cts_render(g_cts)
                             return swal({
                                 title: "没有检索到符合条件的合同。",
                                 type: 'info',
@@ -401,8 +403,9 @@ div.container.cms_edit
                                 allowOutsideClick: true,
                                 timer: 820
                             })
-                        $(".cms_edit_search").animate({marginTop:"16px"},350,function(){
-                            $('.cms_edit_cts_title').toggleClass("hide",false)
+                        }
+                        $(".cms_edit_search").animate({marginTop: "16px"}, 350, function () {
+                            $('.cms_edit_cts_title').toggleClass("hide", false)
                             cts_render(g_cts)
                         })
                     }

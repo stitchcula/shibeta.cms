@@ -462,7 +462,9 @@ div.container.users
                     res = JSON.parse(res)
                     if (res.result == 200) {
                         g_users = users_parse2Arr(res.users)
-                        if (g_users.length == 0)
+                        if (g_users.length == 0) {
+                            $('.users_users_title').toggleClass("hide", true)
+                            users_render(g_users)
                             return swal({
                                 title: "没有检索到符合条件的用户。",
                                 type: 'info',
@@ -470,6 +472,7 @@ div.container.users
                                 allowOutsideClick: true,
                                 timer: 820
                             })
+                        }
                         $(".users_search").animate({marginTop: "16px"}, 350, function () {
                             $('.users_users_title').toggleClass("hide", false)
                             users_render(g_users)
