@@ -33,7 +33,7 @@ router.use('/',function*(next){//验证权限
                 usrs=yield this.db.find({pms:pms,name:eval('/'+new Buffer(this.query.kw).toString('base64')+'/')},{skip:pg*10-10,limit: 11})
             }
         }else {
-            usrs=yield this.db.find({},{skip:pg*10-10,limit: 11})
+            usrs=yield this.db.find({pms:pms},{skip:pg*10-10,limit: 11})
         }
     }
     var resUsrs=[]

@@ -7,22 +7,22 @@ nav.top-nav
 div.container.selfInfo
     div.row.selfInfo_input
         div.input-field.col.s12.m12.l5.offset-l1
-            input.validate.yahei(value=usr,type="text")
+            input.validate.yahei(value=usr,type="text",placeholder="建议至少6位")
             label.active.yahei 用 户 名
         div.input-field.col.s12.m12.l5
             input.validate.yahei(value=name,type="text")
             label.active.yahei 姓    名
         div.input-field.col.s12.m12.l5.offset-l1
-            input.validate.yahei(value=idf,type="text")
+            input.validate.yahei(value=idf,type="text",placeholder="18位的身份证号码")
             label.active.yahei 身份证号
         div.input-field.col.s12.m12.l5
             input.validate.yahei(value=em,type="text")
             label.active.yahei 电子邮箱
         div.input-field.col.s12.m12.l5.offset-l1
-            input.validate.yahei(value=tel,type="text")
+            input.validate.yahei(value=tel,type="text",placeholder="用于找回密码和接收信息")
             label.active.yahei 电话号码
         div.input-field.col.s6.m8.l3.roInput
-            input.validate.yahei(disabled,value=((ding.length>1)?ding:"尚未绑定"),type="text")
+            input.validate.yahei(disabled,value=((ding.length>1)?ding:"尚未绑定"),type="text",placeholder="从钉钉APP进入后可绑定")
             label.active.yahei 钉钉ID
         div.col.s6.m4.l2
             a.waves-effect.btn.yahei.right.selfInfo_unbindDing_enter(class=((ding.length>1)?"":"disabled")) 解除绑定

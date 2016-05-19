@@ -32,7 +32,7 @@ div.container.users
                 p.hide.user_inner_uin
                 div.row
                     div.input-field.col.s12.m12.l5.offset-l1
-                        input.validate.yahei(value="N/a",type="text")
+                        input.validate.yahei(value="N/a",type="text",placeholder="建议至少6位")
                         label.active.yahei 用 户 名
                     div.input-field.col.s12.m12.l5
                         input.validate.yahei(value="N/a",type="text")
@@ -382,6 +382,7 @@ div.container.users
                         $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
                         exit = true
                     }
+
                     if (m!=5 && _g_newUser[m + 1] == "") {
                         $(".user_inner").eq(0).find("input").eq(m).toggleClass("invalid", true)
                         exit = true
