@@ -47,10 +47,11 @@ app.use(function *(next){
     this.render=function(file,opt){
         return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)
     }
+    var su=yield mongo.db.findOne({uin:"000000"})
     this.env={
         WEB_PORT:805,
-        MASTER_MAIL:"1132463097@qq.com",
-        MASTER_TEL:"15675131602"
+        MASTER_MAIL:su.em,
+        MASTER_TEL:su.tel
     }
     this.db=mongo
     this.mailer=mailer

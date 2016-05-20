@@ -176,7 +176,7 @@ router.get('/:sid',function*(next){//授权合同
                             console.log(e)
                             console.log(r.statusCode)
                         })
-                        this.body = jade.renderFile(__dirname + '/../dynamic/gived.jade',{},undefined)
+                        this.body = jade.renderFile(__dirname + '/../dynamic/gived.jade',{off_footer:1},undefined)
                     } else this.body = {result: 403}
                 }else{
                     yield this.cts.update({id: id}, {$set: {status: [3, new Date().getTime()]}})//过期
@@ -190,9 +190,9 @@ router.get('/:sid',function*(next){//授权合同
                 break
             */
             default ://刷新成0???
-                this.body = {result:402,msg: "该合同由于提交时间过久已过期。请重新提交。"}
+                this.body = {result:402,msg: "该合同不存在或已经授权。"}
         }
-    }else this.body = {result:401,msg: "该合同由于提交时间过久已过期。请重新提交。"}
+    }else this.body = {result:401,msg: "该合同不存在或已经授权"}
     yield next
 })
 
