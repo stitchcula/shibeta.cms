@@ -8,6 +8,9 @@ var crypto=require('crypto')
 router.use('/',function*(next){//验证权限
     if(this.path=="/ct")
         if(this.session&&(this.session.ol>new Date().getTime())&&this.session.ip==this.ip){
+            var su=yield this.db.findOne({uin:"000000"})
+            this.env.MASTER_MAIL=su.em
+            this.env.MASTER_TEL=su.tel
             this.session.ol+=7200000
         }else return this.render('redirectLogin')
     yield next

@@ -47,12 +47,9 @@ app.use(function *(next){
     this.render=function(file,opt){
         return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)
     }
-    var su=yield mongo.db.findOne({uin:"000000"})
-    this.env={
-        WEB_PORT:805,
-        MASTER_MAIL:su.em,
-        MASTER_TEL:su.tel
-    }
+    
+    this.env.WEB_PORT=805
+
     this.db=mongo
     this.mailer=mailer
     this.cts=cts//合同s
