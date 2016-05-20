@@ -328,6 +328,15 @@ div.container.cms_edit
                                     g_cts.splice(item,1)
                                     cts_render(g_cts)
                                 }
+                                if (res.result == 403) {
+                                    swal({
+                                        title: "抱歉，没有权限。",
+                                        type: 'error',
+                                        showConfirmButton: true,
+                                        confirmButtonText:"知道了",
+                                        allowOutsideClick: true,
+                                    })
+                                }
                             })
                         });
                     }
