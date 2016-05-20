@@ -146,7 +146,7 @@ router.use('/',function*(next){//验证权限
                 this.body={result:200}
             } else this.body={result:403}
         }else this.body={result:404}
-    }else this.status=403
+    }else this.body={result:403}
     yield next
 })
 

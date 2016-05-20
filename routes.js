@@ -169,7 +169,7 @@ router.get('/login',ding_redirect,function*(next){//登陆页面
                 MO.from = "浩盛消防"
                 MO.to = msg.em
                 MO.subject = "浩盛消防在线平台密码重置"
-                MO.html = '<h4>完成修改密码</h4><b>请点击以下链接完成您的修改：</b><br><a href="http://121.40.249.9:' + this.env.WEB_PORT + '/t/' + sid + '">http://121.40.249.9:800/t/' + sid + '</a>'
+                MO.html = '<h4>完成修改密码</h4><b>请点击以下链接完成您的修改：</b><br><a href="http://121.40.249.9:' + this.env.WEB_PORT + '/t/' + sid + '">-- 我是链接 --</a>'
                 this.mailer.post('api/mailer', MO, function (e, r, b) {
                     console.log(e)
                     console.log(r.statusCode)

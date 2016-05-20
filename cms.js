@@ -47,7 +47,8 @@ app.use(function *(next){
     this.render=function(file,opt){
         return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)
     }
-    
+
+    this.env={}
     this.env.WEB_PORT=805
 
     this.db=mongo
